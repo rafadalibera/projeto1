@@ -22,15 +22,44 @@
 %token T_STRUCTURE
 %token T_ITEM
 %token T_DATE
-%token <str> T_STRINGs
+%token <str> T_STRING
+%token T_COL
+%token T_SHOW
+%token <intval> T_NUM
 
 %error-verbose
 
 
 %%
 
-newspaper: 	T_NEWSPAPER '=' '{' T_ID '}' { printf("%s", $4); } 
-	 
+newspaper: 	T_NEWSPAPER '{' T_TITLE '=' T_STRING  T_DATE '=' T_STRING  structure '}' {  } 
+
+
+news:
+	T_STRING '{' a_news structure '}' 
+
+structure:
+	T_STRUCTURE '{' T_COL '=' T_NUM T_SHOW '=' string_list '}'
+
+
+news_list :
+		news
+	|	news news_list 
+
+a_news:
+			T_TITLE '=' T_STRING '\n' T_ABSTRACT '=' T_STRING '\n' T_AUTHOR '=' T_STRING '\n' 
+		|	T_TITLE '=' T_STRING '\n' T_AUTHOR '=' T_STRING '\n' T_ABSTRACT '=' T_STRING '\n'
+		|	T_AUTHOR '=' T_STRING '\n' T_TITLE '=' T_STRING '\n' T_ABSTRACT '=' T_STRING '\n'
+		|	T_AUTHOR '=' T_STRING '\n' T_ABSTRACT '=' T_STRING '\n' T_TITLE '=' T_STRING '\n'
+		|	T_ABSTRACT '=' T_STRING '\n' T_AUTHOR '=' T_STRING '\n' T_TITLE '=' T_STRING '\n'
+		|	T_ABSTRACT '=' T_STRING '\n' T_TITLE '=' T_STRING '\n' T_AUTHOR '=' T_STRING '\n'
+
+
+
+string_list:
+		T_STRING 		
+	| 	string_list ',' T_STRING 	
+;
  
 %%
  

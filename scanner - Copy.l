@@ -2,9 +2,10 @@
 #include "parser.h"
 %}
 
-NUM [0-9]+
-STRING \"[a-z0-9]+\"
+ID [\*a-z][a-z0-9_]*
+STRING [a-z0-9]+
 WHITESPACE [ \n\r\t]+
+NUM [0-9]*
 ANY_CHAR .
 
 %option case-insensitive
@@ -30,6 +31,12 @@ ANY_CHAR .
 ";"				{return ';';}
 "="				{return '=';}
 
+
+
+{ID} {	
+	yylval.str = (char *) strdup(yytext);
+	return T_ID;
+}
 
 {STRING} {
 	yylval.str = (char *) strdup(yytext);

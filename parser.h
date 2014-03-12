@@ -57,7 +57,10 @@ extern int yydebug;
      T_STRUCTURE = 266,
      T_ITEM = 267,
      T_DATE = 268,
-     T_STRING = 269
+     T_STRING = 269,
+     T_COL = 270,
+     T_SHOW = 271,
+     T_NUM = 272
    };
 #endif
 
@@ -73,7 +76,7 @@ typedef union YYSTYPE
 
 
 /* Line 2053 of yacc.c  */
-#line 77 "parser.h"
+#line 80 "parser.h"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
