@@ -22,7 +22,7 @@
 %token T_STRUCTURE
 %token T_ITEM
 %token T_DATE
-%token <str> T_STRING
+%token <str> T_STRINGs
 
 %error-verbose
 
