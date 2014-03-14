@@ -1,0 +1,112 @@
+<?xml version="1.0"?>
+<VisualGDBProjectSettings2 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <ConfigurationName>Debug</ConfigurationName>
+  <Project xsi:type="com.visualgdb.project.windows">
+    <CustomSourceDirectories>
+      <Directories />
+      <PathStyle>CygwinCygdrive</PathStyle>
+      <LocalDirForAbsolutePaths>D:\Cygwin64</LocalDirForAbsolutePaths>
+    </CustomSourceDirectories>
+    <MainSourceDirectory>D:\mc911\projeto1</MainSourceDirectory>
+  </Project>
+  <Build xsi:type="com.visualgdb.build.custom">
+    <BuildCommand>
+      <SkipWhenRunningCommandList>false</SkipWhenRunningCommandList>
+      <Command>D:\Cygwin64\bin\make.exe</Command>
+      <Arguments />
+      <WorkingDirectory>$(BuildDir)</WorkingDirectory>
+      <Environment>
+        <Records>
+          <Record>
+            <VariableName>LANG</VariableName>
+            <Value>en_US.UTF-8</Value>
+          </Record>
+          <Record>
+            <VariableName>PATH</VariableName>
+            <Value>%PATH%;D:\Cygwin64\bin</Value>
+          </Record>
+        </Records>
+      </Environment>
+    </BuildCommand>
+    <CleanCommand>
+      <SkipWhenRunningCommandList>false</SkipWhenRunningCommandList>
+      <Command>D:\Cygwin64\bin\make.exe</Command>
+      <Arguments>clean</Arguments>
+      <WorkingDirectory>$(BuildDir)</WorkingDirectory>
+      <Environment>
+        <Records>
+          <Record>
+            <VariableName>LANG</VariableName>
+            <Value>en_US.UTF-8</Value>
+          </Record>
+          <Record>
+            <VariableName>PATH</VariableName>
+            <Value>%PATH%;D:\Cygwin64\bin</Value>
+          </Record>
+        </Records>
+      </Environment>
+    </CleanCommand>
+    <Toolchain>
+      <Name>Cygwin</Name>
+      <Location>D:\Cygwin64</Location>
+      <UnixSystem>false</UnixSystem>
+      <GCC>D:\Cygwin64\bin\gcc.exe</GCC>
+      <GXX>D:\Cygwin64\bin\g++.exe</GXX>
+      <GDB>D:\Cygwin64\bin\gdb.exe</GDB>
+      <AR>D:\Cygwin64\bin\ar.exe</AR>
+      <Make>D:\Cygwin64\bin\make.exe</Make>
+      <AdditionalPathDirectories>
+        <string>D:\Cygwin64\bin</string>
+      </AdditionalPathDirectories>
+      <RequireCmdExe>false</RequireCmdExe>
+      <RequireCtrlBreak>true</RequireCtrlBreak>
+      <ToolCheckInstructionsURL>http://visualgdb.com/KB?ProblemID=cygwin</ToolCheckInstructionsURL>
+      <SourceDirMapping>
+        <Directories />
+        <PathStyle>CygwinCygdrive</PathStyle>
+        <LocalDirForAbsolutePaths>D:\Cygwin64</LocalDirForAbsolutePaths>
+      </SourceDirMapping>
+    </Toolchain>
+    <MainBuildDirectory>D:\mc911\projeto1</MainBuildDirectory>
+    <AbsoluteTargetPath>D:\mc911\projeto1\parser.exe</AbsoluteTargetPath>
+    <AutoUpdateMakefiles>true</AutoUpdateMakefiles>
+  </Build>
+  <Debug xsi:type="com.visualgdb.debug.local">
+    <AdditionalStartupCommands />
+    <LaunchGDBSettings xsi:type="GDBLaunchParametersNewInstance">
+      <GDBEnvironment>
+        <Records>
+          <Record>
+            <VariableName>LANG</VariableName>
+            <Value>en_US.UTF-8</Value>
+          </Record>
+          <Record>
+            <VariableName>PATH</VariableName>
+            <Value>%PATH%;D:\Cygwin64\bin</Value>
+          </Record>
+        </Records>
+      </GDBEnvironment>
+      <DebuggedProgram>$(TargetPath)</DebuggedProgram>
+      <GDBServerPort>2000</GDBServerPort>
+      <ProgramArguments />
+      <WorkingDirectory>$(BuildDir)/</WorkingDirectory>
+    </LaunchGDBSettings>
+    <GenerateCtrlBreakInsteadOfCtrlC>true</GenerateCtrlBreakInsteadOfCtrlC>
+  </Debug>
+  <CustomBuild>
+    <PreBuildActions />
+    <PostBuildActions />
+    <PreCleanActions />
+    <PostCleanActions />
+  </CustomBuild>
+  <CustomDebug>
+    <PreDebugActions />
+    <PostDebugActions />
+    <BreakMode>Default</BreakMode>
+  </CustomDebug>
+  <CustomShortcuts>
+    <Shortcuts />
+    <ShowMessageAfterExecuting>true</ShowMessageAfterExecuting>
+  </CustomShortcuts>
+  <UserDefinedVariables />
+</VisualGDBProjectSettings2>
