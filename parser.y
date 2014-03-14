@@ -32,33 +32,71 @@
 
 %%
 
-newspaper: 	T_NEWSPAPER '{' T_TITLE '=' T_STRING  T_DATE '=' T_STRING  structure '}' {  } 
+newspaper: 	T_NEWSPAPER '{' T_TITLE '=' T_STRING  T_DATE '=' T_STRING  structure news_list '}' {	
+		FILE *F = fopen("newspaper.htm", "w"); 
+		fprintf(F, "<html>\n");
+		fprintf(F, "	<head>\n");
+		fprintf(F, "		<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\">\n"); 
+		fprintf(F, "		<title> SEMPRE ONLINE. </title>\n");
+		fprintf(F, "		<link rel=\"stylesheet\" type=\"text/css\" href=\"./style/style.css\" media=\"screen\">\n");
+		fprintf(F, "		<script type=\"text/javascript\"> </script>\n");
+		fprintf(F, "		<style type=\"text/css\"></style>\n");
+		fprintf(F, "	</head>\n");
+		fprintf(F, "	<body style=\"\">\n");
+		fprintf(F, "		<div id=\"header\">\n");
+		fprintf(F, "			<div id=\"logo\">\n");
+		fprintf(F, "				<h1> %s </h1>\n", $5);
+		fprintf(F, "				<p> %s </p>\n", $8);
+		fprintf(F, "			</div>\n");
+		fprintf(F, "		</div>\n");
+		fclose(F);
+	} 
 
-
-news:
-	T_STRING '{' a_news structure '}' 
 
 structure:
-	T_STRUCTURE '{' T_COL '=' T_NUM T_SHOW '=' string_list '}'
+			T_STRUCTURE '{' T_COL '=' T_NUM T_SHOW '=' id_list '}'
+		| 	T_STRUCTURE '{' T_COL '=' T_NUM T_SHOW '=' show_list '}'
 
 
 news_list :
 		news
-	|	news news_list 
+	|	news news_list
+
+news:
+	T_ID '{' a_news structure '}'  
 
 a_news:
-			T_TITLE '=' T_STRING '\n' T_ABSTRACT '=' T_STRING '\n' T_AUTHOR '=' T_STRING '\n' 
-		|	T_TITLE '=' T_STRING '\n' T_AUTHOR '=' T_STRING '\n' T_ABSTRACT '=' T_STRING '\n'
-		|	T_AUTHOR '=' T_STRING '\n' T_TITLE '=' T_STRING '\n' T_ABSTRACT '=' T_STRING '\n'
-		|	T_AUTHOR '=' T_STRING '\n' T_ABSTRACT '=' T_STRING '\n' T_TITLE '=' T_STRING '\n'
-		|	T_ABSTRACT '=' T_STRING '\n' T_AUTHOR '=' T_STRING '\n' T_TITLE '=' T_STRING '\n'
-		|	T_ABSTRACT '=' T_STRING '\n' T_TITLE '=' T_STRING '\n' T_AUTHOR '=' T_STRING '\n'
+			T_TITLE '=' T_STRING T_ABSTRACT '=' T_STRING T_AUTHOR '=' T_STRING 
+		|	T_TITLE '=' T_STRING T_AUTHOR '=' T_STRING T_ABSTRACT '=' T_STRING 
+		|	T_AUTHOR '=' T_STRING T_TITLE '=' T_STRING T_ABSTRACT '=' T_STRING
+		|	T_AUTHOR '=' T_STRING T_ABSTRACT '=' T_STRING T_TITLE '=' T_STRING
+		|	T_ABSTRACT '=' T_STRING T_AUTHOR '=' T_STRING T_TITLE '=' T_STRING
+		|	T_ABSTRACT '=' T_STRING T_TITLE '=' T_STRING T_AUTHOR '=' T_STRING
 
 
 
-string_list:
-		T_STRING 		
-	| 	string_list ',' T_STRING 	
+id_list:
+		T_ID 		
+	| 	id_list ',' T_ID
+
+show_list:
+	/* empty */
+	| T_TITLE 
+	| T_ABSTRACT
+	| T_AUTHOR
+	| T_IMAGE
+	| T_SOURCE
+	| T_DATE
+	| T_TEXT
+	|	show_list ',' T_TITLE 
+	|	show_list ',' T_ABSTRACT 
+	|	show_list ',' T_AUTHOR
+	|	show_list ',' T_IMAGE
+	|	show_list ',' T_SOURCE
+	|	show_list ',' T_DATE
+	|	show_list ',' T_TEXT
+ 
+
 ;
  
 %%
