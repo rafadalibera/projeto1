@@ -4,6 +4,10 @@
 #include <string.h>
 #include <stdlib.h>
 
+enum TipoObjetoNoticia {
+	Title, Abstract, Author, Date, Image, Source, Text
+};
+
 %}
  
 %union{

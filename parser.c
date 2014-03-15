@@ -70,9 +70,13 @@
 #include <string.h>
 #include <stdlib.h>
 
+enum TipoObjetoNoticia {
+	Title, Abstract, Author, Date, Image, Source, Text
+};
+
 
 /* Line 371 of yacc.c  */
-#line 76 "parser.c"
+#line 80 "parser.c"
 
 # ifndef YY_NULL
 #  if defined __cplusplus && 201103L <= __cplusplus
@@ -131,14 +135,14 @@ extern int yydebug;
 typedef union YYSTYPE
 {
 /* Line 387 of yacc.c  */
-#line 9 "parser.y"
+#line 13 "parser.y"
 
 	char *str;
 	int  intval;
 
 
 /* Line 387 of yacc.c  */
-#line 142 "parser.c"
+#line 146 "parser.c"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
@@ -166,7 +170,7 @@ int yyparse ();
 /* Copy the second part of user declarations.  */
 
 /* Line 390 of yacc.c  */
-#line 170 "parser.c"
+#line 174 "parser.c"
 
 #ifdef short
 # undef short
@@ -481,10 +485,10 @@ static const yytype_int8 yyrhs[] =
 /* YYRLINE[YYN] -- source line where rule number YYN was defined.  */
 static const yytype_uint8 yyrline[] =
 {
-       0,    35,    35,    57,    58,    62,    63,    66,    69,    70,
-      71,    72,    73,    74,    79,    80,    82,    84,    85,    86,
-      87,    88,    89,    90,    91,    92,    93,    94,    95,    96,
-      97
+       0,    39,    39,    61,    62,    66,    67,    70,    73,    74,
+      75,    76,    77,    78,    83,    84,    86,    88,    89,    90,
+      91,    92,    93,    94,    95,    96,    97,    98,    99,   100,
+     101
 };
 #endif
 
@@ -1420,7 +1424,7 @@ yyreduce:
     {
         case 2:
 /* Line 1787 of yacc.c  */
-#line 35 "parser.y"
+#line 39 "parser.y"
     {	
 		FILE *F = fopen("newspaper.htm", "w"); 
 		fprintf(F, "<html>\n");
@@ -1444,7 +1448,7 @@ yyreduce:
 
 
 /* Line 1787 of yacc.c  */
-#line 1448 "parser.c"
+#line 1452 "parser.c"
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires
@@ -1676,7 +1680,7 @@ yyreturn:
 
 
 /* Line 2050 of yacc.c  */
-#line 102 "parser.y"
+#line 106 "parser.y"
 
  
 int yyerror(const char* errmsg)
