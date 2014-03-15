@@ -311,6 +311,20 @@ void TesteGeraHtml(){
 	ImprimePaginaWeb("saidaTeste.html", &listaNoticias, 3);
 }
 
+typedef struct {
+	char * title; 
+	char * abstract; 
+	char * author; 
+	char * date; 
+	char * image; 
+	char * source; 
+	char * text; 
+	int numcol; 
+	int propriedadesASeremExibidas[7]; 
+} Noticia;
+
+char * PrintNews (Noticia * news)
+
 %}
  
 %union{
@@ -420,5 +434,68 @@ int main(int argc, char** argv)
      yyparse();
      return 0;
 }
+
+char * PrintNews (Noticia * news) {
+	char * printedNews = (char *) malloc (1000*sizeof(char));
+	char * temp = (char *) malloc (1000*sizeof(char));
+
+	sprintf(printedNews, "<td width=\"337\" align=\"justify\" valign=\"top\">\n");
+	//Print title
+	if (news->propriedadesASeremExibidas[0] == 1) {
+		sprintf(temp, "<h4>%s</h4>\n", news->title);
+		strcat(printedNews, temp);
+	}
+	//Print Date
+	if (news->propriedadesASeremExibidas[3] == 1) {
+		strcat(printedNews, "<p>\n");
+		sprintf(temp, "%s\n", news->date);
+		strcat(printedNews, temp);
+		strcat(printedNews, "<p>\n");
+		strcat(printedNews, "<br>\n");
+	}
+	//Print Abstract
+	if (news->propriedadesASeremExibidas[1] == 1) {
+		strcat(printedNews, "<p>\n");
+		sprintf(temp, "%s\n", news->abstract);
+		strcat(printedNews, temp);
+		strcat(printedNews, "<p>\n");
+		strcat(printedNews, "<br>\n");
+	}
+	//Print Image
+	if (news->propriedadesASeremExibidas[4] == 1) {
+		sprintf(temp, "<center> <img src=\"%s\"> </center> \n", news->image);
+		strcat(printedNews, temp);
+		strcat(printedNews, "<br>\n");
+	}
+	//Print Text
+	if (news->propriedadesASeremExibidas[6] == 1) {
+		strcat(printedNews, "<p>\n");
+		sprintf(temp, "%s\n", news->text);
+		strcat(printedNews, temp);
+		strcat(printedNews, "<p>\n");
+		strcat(printedNews, "<br>\n");
+	}
+	//Print Source
+	if (news->propriedadesASeremExibidas[5] == 1) {
+		strcat(printedNews, "<p>\n");
+		sprintf(temp, "<b>Fonte: </b> <a href=\"%s\" target=\"_blank\">%s</a> \n", news->source, news->source);
+		strcat(printedNews, temp);
+		strcat(printedNews, "<p>\n");
+		strcat(printedNews, "<br>\n");
+	}
+	//Print Author
+	if (news->propriedadesASeremExibidas[2] == 1) {
+		strcat(printedNews, "<p>\n");
+		sprintf(temp, "<b>Autor: </b> %s \n", news->author);
+		strcat(printedNews, temp);
+		strcat(printedNews, "<p>\n");
+		strcat(printedNews, "<br>\n");
+	}
+	strcat(printedNews, "</td>\n");
+                    
+	return printedNews;                
+}
+
+
 
 
