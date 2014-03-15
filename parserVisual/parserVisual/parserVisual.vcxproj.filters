@@ -39,7 +39,7 @@
     <Text Include="Testes.txt">
       <Filter>Resource files</Filter>
     </Text>
-    <Text Include="PaginaIdentada.txt">
+    <Text Include="PaginaIdentada.html">
       <Filter>Resource files</Filter>
     </Text>
   </ItemGroup>
