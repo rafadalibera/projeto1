@@ -25,7 +25,8 @@ typedef struct {
 //Nao mudar abstrac para abstract. Palavra reservada.
 Noticia NewNoticia(char * title, char * abstrac, char * author, char * date, char * image, char * source, char * text, int numCol){
 	Noticia retorno;
-	
+	int i = 0;
+
 	retorno.Abstract = (char*)calloc(strlen(abstrac) + 1, sizeof(char));
 	strcpy(retorno.Abstract, abstrac);
 
@@ -44,7 +45,16 @@ Noticia NewNoticia(char * title, char * abstrac, char * author, char * date, cha
 	retorno.Text = (char *)calloc(strlen(text), sizeof(char));
 	strcpy(retorno.Text, text);
 
+	retorno.Title = (char *)calloc(strlen(title), sizeof(char));
+	strcpy(retorno.Title, title);
+
 	retorno.numCol = numCol;
+
+	for (i = 0; i < 7; i++){
+		retorno.mascaraPropriedades[i] = 0;
+	}
+
+	return retorno;
 }
 
 //Cria nova instancia de uma lista de noticias
