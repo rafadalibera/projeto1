@@ -1,15 +1,25 @@
-﻿Build started 15/03/2014 00:41:52.
-     1>Project "D:\mc911\projeto1\parserVisual\parserVisual\parserVisual.vcxproj" on node 2 (Build target(s)).
-     1>Build:
-         "C:\Program Files (x86)\Sysprogs\VisualGDB\VisualGDB.exe" /build "D:\mc911\projeto1\parserVisual\parserVisual\parserVisual.vcxproj" "/solution:D:\mc911\projeto1\parserVisual\parserVisual.sln" "/config:Debug" "/platform:Win32"
+﻿Build started 15/03/2014 02:48:23.
+     1>Project "D:\mc911\projeto1\parserVisual\parserVisual\parserVisual.vcxproj" on node 2 (Rebuild target(s)).
+     1>Rebuild:
+         "C:\Program Files (x86)\Sysprogs\VisualGDB\VisualGDB.exe" /rebuild "D:\mc911\projeto1\parserVisual\parserVisual\parserVisual.vcxproj" "/solution:D:\mc911\projeto1\parserVisual\parserVisual.sln" "/config:Debug" "/platform:Win32"
+         VisualGDB: Executing preclean actions
+         VisualGDB: Run "D:\Cygwin64\bin\make.exe clean" in directory "D:\mc911\projeto1" on local computer
+         rm -f scanner.c scanner.o parser.c parser.o parser.h parser
+         VisualGDB: Executing postclean actions
          VisualGDB: Executing prebuild actions
          VisualGDB: Run "D:\Cygwin64\bin\make.exe " in directory "D:\mc911\projeto1" on local computer
          bison -d parser.y  -o parser.c
          gcc -g   -c -o parser.o parser.c
+         flex  -o scanner.c scanner.l
+         gcc -g   -c -o scanner.o scanner.c
+         scanner.l: In function ΓÇÿyylexΓÇÖ:
+     1>D:\mc911\projeto1\scanner.l(45,16): warning : assignment makes integer from pointer without a cast [enabled by default]
+           yylval.intval = strdup(yytext);
+                         ^
          gcc -o parser scanner.o parser.o
          VisualGDB: Executing postbuild actions
-     1>Done Building Project "D:\mc911\projeto1\parserVisual\parserVisual\parserVisual.vcxproj" (Build target(s)).
+     1>Done Building Project "D:\mc911\projeto1\parserVisual\parserVisual\parserVisual.vcxproj" (Rebuild target(s)).
 
 Build succeeded.
 
-Time Elapsed 00:00:00.92
+Time Elapsed 00:00:01.46

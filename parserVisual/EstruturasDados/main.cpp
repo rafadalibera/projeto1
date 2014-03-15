@@ -3,7 +3,7 @@
 #include<string.h>
 #include<ctype.h>
 
-enum TipoObjetoNoticia {
+enum  {
 	Title, Abstract, Author, Date, Image, Source, Text
 };
 
@@ -65,7 +65,7 @@ Noticia NewNoticia(char * title, char * abstrac, char * author, char * date, cha
 }
 
 //Marca um dos itens da mascara de objetos a serem mostrados pela noticia
-void MarcarMostrarObjetoNaNoticia(Noticia * noticia, TipoObjetoNoticia tipoObjeto){
+void MarcarMostrarObjetoNaNoticia(Noticia * noticia, int tipoObjeto){
 	if (tipoObjeto == Title)
 		(*noticia).mascaraPropriedades[0] = 1;
 	else if (tipoObjeto == Abstract)
