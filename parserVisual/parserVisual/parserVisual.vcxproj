@@ -42,7 +42,7 @@
     <NMakeCleanCommandLine>"$(VISUALGDB_DIR)\VisualGDB.exe" /clean "$(ProjectPath)" "/solution:$(SolutionPath)" "/config:$(Configuration)" "/platform:$(Platform)"</NMakeCleanCommandLine>
     <NMakeReBuildCommandLine>"$(VISUALGDB_DIR)\VisualGDB.exe" /rebuild "$(ProjectPath)" "/solution:$(SolutionPath)" "/config:$(Configuration)" "/platform:$(Platform)"</NMakeReBuildCommandLine>
     <NMakeOutput>$(ProjectDir)parserVisual-Debug.vgdbsettings</NMakeOutput>
-    <IncludePath />
+    <IncludePath>D:\Cygwin64\usr\include</IncludePath>
     <ReferencePath />
     <LibraryPath />
   </PropertyGroup>
@@ -72,6 +72,7 @@
     <None Include="..\..\scanner.l" />
   </ItemGroup>
   <ItemGroup>
+    <Text Include="PaginaIdentada.txt" />
     <Text Include="Testes.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

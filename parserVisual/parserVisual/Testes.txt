@@ -13,7 +13,7 @@ newspaper {
 
                 structure {
                         col = 1
-                        show = tille, abstract, author
+                        show = title, abstract, author
                 }
         }
 
@@ -24,7 +24,7 @@ newspaper {
 
                 structure {
                         col = 2
-                        show = tille, abstract
+                        show = title, abstract
                 }
         }
 
