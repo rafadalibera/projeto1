@@ -1,0 +1,7 @@
+Noticia
+	- Titulo
+	- Abstract
+	- Autor
+
+
+string ImprimeUmaNoticia(int numCols, noticia)

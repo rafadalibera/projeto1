@@ -13,6 +13,9 @@
       <UniqueIdentifier>{a63e7c24-1e4b-4751-a3fa-464368cfea70}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav</Extensions>
     </Filter>
+    <Filter Include="Doc">
+      <UniqueIdentifier>{2ba3571f-e65e-4ed1-bb13-d1ad3a88b89f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\parser.c">
@@ -41,6 +44,9 @@
     </Text>
     <Text Include="PaginaIdentada.html">
       <Filter>Resource files</Filter>
+    </Text>
+    <Text Include="Estrutura noticia doc.txt">
+      <Filter>Doc</Filter>
     </Text>
   </ItemGroup>
 </Project>
