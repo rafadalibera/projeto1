@@ -35,4 +35,9 @@
       <Filter>Resource files</Filter>
     </None>
   </ItemGroup>
+  <ItemGroup>
+    <Text Include="Testes.txt">
+      <Filter>Resource files</Filter>
+    </Text>
+  </ItemGroup>
 </Project>

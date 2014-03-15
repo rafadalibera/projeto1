@@ -1,0 +1,13 @@
+newspaper{
+	title = "titulo"
+	date = "data"
+	structure {
+		col=2
+		show=head1
+	}
+	head1{
+		title = "titulonoticia"
+		abstract = "resumo"
+		author = "autor1"
+	}
+}
