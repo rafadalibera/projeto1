@@ -5,6 +5,8 @@ VisualStudioVersion = 12.0.30110.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "parserVisual", "parserVisual\parserVisual.vcxproj", "{CDF8F3EA-721F-4C0A-8E07-0B9911EA2BF8}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "EstruturasDados", "EstruturasDados\EstruturasDados.vcxproj", "{2E624FF4-70D1-4279-AA48-BBDC61E4A8AC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -15,6 +17,10 @@ Global
 		{CDF8F3EA-721F-4C0A-8E07-0B9911EA2BF8}.Debug|Win32.Build.0 = Debug|Win32
 		{CDF8F3EA-721F-4C0A-8E07-0B9911EA2BF8}.Release|Win32.ActiveCfg = Release|Win32
 		{CDF8F3EA-721F-4C0A-8E07-0B9911EA2BF8}.Release|Win32.Build.0 = Release|Win32
+		{2E624FF4-70D1-4279-AA48-BBDC61E4A8AC}.Debug|Win32.ActiveCfg = Debug|Win32
+		{2E624FF4-70D1-4279-AA48-BBDC61E4A8AC}.Debug|Win32.Build.0 = Debug|Win32
+		{2E624FF4-70D1-4279-AA48-BBDC61E4A8AC}.Release|Win32.ActiveCfg = Release|Win32
+		{2E624FF4-70D1-4279-AA48-BBDC61E4A8AC}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
