@@ -146,7 +146,7 @@ int TestaPorMaiorColSpan(ListaNoticias * listaNoticias, int maxColSpan){
 //sempre que eu quiser imprimir uma das noticias. Voce fica no escopo <td></td>.
 //Detalhe que, mais pra frente, eh aqui que vamos ter de dar um jeito de formatar 
 //as coisas do wikipedia. Mas acho que isso eh sussa.
-void ImprimeUmaNoticia(Noticia noticia){
+void ImprimeUmaNoticia(Noticia noticia, FILE * arquivo){
 	return;
 }
 
@@ -166,7 +166,7 @@ void ImprimeTodasNoticias(ListaNoticias * listaNoticias, int colspan, FILE * arq
 		proximaNoticia = BuscaProximaNoticia(listaNoticias, colsDisponiveis);
 		while (proximaNoticia != NULL){
 			colsDisponiveis -= (*proximaNoticia).numCol;
-			ImprimeUmaNoticia((*proximaNoticia));
+			ImprimeUmaNoticia((*proximaNoticia), arquivo);
 			proximaNoticia = BuscaProximaNoticia(listaNoticias, colsDisponiveis);
 		}
 		fprintf(arquivo, "</tr>");
