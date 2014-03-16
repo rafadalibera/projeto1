@@ -6,12 +6,14 @@
 #include <stdio.h>
 #include <ctype.h>
 
-enum {
+enum  {
 	Title, Abstract, Author, Date, Image, Source, Text
 };
 
 typedef struct{
 	int buscada; //Esse campo serve soh para dizer se uma noticia jah foi eleita para ser colocada na tela. Necessario na hora de ordenar / decidir.
+	int posicaoNoticia; //-1 significa que essa noticia nao deve ser mostrada. 0 em diante eh a posicao dessa noticia no jornal
+	char * NomeObjeto; //Aqui precisa ir tipo o T_ID "headline1" do codigo, para mais tarde decidirmos quais noticias mostrar, vindo do structure da noticia
 	char * Title;
 	char * Abstract;
 	char * Author;
@@ -31,9 +33,12 @@ typedef struct {
 
 //Os argumentos precisam ser strings bem formadas (com NUL no final). Todos os objetos sao reinstanciados, ou seja, pode dar free nos fontes depois
 //Nao mudar abstrac para abstract. Palavra reservada.
-Noticia NewNoticia(char * title, char * abstrac, char * author, char * date, char * image, char * source, char * text, int numCol){
+Noticia NewNoticia(char * nomeObjeto, char * title, char * abstrac, char * author, char * date, char * image, char * source, char * text, int numCol){
 	Noticia retorno;
 	int i = 0;
+
+	retorno.NomeObjeto = (char *)calloc(strlen(nomeObjeto) + 1, sizeof(char));
+	strcpy(retorno.NomeObjeto, nomeObjeto);
 
 	retorno.Abstract = (char*)calloc(strlen(abstrac) + 1, sizeof(char));
 	strcpy(retorno.Abstract, abstrac);
@@ -63,7 +68,7 @@ Noticia NewNoticia(char * title, char * abstrac, char * author, char * date, cha
 	}
 
 	retorno.buscada = 0;
-
+	retorno.posicaoNoticia = -1;
 	return retorno;
 }
 
@@ -83,6 +88,31 @@ void MarcarMostrarObjetoNaNoticia(Noticia * noticia, int tipoObjeto){
 		(*noticia).mascaraPropriedades[5] = 1;
 	else if (tipoObjeto == Text)
 		(*noticia).mascaraPropriedades[6] = 1;
+}
+
+//Sinaliza que a noticia apontada deve ser impressa no final.
+//nomeToken eh o nome da noticia digitado no codigo que vem do token
+//Se nao achar a noticia na lista joga no stderror que o usuario digitou alguma besteira
+//Deve ser chamado na ordem do structure da news, pois a ordem de chamada influencia
+//na hora da leitura
+void MarcarNoticiaParaExibicao(ListaNoticias * listaNoticias, char * nomeToken){
+	int ultimaNoticia = -2;
+	int i = 0;
+	for (i = 0; i < (*listaNoticias).tamanho; i++){ //pega a posicao atribuida da ultima noticia
+		if ((*listaNoticias).valores[i].posicaoNoticia > ultimaNoticia)
+			ultimaNoticia = (*listaNoticias).valores[i].posicaoNoticia;
+	}
+	ultimaNoticia++; //Representa a posicao da proxima noticia
+
+	for (i = 0; i < (*listaNoticias).tamanho; i++){
+		if (strcmp((*listaNoticias).valores[i].NomeObjeto, nomeToken) == 0 && (*listaNoticias).valores[i].posicaoNoticia == -1){
+			(*listaNoticias).valores[i].posicaoNoticia = ultimaNoticia;
+			return;
+		}
+	}
+
+	fprintf(stderr, "\nWarning: Noticia %s nao faz parte das noticias declaradas\n", nomeToken);
+	return;
 }
 
 //Cria nova instancia de uma lista de noticias
@@ -109,18 +139,23 @@ void AppendElemento(ListaNoticias * listaNoticias, Noticia novaNoticia){
 
 //Quando chamada decide a proxima noticia a ser colocada na tela.
 //Mantem a ordem digitada pelo usuario, mas respeita o numero de colunas desejado.
-//Retorna a proxima noticia que cabe no numero de colunas desejado ou retorna NULL
-Noticia * BuscaProximaNoticia(ListaNoticias * listaNoticias, int numColunasDisponivel){
+//Retorna a proxima noticia
+Noticia * BuscaProximaNoticia(ListaNoticias * listaNoticias){
 	int i = 0;
+	int menorEncontrado = 2147483647;
+	Noticia * retorno = NULL;
 
 	for (i = 0; i < (*listaNoticias).tamanho; i++){
-		if (!(*listaNoticias).valores[i].buscada && (*listaNoticias).valores[i].numCol <= numColunasDisponivel){
-			(*listaNoticias).valores[i].buscada = 1;
-			return &(*listaNoticias).valores[i];
+		if (!(*listaNoticias).valores[i].buscada && (*listaNoticias).valores[i].posicaoNoticia < menorEncontrado && (*listaNoticias).valores[i].posicaoNoticia >= 0){
+			retorno = &(*listaNoticias).valores[i];
+			menorEncontrado = (*retorno).posicaoNoticia;
 		}
 	}
 
-	return NULL;
+	if (retorno != NULL)
+		(*retorno).buscada = 1;
+
+	return retorno;
 }
 
 //Testa se todas as noticias jah foram buscada e o loop pode terminar. 0 se ainda tiver alguma coisa para buscar, 1 se jah tiver pesquisado tudo
@@ -149,7 +184,7 @@ int TestaPorMaiorColSpan(ListaNoticias * listaNoticias, int maxColSpan){
 //sempre que eu quiser imprimir uma das noticias. Voce fica no escopo <td></td>.
 //Detalhe que, mais pra frente, eh aqui que vamos ter de dar um jeito de formatar 
 //as coisas do wikipedia. Mas acho que isso eh sussa.
-void ImprimeUmaNoticia(Noticia noticia){
+void ImprimeUmaNoticia(Noticia noticia, FILE * arquivo){
 	return;
 }
 
@@ -157,23 +192,21 @@ void ImprimeUmaNoticia(Noticia noticia){
 void ImprimeTodasNoticias(ListaNoticias * listaNoticias, int colspan, FILE * arquivo){ //Isso daqui vai ser chamado quando ele reduzir o newspaper, entao jah vou ter essa informacao do structure do newspaper
 	int colsDisponiveis = colspan;
 	Noticia * proximaNoticia = NULL;
-	if (TestaPorMaiorColSpan(listaNoticias, colspan)){
-		//Aqui a gente pode informar algum erro pro usuario
-		return;
-	} 
-	//A partir daqui quer dizer que nenhuma noticia eh maior que o jornal
 	
-	while (!TestaSeTodasNoticiasJahForamBuscadas(listaNoticias)){
+	do{
 		colsDisponiveis = colspan;
 		fprintf(arquivo, "<tr>");
-		proximaNoticia = BuscaProximaNoticia(listaNoticias, colsDisponiveis);
-		while (proximaNoticia != NULL){
-			colsDisponiveis -= (*proximaNoticia).numCol;
-			ImprimeUmaNoticia((*proximaNoticia));
-			proximaNoticia = BuscaProximaNoticia(listaNoticias, colsDisponiveis);
+		while (colsDisponiveis > 0){
+			proximaNoticia = BuscaProximaNoticia(listaNoticias);
+			if (proximaNoticia != NULL){
+				colsDisponiveis -= (*proximaNoticia).numCol;
+				ImprimeUmaNoticia((*proximaNoticia), arquivo);
+				if (colsDisponiveis < 0)
+					fprintf(stderr, "\nWarning: Noticia %s extrapola numero de colunas disponiveis do jornal\n", (*proximaNoticia).NomeObjeto);
+			}
 		}
 		fprintf(arquivo, "</tr>");
-	}
+	} while (proximaNoticia != NULL);
 }
 
 %}
