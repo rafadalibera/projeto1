@@ -160,7 +160,8 @@ int TestaSeTodasNoticiasJahForamBuscadas(ListaNoticias * listaNoticias){
 	int i = 0;
 	int retorno = 1;
 	for (i = 0; i < (*listaNoticias).tamanho; i++){
-		retorno = retorno * (*listaNoticias).valores[i].buscada;
+		if ((*listaNoticias).valores[i].posicaoNoticia >= 0) //So faz a varredura dentre as noticias que devem ser exibidas
+			retorno = retorno * (*listaNoticias).valores[i].buscada;
 	}
 	return retorno;
 }
@@ -203,7 +204,7 @@ void ImprimeTodasNoticias(ListaNoticias * listaNoticias, int colspan, FILE * arq
 			}
 		}
 		fprintf(arquivo, "</tr>");
-	} while (proximaNoticia != NULL);
+	} while (TestaSeTodasNoticiasJahForamBuscadas(listaNoticias));
 }
 
 
@@ -223,7 +224,7 @@ int main(){
 	AppendElemento(&lista, not1);
 
 	MarcarNoticiaParaExibicao(&lista, "headline10"); //Marca que essa noticia deve ir para a tela como a primeira noticia
-	MarcarNoticiaParaExibicao(&lista, "headline1"); //Marca essa noticia deve ir para a tela como a proxima (segunda) noticia
+	MarcarNoticiaParaExibicao(&lista, "headline12"); //Marca essa noticia deve ir para a tela como a proxima (segunda) noticia
 
 	int jornalOverflow = TestaPorMaiorColSpan(&lista, 7); //Deve retornar 1, pois tem uma noticia com 10 lah
 	int jornalOverflow2 = TestaPorMaiorColSpan(&lista, 10); //Deve retornar falso, maior noticia tem 10 colunas 
