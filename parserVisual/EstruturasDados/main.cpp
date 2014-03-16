@@ -28,6 +28,18 @@ typedef struct {
 	Noticia * valores;
 }ListaNoticias;
 
+//Converte uma string para letras maiusculas. Nao esquecer de dar free na memoria retornada depois de usar se nao for mais necessaria
+char *StringToUpper(char * stringOriginal){
+	int i = 0;
+	char * retorno = (char *)calloc(strlen(stringOriginal) + 1, sizeof(char));
+
+	for (i = 0; i < strlen(stringOriginal); i++){
+		retorno[i] = (char)toupper(stringOriginal[i]);
+	}
+	retorno[i] = '\0';
+	return retorno;
+}
+
 //Os argumentos precisam ser strings bem formadas (com NUL no final). Todos os objetos sao reinstanciados, ou seja, pode dar free nos fontes depois
 //Nao mudar abstrac para abstract. Palavra reservada.
 Noticia NewNoticia(char * nomeObjeto, char * title, char * abstrac, char * author, char * date, char * image, char * source, char * text, int numCol){
@@ -35,7 +47,7 @@ Noticia NewNoticia(char * nomeObjeto, char * title, char * abstrac, char * autho
 	int i = 0;
 
 	retorno.NomeObjeto = (char *)calloc(strlen(nomeObjeto) + 1, sizeof(char));
-	strcpy(retorno.NomeObjeto, nomeObjeto);
+	retorno.NomeObjeto = StringToUpper(nomeObjeto);
 
 	retorno.Abstract = (char*)calloc(strlen(abstrac) + 1, sizeof(char));
 	strcpy(retorno.Abstract, abstrac);
@@ -87,6 +99,9 @@ void MarcarMostrarObjetoNaNoticia(Noticia * noticia, int tipoObjeto){
 		(*noticia).mascaraPropriedades[6] = 1;
 }
 
+
+
+
 //Sinaliza que a noticia apontada deve ser impressa no final.
 //nomeToken eh o nome da noticia digitado no codigo que vem do token
 //Se nao achar a noticia na lista joga no stderror que o usuario digitou alguma besteira
@@ -94,21 +109,26 @@ void MarcarMostrarObjetoNaNoticia(Noticia * noticia, int tipoObjeto){
 //na hora da leitura
 void MarcarNoticiaParaExibicao(ListaNoticias * listaNoticias, char * nomeToken){
 	int ultimaNoticia = -2;
+	char *nomeTokenMaiusculo = StringToUpper(nomeToken); //Precisa converter o nome do token para maiusculas, pois o nome do objeto eh sempre em maiusculas (para ser case insensitive)
 	int i = 0;
+
 	for (i = 0; i < (*listaNoticias).tamanho; i++){ //pega a posicao atribuida da ultima noticia
 		if ((*listaNoticias).valores[i].posicaoNoticia > ultimaNoticia)
 			ultimaNoticia = (*listaNoticias).valores[i].posicaoNoticia;
 	}
 	ultimaNoticia++; //Representa a posicao da proxima noticia
 
+	//Faz a busca na lista
 	for (i = 0; i < (*listaNoticias).tamanho; i++){
-		if (strcmp((*listaNoticias).valores[i].NomeObjeto, nomeToken) == 0 && (*listaNoticias).valores[i].posicaoNoticia == -1){
+		if (strcmp((*listaNoticias).valores[i].NomeObjeto, nomeTokenMaiusculo) == 0 && (*listaNoticias).valores[i].posicaoNoticia == -1){
 			(*listaNoticias).valores[i].posicaoNoticia = ultimaNoticia;
+			free(nomeTokenMaiusculo);
 			return;
 		}
 	}
 
-	fprintf(stderr, "\nWarning: Noticia %s nao faz parte das noticias declaradas\n", nomeToken);
+	fprintf(stderr, "\nWarning: Noticia %s nao faz parte das noticias declaradas\n", nomeTokenMaiusculo);
+	free(nomeTokenMaiusculo);
 	return;
 }
 
