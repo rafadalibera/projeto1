@@ -6,9 +6,9 @@
 #include <stdio.h>
 #include <ctype.h>
 
-enum  {
-	Title, Abstract, Author, Date, Image, Source, Text
-};
+typedef enum  {
+	Invalido, Title, Abstract, Author, Date, Image, Source, Text
+}TipoPropriedade;
 
 typedef struct{
 	int buscada; //Esse campo serve soh para dizer se uma noticia jah foi eleita para ser colocada na tela. Necessario na hora de ordenar / decidir.
@@ -22,7 +22,7 @@ typedef struct{
 	char * Source;
 	char * Text;
 	int numCol;
-	short mascaraPropriedades[7];
+	TipoPropriedade listaPropriedades[7];
 } Noticia;
 
 typedef struct {
@@ -31,6 +31,18 @@ typedef struct {
 	Noticia * valores;
 }ListaNoticias;
 
+//Converte uma string para letras maiusculas. Nao esquecer de dar free na memoria retornada depois de usar se nao for mais necessaria
+char *StringToUpper(char * stringOriginal){
+	int i = 0;
+	char * retorno = (char *)calloc(strlen(stringOriginal) + 1, sizeof(char));
+
+	for (i = 0; i < strlen(stringOriginal); i++){
+		retorno[i] = (char)toupper(stringOriginal[i]);
+	}
+	retorno[i] = '\0';
+	return retorno;
+}
+
 //Os argumentos precisam ser strings bem formadas (com NUL no final). Todos os objetos sao reinstanciados, ou seja, pode dar free nos fontes depois
 //Nao mudar abstrac para abstract. Palavra reservada.
 Noticia NewNoticia(char * nomeObjeto, char * title, char * abstrac, char * author, char * date, char * image, char * source, char * text, int numCol){
@@ -38,7 +50,7 @@ Noticia NewNoticia(char * nomeObjeto, char * title, char * abstrac, char * autho
 	int i = 0;
 
 	retorno.NomeObjeto = (char *)calloc(strlen(nomeObjeto) + 1, sizeof(char));
-	strcpy(retorno.NomeObjeto, nomeObjeto);
+	retorno.NomeObjeto = StringToUpper(nomeObjeto);
 
 	retorno.Abstract = (char*)calloc(strlen(abstrac) + 1, sizeof(char));
 	strcpy(retorno.Abstract, abstrac);
@@ -64,7 +76,7 @@ Noticia NewNoticia(char * nomeObjeto, char * title, char * abstrac, char * autho
 	retorno.numCol = numCol;
 
 	for (i = 0; i < 7; i++){
-		retorno.mascaraPropriedades[i] = 0;
+		retorno.listaPropriedades[i] = Invalido;
 	}
 
 	retorno.buscada = 0;
@@ -72,23 +84,33 @@ Noticia NewNoticia(char * nomeObjeto, char * title, char * abstrac, char * autho
 	return retorno;
 }
 
-//Marca um dos itens da mascara de objetos a serem mostrados pela noticia
-void MarcarMostrarObjetoNaNoticia(Noticia * noticia, int tipoObjeto){
-	if (tipoObjeto == Title)
-		(*noticia).mascaraPropriedades[0] = 1;
-	else if (tipoObjeto == Abstract)
-		(*noticia).mascaraPropriedades[1] = 1;
-	else if (tipoObjeto == Author)
-		(*noticia).mascaraPropriedades[2] = 1;
-	else if (tipoObjeto == Date)
-		(*noticia).mascaraPropriedades[3] = 1;
-	else if (tipoObjeto == Image)
-		(*noticia).mascaraPropriedades[4] = 1;
-	else if (tipoObjeto == Source)
-		(*noticia).mascaraPropriedades[5] = 1;
-	else if (tipoObjeto == Text)
-		(*noticia).mascaraPropriedades[6] = 1;
+//Marca um dos itens da lista de atributos a serem mostrados pela noticia. 
+//Notar que o objeto eh eh adicionado numa lista, para manter a ordem em que isso aparece
+//no structure da noticia. Aqui eu mesmo jah pego coisas do tipo o usuario tentando 
+//declarar para mostrar duas vezes o mesmo objeto.
+void MarcarMostrarObjetoNaNoticia(Noticia * noticia, TipoPropriedade tipoObjeto){
+	int i = 0;
+	
+	//Primeiro varre pra testar se o tipoObjeto sendo adicionado jah foi adicionado. Se isso acontecer eh uma condicao de warning.
+	for (i = 0; i < 7; i++){
+		if ((*noticia).listaPropriedades[i] == tipoObjeto){
+			fprintf(stderr, "\nWarning: Noticia %s possui atributos repetidos sendo mostrados\n", (*noticia).NomeObjeto);
+		}
+	}
+
+	//Aqui coloca o objeto desejado na lista
+	for (i = 0; i < 7; i++){
+		if ((*noticia).listaPropriedades[i] == Invalido){
+			(*noticia).listaPropriedades[i] = tipoObjeto;
+			return;
+		}
+	}
+	//Na pagina tem lugar para uma vez cada atributo (ou seja, 7 atributos). Tentou mostrar mais que 7 joga warning.
+	fprintf(stderr, "\nWarning: Noticia %s tentando mostrar mais objetos que o possivel.\n", (*noticia).NomeObjeto);
 }
+
+
+
 
 //Sinaliza que a noticia apontada deve ser impressa no final.
 //nomeToken eh o nome da noticia digitado no codigo que vem do token
@@ -97,21 +119,26 @@ void MarcarMostrarObjetoNaNoticia(Noticia * noticia, int tipoObjeto){
 //na hora da leitura
 void MarcarNoticiaParaExibicao(ListaNoticias * listaNoticias, char * nomeToken){
 	int ultimaNoticia = -2;
+	char *nomeTokenMaiusculo = StringToUpper(nomeToken); //Precisa converter o nome do token para maiusculas, pois o nome do objeto eh sempre em maiusculas (para ser case insensitive)
 	int i = 0;
+
 	for (i = 0; i < (*listaNoticias).tamanho; i++){ //pega a posicao atribuida da ultima noticia
 		if ((*listaNoticias).valores[i].posicaoNoticia > ultimaNoticia)
 			ultimaNoticia = (*listaNoticias).valores[i].posicaoNoticia;
 	}
 	ultimaNoticia++; //Representa a posicao da proxima noticia
 
+	//Faz a busca na lista
 	for (i = 0; i < (*listaNoticias).tamanho; i++){
-		if (strcmp((*listaNoticias).valores[i].NomeObjeto, nomeToken) == 0 && (*listaNoticias).valores[i].posicaoNoticia == -1){
+		if (strcmp((*listaNoticias).valores[i].NomeObjeto, nomeTokenMaiusculo) == 0 && (*listaNoticias).valores[i].posicaoNoticia == -1){
 			(*listaNoticias).valores[i].posicaoNoticia = ultimaNoticia;
+			free(nomeTokenMaiusculo);
 			return;
 		}
 	}
 
-	fprintf(stderr, "\nWarning: Noticia %s nao faz parte das noticias declaradas\n", nomeToken);
+	fprintf(stderr, "\nWarning: Noticia %s nao faz parte das noticias declaradas\n", nomeTokenMaiusculo);
+	free(nomeTokenMaiusculo);
 	return;
 }
 
@@ -138,7 +165,7 @@ void AppendElemento(ListaNoticias * listaNoticias, Noticia novaNoticia){
 }
 
 //Quando chamada decide a proxima noticia a ser colocada na tela.
-//Mantem a ordem digitada pelo usuario, mas respeita o numero de colunas desejado.
+//Mantem a ordem digitada pelo usuario.
 //Retorna a proxima noticia
 Noticia * BuscaProximaNoticia(ListaNoticias * listaNoticias){
 	int i = 0;
@@ -163,7 +190,8 @@ int TestaSeTodasNoticiasJahForamBuscadas(ListaNoticias * listaNoticias){
 	int i = 0;
 	int retorno = 1;
 	for (i = 0; i < (*listaNoticias).tamanho; i++){
-		retorno = retorno * (*listaNoticias).valores[i].buscada;
+		if ((*listaNoticias).valores[i].posicaoNoticia >= 0) //So faz a varredura dentre as noticias que devem ser exibidas
+			retorno = retorno * (*listaNoticias).valores[i].buscada;
 	}
 	return retorno;
 }
@@ -189,7 +217,7 @@ void ImprimeUmaNoticia(Noticia noticia, FILE * arquivo){
 }
 
 
-void ImprimeTodasNoticias(ListaNoticias * listaNoticias, int colspan, FILE * arquivo){ //Isso daqui vai ser chamado quando ele reduzir o newspaper, entao jah vou ter essa informacao do structure do newspaper
+void ImprimeTodasNoticias(ListaNoticias * listaNoticias, int colspan, FILE * arquivo){
 	int colsDisponiveis = colspan;
 	Noticia * proximaNoticia = NULL;
 	
@@ -206,7 +234,81 @@ void ImprimeTodasNoticias(ListaNoticias * listaNoticias, int colspan, FILE * arq
 			}
 		}
 		fprintf(arquivo, "</tr>");
-	} while (proximaNoticia != NULL);
+	} while (!TestaSeTodasNoticiasJahForamBuscadas(listaNoticias));
+}
+
+//Imprime o preambulo. Coloquei um javascript pra atualizar o dia automaticamente.
+void ImprimePreambulo(FILE * arquivo){
+	fprintf(arquivo, "<html><head><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><title> SEMPRE ONLINE. </title><link rel=\"stylesheet\" type=\"text/css\" href=\"style.css\" media=\"screen\"><script type=\"text/javascript\"> </script><style type=\"text/css\"></style></head><body style=\"\"><div id=\"header\"> <div id=\"logo\"> <h1><a><span>SEMPRE ONLINE.</span>O jornal em tempo real. </a></h1><p><script language=\"JavaScript\">var now = new Date();var dayNames = new Array(\"Domingo\",\"Segunda - Feira\",\"Terca - Feira\",\"Quarta - Feira\",\"Quinta - Feira\",\"Sexta - Feira\",\"Sabado\");var monNames = new Array(\"Janeiro\",\"Fevereiro\",\"Marco\",\"Abril\",\"Maio\",\"Junho\",\"Julho\",\"Agosto\",\"Setembro\",\"Outubro\",\"Novembro\",\"Dezembro\");document.write(dayNames[now.getDay()] + \", \" + now.getDate() + \" de \" + monNames[now.getMonth()] + \" de \" +  now.getFullYear());</script></p></div><div id=\"separador\"></div></div><table cellspacing=\"0\" cellpadding=\"8\" width=\"1024\" border=\"0\"><tbody>");
+}
+
+//Imprime as closing tags
+void ImprimeTermino(FILE * arquivo){
+	fprintf(arquivo, "</tbody></table></body></html>");
+}
+
+//Imprime a pagina web, com posse das noticias
+void ImprimePaginaWeb(char * nomeSaidaHtml, ListaNoticias * listaNoticias, int colspan){ //Chamar essa funcao quando ele reduzir o newspaper, porque jah se tem todas as informacoes necessarias
+	FILE * arquivo = fopen(nomeSaidaHtml, "w");
+	ImprimePreambulo(arquivo);
+	ImprimeTodasNoticias(listaNoticias, colspan, arquivo);
+	ImprimeTermino(arquivo);
+	fclose(arquivo);
+}
+
+
+void TesteMetodos(){
+	ListaNoticias lista = NewListaNoticias(10); //O capacity pode por qualquer coisa. Acho que 10 tah bom para nao ficar dando realloc nem gastar infinito memoria. Mas se passar disso ele realoca.
+
+	Noticia not10 = NewNoticia("headline10", "titulo10", "abstract10", "author10", "data10", "imagem10", "fonte10", "texto balbalablab10", 10); //Instancias de teste
+	Noticia not1 = NewNoticia("headline1", "titulo1", "abstract1", "author1", "data1", "imagem1", "fonte1", "texto balbalablab10", 1);
+
+	MarcarMostrarObjetoNaNoticia(&not10, Title); //Marca que a noticia not10 deve mostrar titulo e source
+	MarcarMostrarObjetoNaNoticia(&not10, Source);
+
+	MarcarMostrarObjetoNaNoticia(&not1, Abstract); //Marca que noticia not1 deve mostrar abstract e author
+	MarcarMostrarObjetoNaNoticia(&not1, Author);
+
+	AppendElemento(&lista, not10); //Coloca not10 e not1 na lista
+	AppendElemento(&lista, not1);
+
+	MarcarNoticiaParaExibicao(&lista, "headline10"); //Marca que essa noticia deve ir para a tela como a primeira noticia
+	MarcarNoticiaParaExibicao(&lista, "headline1"); //Marca essa noticia deve ir para a tela como a proxima (segunda) noticia
+
+	int jornalOverflow = TestaPorMaiorColSpan(&lista, 7); //Deve retornar 1, pois tem uma noticia com 10 lah
+	int jornalOverflow2 = TestaPorMaiorColSpan(&lista, 10); //Deve retornar falso, maior noticia tem 10 colunas 
+
+	int aindaNaoPesquisouTudo = !TestaSeTodasNoticiasJahForamBuscadas(&lista); //Tem de dar 1 (negado de 0), pois nenhuma noticia ainda foi eleita para ser impressa
+
+	Noticia * not10ret = BuscaProximaNoticia(&lista); //Escolhe a primeira noticia disponivel
+	Noticia * not1ret = BuscaProximaNoticia(&lista); //Escolha a segunda noticia disponivel 
+
+	Noticia * not1ret2 = BuscaProximaNoticia(&lista); // Deve voltar NULL, pois as duas noticias jah foram pesquisadas e nao tem mais nada sem pesquisar
+
+	int jahPesquisouTudo = TestaSeTodasNoticiasJahForamBuscadas(&lista); //Deve retornar 1, pois as duas noticias jah foram eleitas
+}
+
+void TesteGeraHtml(){
+	ListaNoticias listaNoticias = NewListaNoticias(5);
+
+	Noticia not1 = NewNoticia("head1", "Teste 1", "Essa eh a primeira noticia de testes", "Eu mermo", "Hoje", "sem imagem", "sem fonte", "aqui vai um texto qqr blablabla", 2);
+	
+	MarcarMostrarObjetoNaNoticia(&not1, Title);
+	MarcarMostrarObjetoNaNoticia(&not1, Image);
+	MarcarMostrarObjetoNaNoticia(&not1, Abstract);
+	AppendElemento(&listaNoticias, not1);
+
+	Noticia not2 = NewNoticia("head2", "Teste 2", "Essa eh a segunda noticia de testes", "Eu mermo denovo", "Hoje", "sem imagem", "sem fonte", "aqui vai mais outroo texto qqr dasdlsjadlaskjd", 1);
+
+	MarcarMostrarObjetoNaNoticia(&not2, Abstract);
+	MarcarMostrarObjetoNaNoticia(&not2, Image);
+	MarcarMostrarObjetoNaNoticia(&not2, Title);
+	AppendElemento(&listaNoticias, not2);
+	
+	MarcarNoticiaParaExibicao(&listaNoticias, "HEAD1");
+	MarcarNoticiaParaExibicao(&listaNoticias, "HEAD2");
+
+	ImprimePaginaWeb("saidaTeste.html", &listaNoticias, 3);
 }
 
 %}

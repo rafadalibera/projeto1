@@ -3,9 +3,9 @@
 #include<string.h>
 #include<ctype.h>
 
-enum  {
-	Title, Abstract, Author, Date, Image, Source, Text
-};
+typedef enum  {
+	Invalido, Title, Abstract, Author, Date, Image, Source, Text
+}TipoPropriedade;
 
 typedef struct{
 	int buscada; //Esse campo serve soh para dizer se uma noticia jah foi eleita para ser colocada na tela. Necessario na hora de ordenar / decidir.
@@ -19,7 +19,7 @@ typedef struct{
 	char * Source;
 	char * Text;
 	int numCol;
-	short mascaraPropriedades[7];
+	TipoPropriedade listaPropriedades[7];
 } Noticia;
 
 typedef struct {
@@ -73,7 +73,7 @@ Noticia NewNoticia(char * nomeObjeto, char * title, char * abstrac, char * autho
 	retorno.numCol = numCol;
 
 	for (i = 0; i < 7; i++){
-		retorno.mascaraPropriedades[i] = 0;
+		retorno.listaPropriedades[i] = Invalido;
 	}
 
 	retorno.buscada = 0;
@@ -81,22 +81,29 @@ Noticia NewNoticia(char * nomeObjeto, char * title, char * abstrac, char * autho
 	return retorno;
 }
 
-//Marca um dos itens da mascara de objetos a serem mostrados pela noticia
-void MarcarMostrarObjetoNaNoticia(Noticia * noticia, int tipoObjeto){
-	if (tipoObjeto == Title)
-		(*noticia).mascaraPropriedades[0] = 1;
-	else if (tipoObjeto == Abstract)
-		(*noticia).mascaraPropriedades[1] = 1;
-	else if (tipoObjeto == Author)
-		(*noticia).mascaraPropriedades[2] = 1;
-	else if (tipoObjeto == Date)
-		(*noticia).mascaraPropriedades[3] = 1;
-	else if (tipoObjeto == Image)
-		(*noticia).mascaraPropriedades[4] = 1;
-	else if (tipoObjeto == Source)
-		(*noticia).mascaraPropriedades[5] = 1;
-	else if (tipoObjeto == Text)
-		(*noticia).mascaraPropriedades[6] = 1;
+//Marca um dos itens da lista de atributos a serem mostrados pela noticia. 
+//Notar que o objeto eh eh adicionado numa lista, para manter a ordem em que isso aparece
+//no structure da noticia. Aqui eu mesmo jah pego coisas do tipo o usuario tentando 
+//declarar para mostrar duas vezes o mesmo objeto.
+void MarcarMostrarObjetoNaNoticia(Noticia * noticia, TipoPropriedade tipoObjeto){
+	int i = 0;
+	
+	//Primeiro varre pra testar se o tipoObjeto sendo adicionado jah foi adicionado. Se isso acontecer eh uma condicao de warning.
+	for (i = 0; i < 7; i++){
+		if ((*noticia).listaPropriedades[i] == tipoObjeto){
+			fprintf(stderr, "\nWarning: Noticia %s possui atributos repetidos sendo mostrados\n", (*noticia).NomeObjeto);
+		}
+	}
+
+	//Aqui coloca o objeto desejado na lista
+	for (i = 0; i < 7; i++){
+		if ((*noticia).listaPropriedades[i] == Invalido){
+			(*noticia).listaPropriedades[i] = tipoObjeto;
+			return;
+		}
+	}
+	//Na pagina tem lugar para uma vez cada atributo (ou seja, 7 atributos). Tentou mostrar mais que 7 joga warning.
+	fprintf(stderr, "\nWarning: Noticia %s tentando mostrar mais objetos que o possivel.\n", (*noticia).NomeObjeto);
 }
 
 
@@ -155,7 +162,7 @@ void AppendElemento(ListaNoticias * listaNoticias, Noticia novaNoticia){
 }
 
 //Quando chamada decide a proxima noticia a ser colocada na tela.
-//Mantem a ordem digitada pelo usuario, mas respeita o numero de colunas desejado.
+//Mantem a ordem digitada pelo usuario.
 //Retorna a proxima noticia
 Noticia * BuscaProximaNoticia(ListaNoticias * listaNoticias){
 	int i = 0;
@@ -207,7 +214,7 @@ void ImprimeUmaNoticia(Noticia noticia, FILE * arquivo){
 }
 
 
-void ImprimeTodasNoticias(ListaNoticias * listaNoticias, int colspan, FILE * arquivo){ //Isso daqui vai ser chamado quando ele reduzir o newspaper, entao jah vou ter essa informacao do structure do newspaper
+void ImprimeTodasNoticias(ListaNoticias * listaNoticias, int colspan, FILE * arquivo){
 	int colsDisponiveis = colspan;
 	Noticia * proximaNoticia = NULL;
 	
@@ -224,16 +231,35 @@ void ImprimeTodasNoticias(ListaNoticias * listaNoticias, int colspan, FILE * arq
 			}
 		}
 		fprintf(arquivo, "</tr>");
-	} while (TestaSeTodasNoticiasJahForamBuscadas(listaNoticias));
+	} while (!TestaSeTodasNoticiasJahForamBuscadas(listaNoticias));
+}
+
+//Imprime o preambulo. Coloquei um javascript pra atualizar o dia automaticamente.
+void ImprimePreambulo(FILE * arquivo){
+	fprintf(arquivo, "<html><head><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><title> SEMPRE ONLINE. </title><link rel=\"stylesheet\" type=\"text/css\" href=\"style.css\" media=\"screen\"><script type=\"text/javascript\"> </script><style type=\"text/css\"></style></head><body style=\"\"><div id=\"header\"> <div id=\"logo\"> <h1><a><span>SEMPRE ONLINE.</span>O jornal em tempo real. </a></h1><p><script language=\"JavaScript\">var now = new Date();var dayNames = new Array(\"Domingo\",\"Segunda - Feira\",\"Terca - Feira\",\"Quarta - Feira\",\"Quinta - Feira\",\"Sexta - Feira\",\"Sabado\");var monNames = new Array(\"Janeiro\",\"Fevereiro\",\"Marco\",\"Abril\",\"Maio\",\"Junho\",\"Julho\",\"Agosto\",\"Setembro\",\"Outubro\",\"Novembro\",\"Dezembro\");document.write(dayNames[now.getDay()] + \", \" + now.getDate() + \" de \" + monNames[now.getMonth()] + \" de \" +  now.getFullYear());</script></p></div><div id=\"separador\"></div></div><table cellspacing=\"0\" cellpadding=\"8\" width=\"1024\" border=\"0\"><tbody>");
+}
+
+//Imprime as closing tags
+void ImprimeTermino(FILE * arquivo){
+	fprintf(arquivo, "</tbody></table></body></html>");
+}
+
+//Imprime a pagina web, com posse das noticias
+void ImprimePaginaWeb(char * nomeSaidaHtml, ListaNoticias * listaNoticias, int colspan){ //Chamar essa funcao quando ele reduzir o newspaper, porque jah se tem todas as informacoes necessarias
+	FILE * arquivo = fopen(nomeSaidaHtml, "w");
+	ImprimePreambulo(arquivo);
+	ImprimeTodasNoticias(listaNoticias, colspan, arquivo);
+	ImprimeTermino(arquivo);
+	fclose(arquivo);
 }
 
 
-int main(){
+void TesteMetodos(){
 	ListaNoticias lista = NewListaNoticias(10); //O capacity pode por qualquer coisa. Acho que 10 tah bom para nao ficar dando realloc nem gastar infinito memoria. Mas se passar disso ele realoca.
 
 	Noticia not10 = NewNoticia("headline10", "titulo10", "abstract10", "author10", "data10", "imagem10", "fonte10", "texto balbalablab10", 10); //Instancias de teste
 	Noticia not1 = NewNoticia("headline1", "titulo1", "abstract1", "author1", "data1", "imagem1", "fonte1", "texto balbalablab10", 1);
-	
+
 	MarcarMostrarObjetoNaNoticia(&not10, Title); //Marca que a noticia not10 deve mostrar titulo e source
 	MarcarMostrarObjetoNaNoticia(&not10, Source);
 
@@ -257,7 +283,35 @@ int main(){
 	Noticia * not1ret2 = BuscaProximaNoticia(&lista); // Deve voltar NULL, pois as duas noticias jah foram pesquisadas e nao tem mais nada sem pesquisar
 
 	int jahPesquisouTudo = TestaSeTodasNoticiasJahForamBuscadas(&lista); //Deve retornar 1, pois as duas noticias jah foram eleitas
+}
 
+void TesteGeraHtml(){
+	ListaNoticias listaNoticias = NewListaNoticias(5);
 
+	Noticia not1 = NewNoticia("head1", "Teste 1", "Essa eh a primeira noticia de testes", "Eu mermo", "Hoje", "sem imagem", "sem fonte", "aqui vai um texto qqr blablabla", 2);
+	
+	MarcarMostrarObjetoNaNoticia(&not1, Title);
+	MarcarMostrarObjetoNaNoticia(&not1, Image);
+	MarcarMostrarObjetoNaNoticia(&not1, Abstract);
+	AppendElemento(&listaNoticias, not1);
+
+	Noticia not2 = NewNoticia("head2", "Teste 2", "Essa eh a segunda noticia de testes", "Eu mermo denovo", "Hoje", "sem imagem", "sem fonte", "aqui vai mais outroo texto qqr dasdlsjadlaskjd", 1);
+
+	MarcarMostrarObjetoNaNoticia(&not2, Abstract);
+	MarcarMostrarObjetoNaNoticia(&not2, Image);
+	MarcarMostrarObjetoNaNoticia(&not2, Title);
+	AppendElemento(&listaNoticias, not2);
+	
+	MarcarNoticiaParaExibicao(&listaNoticias, "HEAD1");
+	MarcarNoticiaParaExibicao(&listaNoticias, "HEAD2");
+
+	ImprimePaginaWeb("saidaTeste.html", &listaNoticias, 3);
+}
+
+int main(){
+
+	//TesteMetodos();
+
+	TesteGeraHtml();
 
 }
