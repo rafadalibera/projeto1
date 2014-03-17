@@ -357,11 +357,51 @@ void TesteGeraHtml(){
 	ImprimePaginaWeb("saidaTeste.html", &listaNoticias, 3);
 }
 
+char* concat(int count, ...)
+{
+    va_list ap;
+    int len = 1, i;
+
+    va_start(ap, count);
+    for(i=0 ; i<count ; i++)
+        len += strlen(va_arg(ap, char*));
+    va_end(ap);
+
+    char *result = (char*) calloc(sizeof(char),len);
+    int pos = 0;
+
+    // Actually concatenate strings
+    va_start(ap, count);
+    for(i=0 ; i<count ; i++)
+    {
+        char *s = va_arg(ap, char*);
+        strcpy(result+pos, s);
+        pos += strlen(s);
+    }
+    va_end(ap);
+
+    return result;
+}
+
 %}
  
 %union{
 	char *str;
 	int  intval;
+	struct NewsStructure {
+		int coluna;
+		char * lista;
+	} newsStructure;
+	struct TempNews {
+		char * title;
+		char * abstract;
+		char * author;
+		char * date;
+		char * image;
+		char * source;
+		char * text;
+	} tempNews;
+	// Noticia noticia;
 }
 
 %token <str> T_ID
@@ -381,6 +421,11 @@ void TesteGeraHtml(){
 %token <intval> T_NUM
 
 %error-verbose
+
+%type <str> id_list show_list T_TITLE T_ABSTRACT T_AUTHOR  T_IMAGE	 T_SOURCE T_DATE T_TEXT	
+%type <newsStructure> structure
+%type <tempNews> a_news
+/* %type <noticia> news */
 
 
 %%
@@ -402,13 +447,32 @@ newspaper: 	T_NEWSPAPER '{' T_TITLE '=' T_STRING  T_DATE '=' T_STRING  structure
 		fprintf(F, "				<p> %s </p>\n", $8);
 		fprintf(F, "			</div>\n");
 		fprintf(F, "		</div>\n");
+
+		fprintf(F, "teste -> %d\n", $9.coluna);
+		fprintf(F, "teste -> %s\n", $9.lista);
 		fclose(F);
 	} 
 
 
 structure:
-			T_STRUCTURE '{' T_COL '=' T_NUM T_SHOW '=' id_list '}'
+			T_STRUCTURE '{' T_COL '=' T_NUM T_SHOW '=' id_list '}' 		
+			{ 
+				struct NewsStructure temp;
+				temp.coluna = $5;
+				temp.lista = (char *) malloc ((sizeof($8) + 1) * sizeof(char));
+				temp.lista = $8;
+
+				$$ = temp;
+			}
 		| 	T_STRUCTURE '{' T_COL '=' T_NUM T_SHOW '=' show_list '}'
+			{ 
+				struct NewsStructure temp;
+				temp.coluna = (int) malloc (sizeof(int));
+				temp.coluna = $5;
+				temp.lista = (char *) malloc ((sizeof($8) + 1) * sizeof(char));
+				temp.lista = $8;
+
+			}
 
 
 news_list :
@@ -416,38 +480,160 @@ news_list :
 	|	news news_list
 
 news:
-	T_ID '{' a_news structure '}'  
+		T_ID '{' a_news structure '}'
+		{
+		/*
+		Noticia novaNoticia;
+		novaNoticia = NewNoticia($1, $3.title, $3.abstract, $3.author, $3.date, $3.image, $3.source, $3.text, $4.coluna);
+
+		$$ = novaNoticia;
+		*/
+		}  
 
 a_news:
 			T_TITLE '=' T_STRING T_ABSTRACT '=' T_STRING T_AUTHOR '=' T_STRING 
-		|	T_TITLE '=' T_STRING T_AUTHOR '=' T_STRING T_ABSTRACT '=' T_STRING 
+			{ 
+				struct TempNews temp;
+				temp.title = (char *) malloc ((sizeof($3) + 1) * sizeof(char));
+				temp.title = $3;
+				temp.abstract = (char *) malloc ((sizeof($6) + 1) * sizeof(char));
+				temp.abstract = $6;
+				temp.author = (char *) malloc ((sizeof($9) + 1) * sizeof(char));
+				temp.author = $9;
+				temp.date = (char *) malloc (sizeof(char));
+				temp.date = "";
+				temp.image = (char *) malloc (sizeof(char));
+				temp.image = "";
+				temp.source = (char *) malloc (sizeof(char));
+				temp.source = "";
+				temp.text = (char *) malloc (sizeof(char));
+				temp.text = "";
+
+				$$ = temp;
+			}	
+		|	T_TITLE '=' T_STRING T_AUTHOR '=' T_STRING T_ABSTRACT '=' T_STRING
+			{ 
+				struct TempNews temp;
+				temp.title = (char *) malloc ((sizeof($3) + 1) * sizeof(char));
+				temp.title = $3;
+				temp.abstract = (char *) malloc ((sizeof($9) + 1) * sizeof(char));
+				temp.abstract = $9;
+				temp.author = (char *) malloc ((sizeof($6) + 1) * sizeof(char));
+				temp.author = $6;
+				temp.date = (char *) malloc (sizeof(char));
+				temp.date = "";
+				temp.image = (char *) malloc (sizeof(char));
+				temp.image = "";
+				temp.source = (char *) malloc (sizeof(char));
+				temp.source = "";
+				temp.text = (char *) malloc (sizeof(char));
+				temp.text = "";
+
+				$$ = temp;
+			} 
 		|	T_AUTHOR '=' T_STRING T_TITLE '=' T_STRING T_ABSTRACT '=' T_STRING
+			{ 
+				struct TempNews temp;
+				temp.title = (char *) malloc ((sizeof($6) + 1) * sizeof(char));
+				temp.title = $6;
+				temp.abstract = (char *) malloc ((sizeof($9) + 1) * sizeof(char));
+				temp.abstract = $9;
+				temp.author = (char *) malloc ((sizeof($3) + 1) * sizeof(char));
+				temp.author = $3;
+				temp.date = (char *) malloc (sizeof(char));
+				temp.date = "";
+				temp.image = (char *) malloc (sizeof(char));
+				temp.image = "";
+				temp.source = (char *) malloc (sizeof(char));
+				temp.source = "";
+				temp.text = (char *) malloc (sizeof(char));
+				temp.text = "";
+
+				$$ = temp;
+			}
 		|	T_AUTHOR '=' T_STRING T_ABSTRACT '=' T_STRING T_TITLE '=' T_STRING
+			{ 
+				struct TempNews temp;
+				temp.title = (char *) malloc ((sizeof($9) + 1) * sizeof(char));
+				temp.title = $9;
+				temp.abstract = (char *) malloc ((sizeof($6) + 1) * sizeof(char));
+				temp.abstract = $6;
+				temp.author = (char *) malloc ((sizeof($3) + 1) * sizeof(char));
+				temp.author = $3;
+				temp.date = (char *) malloc (sizeof(char));
+				temp.date = "";
+				temp.image = (char *) malloc (sizeof(char));
+				temp.image = "";
+				temp.source = (char *) malloc (sizeof(char));
+				temp.source = "";
+				temp.text = (char *) malloc (sizeof(char));
+				temp.text = "";
+
+				$$ = temp;
+			}
 		|	T_ABSTRACT '=' T_STRING T_AUTHOR '=' T_STRING T_TITLE '=' T_STRING
+			{ 
+				struct TempNews temp;
+				temp.title = (char *) malloc ((sizeof($9) + 1) * sizeof(char));
+				temp.title = $9;
+				temp.abstract = (char *) malloc ((sizeof($3) + 1) * sizeof(char));
+				temp.abstract = $3;
+				temp.author = (char *) malloc ((sizeof($6) + 1) * sizeof(char));
+				temp.author = $6;
+				temp.date = (char *) malloc (sizeof(char));
+				temp.date = "";
+				temp.image = (char *) malloc (sizeof(char));
+				temp.image = "";
+				temp.source = (char *) malloc (sizeof(char));
+				temp.source = "";
+				temp.text = (char *) malloc (sizeof(char));
+				temp.text = "";
+
+				$$ = temp;
+			}
 		|	T_ABSTRACT '=' T_STRING T_TITLE '=' T_STRING T_AUTHOR '=' T_STRING
+			{ 
+				struct TempNews temp;
+				temp.title = (char *) malloc ((sizeof($6) + 1) * sizeof(char));
+				temp.title = $6;
+				temp.abstract = (char *) malloc ((sizeof($3) + 1) * sizeof(char));
+				temp.abstract = $3;
+				temp.author = (char *) malloc ((sizeof($3) + 1) * sizeof(char));
+				temp.author = $3;
+				temp.date = (char *) malloc (sizeof(char));
+				temp.date = "";
+				temp.image = (char *) malloc (sizeof(char));
+				temp.image = "";
+				temp.source = (char *) malloc (sizeof(char));
+				temp.source = "";
+				temp.text = (char *) malloc (sizeof(char));
+				temp.text = "";
+
+				$$ = temp;
+			}
 
 
 
 id_list:
-		T_ID 		
-	| 	id_list ',' T_ID
+		T_ID {$$ = $1;}
+	| 	id_list ',' T_ID {$$ = concat(3, $1, ",", $3);}
 
 show_list:
-	/* empty */
-	| T_TITLE 
-	| T_ABSTRACT
-	| T_AUTHOR
-	| T_IMAGE
-	| T_SOURCE
-	| T_DATE
-	| T_TEXT
-	|	show_list ',' T_TITLE 
-	|	show_list ',' T_ABSTRACT 
-	|	show_list ',' T_AUTHOR
-	|	show_list ',' T_IMAGE
-	|	show_list ',' T_SOURCE
-	|	show_list ',' T_DATE
-	|	show_list ',' T_TEXT
+	/* empty */		{$$ = ""}
+	| 	T_TITLE 	{$$ = $1;}
+	| 	T_ABSTRACT 	{$$ = $1;}
+	| 	T_AUTHOR 	{$$ = $1;}
+	| 	T_IMAGE		{$$ = $1;}
+	| 	T_SOURCE	{$$ = $1;}
+	| 	T_DATE		{$$ = $1;}
+	| 	T_TEXT		{$$ = $1;}
+	|	show_list ',' T_TITLE		{$$ = concat(3, $1, ",", $3);} 		
+	|	show_list ',' T_ABSTRACT 	{$$ = concat(3, $1, ",", $3);}
+	|	show_list ',' T_AUTHOR		{$$ = concat(3, $1, ",", $3);}
+	|	show_list ',' T_IMAGE		{$$ = concat(3, $1, ",", $3);}
+	|	show_list ',' T_SOURCE		{$$ = concat(3, $1, ",", $3);}
+	|	show_list ',' T_DATE		{$$ = concat(3, $1, ",", $3);}
+	|	show_list ',' T_TEXT		{$$ = concat(3, $1, ",", $3);}
  
 
 ;
