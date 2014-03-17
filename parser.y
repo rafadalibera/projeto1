@@ -207,58 +207,68 @@ int TestaPorMaiorColSpan(ListaNoticias * listaNoticias, int maxColSpan){
 	return 0;
 }
 
+//Cria o arquivo HTML do corpo do texto de uma noticia
+//Nao precisa mandar .html no nome
+void ImprimeTextoDeUmaNoticia(Noticia noticia, char * nomeSaidaHtml){
+	char * nomeComExtensao = (char *)calloc(strlen(nomeSaidaHtml) + 6, sizeof(char));
+	strcpy(nomeComExtensao, nomeSaidaHtml);
+	FILE * arquivoSaida = fopen(strcat(nomeComExtensao, ".html"), "w");
+
+	//Imprime a noticia
+	fprintf(arquivoSaida, "<html><head><link href=\"styleJanelas.css\" rel=\"stylesheet\" type=\"text/css\"></head><body><center><h2>%s</h2></center><br>%s</body></html>", noticia.Title, noticia.Text);
+
+	fclose(arquivoSaida);
+	free(nomeComExtensao);
+}
+
 //Dalibera, essa daqui eh a funcao que imprime uma das noticias.
 //Faz com fprintf ao inves de retornar string. Eu chamo essa funcao 
 //sempre que eu quiser imprimir uma das noticias. Voce fica no escopo <td></td>.
 //Detalhe que, mais pra frente, eh aqui que vamos ter de dar um jeito de formatar 
 //as coisas do wikipedia. Mas acho que isso eh sussa.
 void ImprimeUmaNoticia(Noticia noticia, FILE * F){
+	int i = 0;
+	fprintf(F, "<td width=\"337\" align=\"justify\" valign=\"top\" colspan=\"%d\">\n", noticia.numCol);
+	
+	for (i = 0; i < 7; i++){
+		if (noticia.listaPropriedades[i] == Title){
+			if (strcmp("", noticia.Text)){
+				fprintf(F, "<h2><a href onclick=\"window.open('%s.html', '_blank', 'width=720,height=500,toolbar=no,scrollbars=yes,resizable=no');\">%s</a></h2>\n", noticia.NomeObjeto, noticia.Title);
+				ImprimeTextoDeUmaNoticia(noticia, noticia.NomeObjeto);
+			}
+			else
+				fprintf(F, "<h2>%s</h2>\n", noticia.Title);
+		}
+		else if (noticia.listaPropriedades[i] == Date){
+			fprintf(F, "<p>\n");
+			fprintf(F, "%s\n", noticia.Date);
+			fprintf(F, "<p>\n");
+			fprintf(F, "<br>\n");
+		}
+		else if (noticia.listaPropriedades[i] == Abstract){
+			fprintf(F, "<p>\n");
+			fprintf(F, "%s\n", noticia.Abstract);
+			fprintf(F, "<p>\n");
+			fprintf(F, "<br>\n");
+		}
+		else if (noticia.listaPropriedades[i] == Image){
+			fprintf(F, "<div id=\"figura\"><p> <img class=\"escala\" src=\"%s\"> </p></div> \n", noticia.Image);
+			fprintf(F, "<br>\n");
+		}
+		else if (noticia.listaPropriedades[i] == Source){
+			fprintf(F, "<p>\n");
+			fprintf(F, "<b>Fonte: </b> <a href=\"%s\" target=\"_blank\">%s</a> \n", noticia.Source, noticia.Source);
+			fprintf(F, "<p>\n");
+			fprintf(F, "<br>\n");
+		}
+		else if (noticia.listaPropriedades[i] == Author){
+			fprintf(F, "<p>\n");
+			fprintf(F, "<b>Autor: </b> %s \n", noticia.Author);
+			fprintf(F, "<p>\n");
+			fprintf(F, "<br>\n");
+		}
+	}
 
-	fprintf(F, "<td width=\"337\" align=\"justify\" valign=\"top\">\n");
-	//Print title
-	if (noticia.listaPropriedades[0] == 1) {
-		fprintf(F, "<h4>%s</h4>\n", noticia.Title);
-	}
-	//Print Date
-	if (noticia.listaPropriedades[3] == 1) {
-		fprintf(F, "<p>\n");
-		fprintf(F, "%s\n", noticia.Date);
-		fprintf(F, "<p>\n");
-		fprintf(F, "<br>\n");
-	}
-	//Print Abstract
-	if (noticia.listaPropriedades[1] == 1) {
-		fprintf(F, "<p>\n");
-		fprintf(F, "%s\n", noticia.Abstract);
-		fprintf(F, "<p>\n");
-		fprintf(F, "<br>\n");
-	}
-	//Print Image
-	if (noticia.listaPropriedades[4] == 1) {
-		fprintf(F, "<center> <img src=\"%s\"> </center> \n", noticia.Image);
-		fprintf(F, "<br>\n");
-	}
-	//Print Text
-	if (noticia.listaPropriedades[6] == 1) {
-		fprintf(F, "<p>\n");
-		fprintf(F, "%s\n", noticia.Text);
-		fprintf(F, "<p>\n");
-		fprintf(F, "<br>\n");
-	}
-	//Print Source
-	if (noticia.listaPropriedades[5] == 1) {
-		fprintf(F, "<p>\n");
-		fprintf(F, "<b>Fonte: </b> <a href=\"%s\" target=\"_blank\">%s</a> \n", noticia.Source, noticia.Source);
-		fprintf(F, "<p>\n");
-		fprintf(F, "<br>\n");
-	}
-	//Print Author
-	if (noticia.listaPropriedades[2] == 1) {
-		fprintf(F, "<p>\n");
-		fprintf(F, "<b>Autor: </b> %s \n", noticia.Author);
-		fprintf(F, "<p>\n");
-		fprintf(F, "<br>\n");
-	}
 	fprintf(F, "</td>\n");
 }
 
@@ -300,61 +310,6 @@ void ImprimePaginaWeb(char * nomeSaidaHtml, ListaNoticias * listaNoticias, int c
 	ImprimeTodasNoticias(listaNoticias, colspan, arquivo);
 	ImprimeTermino(arquivo);
 	fclose(arquivo);
-}
-
-
-void TesteMetodos(){
-	ListaNoticias lista = NewListaNoticias(10); //O capacity pode por qualquer coisa. Acho que 10 tah bom para nao ficar dando realloc nem gastar infinito memoria. Mas se passar disso ele realoca.
-
-	Noticia not10 = NewNoticia("headline10", "titulo10", "abstract10", "author10", "data10", "imagem10", "fonte10", "texto balbalablab10", 10); //Instancias de teste
-	Noticia not1 = NewNoticia("headline1", "titulo1", "abstract1", "author1", "data1", "imagem1", "fonte1", "texto balbalablab10", 1);
-
-	MarcarMostrarObjetoNaNoticia(&not10, Title); //Marca que a noticia not10 deve mostrar titulo e source
-	MarcarMostrarObjetoNaNoticia(&not10, Source);
-
-	MarcarMostrarObjetoNaNoticia(&not1, Abstract); //Marca que noticia not1 deve mostrar abstract e author
-	MarcarMostrarObjetoNaNoticia(&not1, Author);
-
-	AppendElemento(&lista, not10); //Coloca not10 e not1 na lista
-	AppendElemento(&lista, not1);
-
-	MarcarNoticiaParaExibicao(&lista, "headline10"); //Marca que essa noticia deve ir para a tela como a primeira noticia
-	MarcarNoticiaParaExibicao(&lista, "headline1"); //Marca essa noticia deve ir para a tela como a proxima (segunda) noticia
-
-	int jornalOverflow = TestaPorMaiorColSpan(&lista, 7); //Deve retornar 1, pois tem uma noticia com 10 lah
-	int jornalOverflow2 = TestaPorMaiorColSpan(&lista, 10); //Deve retornar falso, maior noticia tem 10 colunas 
-
-	int aindaNaoPesquisouTudo = !TestaSeTodasNoticiasJahForamBuscadas(&lista); //Tem de dar 1 (negado de 0), pois nenhuma noticia ainda foi eleita para ser impressa
-
-	Noticia * not10ret = BuscaProximaNoticia(&lista); //Escolhe a primeira noticia disponivel
-	Noticia * not1ret = BuscaProximaNoticia(&lista); //Escolha a segunda noticia disponivel 
-
-	Noticia * not1ret2 = BuscaProximaNoticia(&lista); // Deve voltar NULL, pois as duas noticias jah foram pesquisadas e nao tem mais nada sem pesquisar
-
-	int jahPesquisouTudo = TestaSeTodasNoticiasJahForamBuscadas(&lista); //Deve retornar 1, pois as duas noticias jah foram eleitas
-}
-
-void TesteGeraHtml(){
-	ListaNoticias listaNoticias = NewListaNoticias(5);
-
-	Noticia not1 = NewNoticia("head1", "Teste 1", "Essa eh a primeira noticia de testes", "Eu mermo", "Hoje", "sem imagem", "sem fonte", "aqui vai um texto qqr blablabla", 2);
-	
-	MarcarMostrarObjetoNaNoticia(&not1, Title);
-	MarcarMostrarObjetoNaNoticia(&not1, Image);
-	MarcarMostrarObjetoNaNoticia(&not1, Abstract);
-	AppendElemento(&listaNoticias, not1);
-
-	Noticia not2 = NewNoticia("head2", "Teste 2", "Essa eh a segunda noticia de testes", "Eu mermo denovo", "Hoje", "sem imagem", "sem fonte", "aqui vai mais outroo texto qqr dasdlsjadlaskjd", 1);
-
-	MarcarMostrarObjetoNaNoticia(&not2, Abstract);
-	MarcarMostrarObjetoNaNoticia(&not2, Image);
-	MarcarMostrarObjetoNaNoticia(&not2, Title);
-	AppendElemento(&listaNoticias, not2);
-	
-	MarcarNoticiaParaExibicao(&listaNoticias, "HEAD1");
-	MarcarNoticiaParaExibicao(&listaNoticias, "HEAD2");
-
-	ImprimePaginaWeb("saidaTeste.html", &listaNoticias, 3);
 }
 
 char* concat(int count, ...)
@@ -401,7 +356,8 @@ char* concat(int count, ...)
 		char * source;
 		char * text;
 	} tempNews;
-	// Noticia noticia;
+
+	Noticia noticia;
 }
 
 %token <str> T_ID
@@ -425,7 +381,7 @@ char* concat(int count, ...)
 %type <str> id_list show_list T_TITLE T_ABSTRACT T_AUTHOR  T_IMAGE	 T_SOURCE T_DATE T_TEXT	
 %type <newsStructure> structure
 %type <tempNews> a_news
-/* %type <noticia> news */
+%type <noticia> news
 
 
 %%
@@ -482,12 +438,14 @@ news_list :
 news:
 		T_ID '{' a_news structure '}'
 		{
-		/*
-		Noticia novaNoticia;
-		novaNoticia = NewNoticia($1, $3.title, $3.abstract, $3.author, $3.date, $3.image, $3.source, $3.text, $4.coluna);
+		struct TempNews a_news_struct = (struct TempNews)$3;
+		struct NewsStructure structure_struct = (struct NewsStructure)$4;
 
+		Noticia novaNoticia;
+		novaNoticia = NewNoticia($1, a_news_struct.title, a_news_struct.abstract, a_news_struct.author, a_news_struct.date, a_news_struct.image, a_news_struct.source, a_news_struct.text, structure_struct.coluna);
+		
 		$$ = novaNoticia;
-		*/
+
 		}  
 
 a_news:

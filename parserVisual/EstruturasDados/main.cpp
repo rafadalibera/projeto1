@@ -204,13 +204,69 @@ int TestaPorMaiorColSpan(ListaNoticias * listaNoticias, int maxColSpan){
 	return 0;
 }
 
+//Cria o arquivo HTML do corpo do texto de uma noticia
+//Nao precisa mandar .html no nome
+void ImprimeTextoDeUmaNoticia(Noticia noticia, char * nomeSaidaHtml){
+	char * nomeComExtensao = (char *)calloc(strlen(nomeSaidaHtml) + 6, sizeof(char));
+	strcpy(nomeComExtensao, nomeSaidaHtml);
+	FILE * arquivoSaida = fopen(strcat(nomeComExtensao, ".html"), "w");
+
+	//Imprime a noticia
+	fprintf(arquivoSaida, "<html><head><link href=\"styleJanelas.css\" rel=\"stylesheet\" type=\"text/css\"></head><body><center><h2>%s</h2></center><br>%s</body></html>", noticia.Title, noticia.Text);
+
+	fclose(arquivoSaida);
+	free(nomeComExtensao);
+}
+
 //Dalibera, essa daqui eh a funcao que imprime uma das noticias.
 //Faz com fprintf ao inves de retornar string. Eu chamo essa funcao 
 //sempre que eu quiser imprimir uma das noticias. Voce fica no escopo <td></td>.
 //Detalhe que, mais pra frente, eh aqui que vamos ter de dar um jeito de formatar 
 //as coisas do wikipedia. Mas acho que isso eh sussa.
-void ImprimeUmaNoticia(Noticia noticia, FILE * arquivo){
-	return;
+void ImprimeUmaNoticia(Noticia noticia, FILE * F){
+	int i = 0;
+	fprintf(F, "<td width=\"337\" align=\"justify\" valign=\"top\" colspan=\"%d\">\n", noticia.numCol);
+	
+	for (i = 0; i < 7; i++){
+		if (noticia.listaPropriedades[i] == Title){
+			if (strcmp("", noticia.Text)){
+				fprintf(F, "<h2><a href onclick=\"window.open('%s.html', '_blank', 'width=720,height=500,toolbar=no,scrollbars=yes,resizable=no');\">%s</a></h2>\n", noticia.NomeObjeto, noticia.Title);
+				ImprimeTextoDeUmaNoticia(noticia, noticia.NomeObjeto);
+			}
+			else
+				fprintf(F, "<h2>%s</h2>\n", noticia.Title);
+		}
+		else if (noticia.listaPropriedades[i] == Date){
+			fprintf(F, "<p>\n");
+			fprintf(F, "%s\n", noticia.Date);
+			fprintf(F, "<p>\n");
+			fprintf(F, "<br>\n");
+		}
+		else if (noticia.listaPropriedades[i] == Abstract){
+			fprintf(F, "<p>\n");
+			fprintf(F, "%s\n", noticia.Abstract);
+			fprintf(F, "<p>\n");
+			fprintf(F, "<br>\n");
+		}
+		else if (noticia.listaPropriedades[i] == Image){
+			fprintf(F, "<div id=\"figura\"><p> <img class=\"escala\" src=\"%s\"> </p></div> \n", noticia.Image);
+			fprintf(F, "<br>\n");
+		}
+		else if (noticia.listaPropriedades[i] == Source){
+			fprintf(F, "<p>\n");
+			fprintf(F, "<b>Fonte: </b> <a href=\"%s\" target=\"_blank\">%s</a> \n", noticia.Source, noticia.Source);
+			fprintf(F, "<p>\n");
+			fprintf(F, "<br>\n");
+		}
+		else if (noticia.listaPropriedades[i] == Author){
+			fprintf(F, "<p>\n");
+			fprintf(F, "<b>Autor: </b> %s \n", noticia.Author);
+			fprintf(F, "<p>\n");
+			fprintf(F, "<br>\n");
+		}
+	}
+
+	fprintf(F, "</td>\n");
 }
 
 
@@ -288,14 +344,14 @@ void TesteMetodos(){
 void TesteGeraHtml(){
 	ListaNoticias listaNoticias = NewListaNoticias(5);
 
-	Noticia not1 = NewNoticia("head1", "Teste 1", "Essa eh a primeira noticia de testes", "Eu mermo", "Hoje", "sem imagem", "sem fonte", "aqui vai um texto qqr blablabla", 2);
+	Noticia not1 = NewNoticia("head1", "Teste 1", "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla in neque at magna tempus consectetur at ut ligula. Proin imperdiet a urna sit amet porta. Suspendisse sapien nulla, dapibus ut aliquet sit amet, aliquam ac tortor. Donec sed dictum justo. Ut tortor tortor, porta ut tincidunt ac, cursus ut lectus. Sed tempor, tortor vitae blandit suscipit, lacus nibh molestie magna, ac vestibulum felis dui non purus. Aliquam faucibus, dui quis laoreet lobortis, orci elit facilisis dui, quis pellentesque dui eros id velit. Maecenas tincidunt arcu ac leo semper convallis. Quisque ultrices mauris a orci aliquet adipiscing. Nam sagittis dui volutpat eleifend sollicitudin. Cras nec aliquet risus, sed sagittis eros. Sed quis sagittis mi, sit amet imperdiet neque. Ut mattis est est, ut pretium lorem tincidunt eget. Nam aliquam mollis sagittis. ", "Eu mermo", "Hoje", "imgTeste3.jpg", "sem fonte", "Etiam eu libero at ipsum lacinia dapibus id eu dolor. Nam volutpat vel lectus non mattis. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. In arcu lorem, pellentesque pellentesque fermentum vel, fringilla at dui. Maecenas bibendum, libero id fringilla venenatis, sem elit tincidunt eros, vitae posuere massa erat accumsan odio. Proin fermentum porta diam, ac condimentum urna euismod nec. Praesent nec ligula a turpis consectetur convallis ut vitae metus. Etiam at ligula scelerisque, mollis sapien non, facilisis erat. Duis eu adipiscing erat. Etiam consectetur feugiat nulla id euismod. Aliquam sed aliquam magna. Vestibulum posuere, velit eu interdum feugiat, dolor sapien faucibus tellus, in adipiscing neque ipsum porttitor orci. Aenean semper magna mi, vitae volutpat elit tincidunt sed. Curabitur dui quam, mollis nec condimentum hendrerit, vulputate eu magna. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas", 2);
 	
 	MarcarMostrarObjetoNaNoticia(&not1, Title);
 	MarcarMostrarObjetoNaNoticia(&not1, Image);
 	MarcarMostrarObjetoNaNoticia(&not1, Abstract);
 	AppendElemento(&listaNoticias, not1);
 
-	Noticia not2 = NewNoticia("head2", "Teste 2", "Essa eh a segunda noticia de testes", "Eu mermo denovo", "Hoje", "sem imagem", "sem fonte", "aqui vai mais outroo texto qqr dasdlsjadlaskjd", 1);
+	Noticia not2 = NewNoticia("head2", "Teste 2", "Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Cras mauris arcu, gravida sed sagittis non, mattis in tellus. Donec imperdiet, nulla id iaculis tempus, leo odio eleifend erat, at gravida enim neque vel ligula. Integer non faucibus dui, vel laoreet velit. Morbi ornare nulla pretium orci ornare dictum. Vivamus dictum ipsum ac venenatis pulvinar. Curabitur venenatis lorem ut neque vulputate ornare. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Vestibulum ornare, quam non faucibus condimentum, turpis nulla tempor purus, a mattis sem velit quis lorem. Phasellus fringilla gravida placerat. In metus urna, molestie ac ornare in, vulputate sed metus. Nulla facilisi. Integer sollicitudin ultrices nunc, in ullamcorper orci dignissim nec. Maecenas id mi non diam gravida dictum. Nulla nulla elit, pellentesque ut mauris at, accumsan tincidunt felis. Nulla facilisi. ", "Eu mermo denovo", "Hoje", "imgTeste2.png", "sem fonte", "Praesent at feugiat nisl. Etiam id erat at sem porta pulvinar in tempus lorem. Quisque vel sollicitudin risus. Phasellus tristique nulla et ipsum cursus scelerisque. Proin nulla libero, ullamcorper sed suscipit quis, iaculis et mi. Sed ornare, urna sed tristique iaculis, ipsum dolor bibendum eros, sed aliquet felis lorem ut erat. Vivamus convallis ipsum ut dolor cursus, sed tincidunt quam auctor. Pellentesque ut justo porttitor, consectetur magna ornare, dignissim sapien. Phasellus eu nulla tellus. Donec vulputate sodales quam, eget viverra lorem eleifend sed. Morbi rutrum malesuada venenatis. ", 1);
 
 	MarcarMostrarObjetoNaNoticia(&not2, Abstract);
 	MarcarMostrarObjetoNaNoticia(&not2, Image);

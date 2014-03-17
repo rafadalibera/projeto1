@@ -16,6 +16,7 @@ newspaper {
                         show = title, abstract, author
                 }
         }
+}
 
         head2 {
                 title = "newstile2”

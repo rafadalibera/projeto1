@@ -1,5 +1,6 @@
 %{
 #include "parser.h"
+
 %}
 
 ID [\*a-z][a-z0-9_]*
@@ -42,7 +43,7 @@ ANY_CHAR .
 }
 
 {NUM} {
-	yylval.intval = strdup(yytext);
+	yylval.intval = atoi(strdup(yytext));
 	return T_NUM;
 }
 

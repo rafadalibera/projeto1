@@ -42,7 +42,7 @@
     <NMakeCleanCommandLine>"$(VISUALGDB_DIR)\VisualGDB.exe" /clean "$(ProjectPath)" "/solution:$(SolutionPath)" "/config:$(Configuration)" "/platform:$(Platform)"</NMakeCleanCommandLine>
     <NMakeReBuildCommandLine>"$(VISUALGDB_DIR)\VisualGDB.exe" /rebuild "$(ProjectPath)" "/solution:$(SolutionPath)" "/config:$(Configuration)" "/platform:$(Platform)"</NMakeReBuildCommandLine>
     <NMakeOutput>$(ProjectDir)parserVisual-Debug.vgdbsettings</NMakeOutput>
-    <IncludePath>D:\Cygwin64\usr\include</IncludePath>
+    <IncludePath>D:\Cygwin64\usr\include;$(IncludePath)</IncludePath>
     <ReferencePath />
     <LibraryPath />
   </PropertyGroup>
