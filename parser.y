@@ -290,6 +290,9 @@ void ImprimeTodasNoticias(ListaNoticias * listaNoticias, int colspan, FILE * arq
 				if (colsDisponiveis < 0)
 					fprintf(stderr, "\nWarning: Noticia %s extrapola numero de colunas disponiveis do jornal\n", (*proximaNoticia).NomeObjeto);
 			}
+			else{
+				break;
+			}
 		}
 		fprintf(arquivo, "</tr>");
 	} while (!TestaSeTodasNoticiasJahForamBuscadas(listaNoticias));
@@ -584,20 +587,20 @@ id_list:
 
 show_list:
 	/* empty */		{$$ = ""}
-	| 	T_TITLE 	{ $$ = $1; }
-	| 	T_ABSTRACT 	{ $$ = $1; }
-	| 	T_AUTHOR 	{ $$ = $1; }
-	| 	T_IMAGE		{ $$ = $1; }
-	| 	T_SOURCE	{ $$ = $1; }
-	| 	T_DATE		{ $$ = $1; }
-	| 	T_TEXT		{ $$ = $1; }
-	|	show_list ',' T_TITLE		{ $$ = concat($1, ",", $3); } 		
-	|	show_list ',' T_ABSTRACT 	{ $$ = concat($1, ",", $3); }
-	|	show_list ',' T_AUTHOR		{ $$ = concat($1, ",", $3); }
-	|	show_list ',' T_IMAGE		{ $$ = concat($1, ",", $3); }
-	|	show_list ',' T_SOURCE		{ $$ = concat($1, ",", $3); }
-	|	show_list ',' T_DATE		{ $$ = concat($1, ",", $3); }
-	|	show_list ',' T_TEXT		{ $$ = concat($1, ",", $3); }
+	| 	T_TITLE 	{ $$ = "title"; }
+	| 	T_ABSTRACT 	{ $$ = "abstract"; }
+	| 	T_AUTHOR 	{ $$ = "author"; }
+	| 	T_IMAGE		{ $$ = "image"; }
+	| 	T_SOURCE	{ $$ = "source"; }
+	| 	T_DATE		{ $$ = "date"; }
+	| 	T_TEXT		{ $$ = "text"; }
+	|	show_list ',' T_TITLE		{ $$ = concat($1, ",", "title"); } 		
+	|	show_list ',' T_ABSTRACT 	{ $$ = concat($1, ",", "abstract"); }
+	|	show_list ',' T_AUTHOR		{ $$ = concat($1, ",", "author"); }
+	|	show_list ',' T_IMAGE		{ $$ = concat($1, ",", "image"); }
+	|	show_list ',' T_SOURCE		{ $$ = concat($1, ",", "source"); }
+	|	show_list ',' T_DATE		{ $$ = concat($1, ",", "date"); }
+	|	show_list ',' T_TEXT		{ $$ = concat($1, ",", "text"); }
  
 
 ;

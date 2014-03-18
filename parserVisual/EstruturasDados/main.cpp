@@ -285,6 +285,9 @@ void ImprimeTodasNoticias(ListaNoticias * listaNoticias, int colspan, FILE * arq
 				if (colsDisponiveis < 0)
 					fprintf(stderr, "\nWarning: Noticia %s extrapola numero de colunas disponiveis do jornal\n", (*proximaNoticia).NomeObjeto);
 			}
+			else{
+				break;
+			}
 		}
 		fprintf(arquivo, "</tr>");
 	} while (!TestaSeTodasNoticiasJahForamBuscadas(listaNoticias));
@@ -358,8 +361,8 @@ void TesteGeraHtml(){
 	MarcarMostrarObjetoNaNoticia(&not2, Title);
 	AppendElemento(&listaNoticias, not2);
 	
-	MarcarNoticiaParaExibicao(&listaNoticias, "HEAD1");
 	MarcarNoticiaParaExibicao(&listaNoticias, "HEAD2");
+	MarcarNoticiaParaExibicao(&listaNoticias, "HEAD1");
 
 	ImprimePaginaWeb("saidaTeste.html", &listaNoticias, 3);
 }
