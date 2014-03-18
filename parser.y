@@ -31,6 +31,8 @@ typedef struct {
 	Noticia * valores;
 }ListaNoticias;
 
+ListaNoticias listaNoticias;
+
 //Converte uma string para letras maiusculas. Nao esquecer de dar free na memoria retornada depois de usar se nao for mais necessaria
 char *StringToUpper(char * stringOriginal){
 	int i = 0;
@@ -312,30 +314,26 @@ void ImprimePaginaWeb(char * nomeSaidaHtml, ListaNoticias * listaNoticias, int c
 	fclose(arquivo);
 }
 
-char* concat(int count, ...)
+int stringLength (char * str) {
+	int i = 0;
+
+	while(str[i] != '\0') {
+		i++;
+	}
+
+	return i;
+}
+
+char* concat(char *str1, char *str2, char *str3)
 {
-    va_list ap;
-    int len = 1, i;
+	int length = stringLength(str1) + stringLength(str2) + stringLength(str3);
+	char *str = (char *) malloc ((length + 1) * sizeof(char));
 
-    va_start(ap, count);
-    for(i=0 ; i<count ; i++)
-        len += strlen(va_arg(ap, char*));
-    va_end(ap);
+	strcpy (str, str1);
+	str = strcat(str, str2);
+	str = strcat(str, str3);
 
-    char *result = (char*) calloc(sizeof(char),len);
-    int pos = 0;
-
-    // Actually concatenate strings
-    va_start(ap, count);
-    for(i=0 ; i<count ; i++)
-    {
-        char *s = va_arg(ap, char*);
-        strcpy(result+pos, s);
-        pos += strlen(s);
-    }
-    va_end(ap);
-
-    return result;
+	return str;
 }
 
 %}
@@ -403,10 +401,11 @@ newspaper: 	T_NEWSPAPER '{' T_TITLE '=' T_STRING  T_DATE '=' T_STRING  structure
 		fprintf(F, "				<p> %s </p>\n", $8);
 		fprintf(F, "			</div>\n");
 		fprintf(F, "		</div>\n");
-
-		fprintf(F, "teste -> %d\n", $9.coluna);
-		fprintf(F, "teste -> %s\n", $9.lista);
 		fclose(F);
+
+		//printf("passei aqui =)\n");
+
+		ImprimePaginaWeb("out.htm", &listaNoticias, $9.coluna);
 	} 
 
 
@@ -432,20 +431,27 @@ structure:
 
 
 news_list :
-		news
+		news 
+		{
+			AppendElemento(&listaNoticias, $1);
+			printf("%s\n", $1.Author);
+		}
 	|	news news_list
+		{
+			AppendElemento(&listaNoticias, $1);
+			printf("%s\n", $1.Author);
+		}
 
 news:
 		T_ID '{' a_news structure '}'
 		{
-		struct TempNews a_news_struct = (struct TempNews)$3;
-		struct NewsStructure structure_struct = (struct NewsStructure)$4;
+			//struct TempNews a_news_struct = (struct TempNews)$3;
+			//struct NewsStructure structure_struct = (struct NewsStructure)$4;
 
-		Noticia novaNoticia;
-		novaNoticia = NewNoticia($1, a_news_struct.title, a_news_struct.abstract, a_news_struct.author, a_news_struct.date, a_news_struct.image, a_news_struct.source, a_news_struct.text, structure_struct.coluna);
-		
-		$$ = novaNoticia;
-
+			Noticia novaNoticia;
+			novaNoticia = NewNoticia($1, $3.title, $3.abstract, $3.author, $3.date, $3.image, $3.source, $3.text, $4.coluna);
+			
+			$$ = novaNoticia;
 		}  
 
 a_news:
@@ -574,24 +580,24 @@ a_news:
 
 id_list:
 		T_ID {$$ = $1;}
-	| 	id_list ',' T_ID {$$ = concat(3, $1, ",", $3);}
+	| 	id_list ',' T_ID {$$ = concat($1, ",", $3);}
 
 show_list:
 	/* empty */		{$$ = ""}
-	| 	T_TITLE 	{$$ = $1;}
-	| 	T_ABSTRACT 	{$$ = $1;}
-	| 	T_AUTHOR 	{$$ = $1;}
-	| 	T_IMAGE		{$$ = $1;}
-	| 	T_SOURCE	{$$ = $1;}
-	| 	T_DATE		{$$ = $1;}
-	| 	T_TEXT		{$$ = $1;}
-	|	show_list ',' T_TITLE		{$$ = concat(3, $1, ",", $3);} 		
-	|	show_list ',' T_ABSTRACT 	{$$ = concat(3, $1, ",", $3);}
-	|	show_list ',' T_AUTHOR		{$$ = concat(3, $1, ",", $3);}
-	|	show_list ',' T_IMAGE		{$$ = concat(3, $1, ",", $3);}
-	|	show_list ',' T_SOURCE		{$$ = concat(3, $1, ",", $3);}
-	|	show_list ',' T_DATE		{$$ = concat(3, $1, ",", $3);}
-	|	show_list ',' T_TEXT		{$$ = concat(3, $1, ",", $3);}
+	| 	T_TITLE 	{ $$ = $1; }
+	| 	T_ABSTRACT 	{ $$ = $1; }
+	| 	T_AUTHOR 	{ $$ = $1; }
+	| 	T_IMAGE		{ $$ = $1; }
+	| 	T_SOURCE	{ $$ = $1; }
+	| 	T_DATE		{ $$ = $1; }
+	| 	T_TEXT		{ $$ = $1; }
+	|	show_list ',' T_TITLE		{ $$ = concat($1, ",", $3); } 		
+	|	show_list ',' T_ABSTRACT 	{ $$ = concat($1, ",", $3); }
+	|	show_list ',' T_AUTHOR		{ $$ = concat($1, ",", $3); }
+	|	show_list ',' T_IMAGE		{ $$ = concat($1, ",", $3); }
+	|	show_list ',' T_SOURCE		{ $$ = concat($1, ",", $3); }
+	|	show_list ',' T_DATE		{ $$ = concat($1, ",", $3); }
+	|	show_list ',' T_TEXT		{ $$ = concat($1, ",", $3); }
  
 
 ;
@@ -607,6 +613,7 @@ int yywrap(void) { return 1; }
  
 int main(int argc, char** argv)
 {
-     yyparse();
-     return 0;
+	listaNoticias = NewListaNoticias(10);
+    yyparse();
+    return 0;
 }
