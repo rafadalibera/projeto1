@@ -7,3 +7,5 @@ parserVisual/parserVisual.opensdf
 parser.h
 
 *.swp
+
+scanner.c
