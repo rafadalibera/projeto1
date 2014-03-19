@@ -5,7 +5,7 @@
 
 typedef enum  {
 	Invalido, Title, Abstract, Author, Date, Image, Source, Text
-}TipoPropriedade;
+} TipoPropriedade;
 
 typedef struct{
 	int buscada; //Esse campo serve soh para dizer se uma noticia jah foi eleita para ser colocada na tela. Necessario na hora de ordenar / decidir.
@@ -26,7 +26,7 @@ typedef struct {
 	int capacidade;
 	int tamanho;
 	Noticia * valores;
-}ListaNoticias;
+} ListaNoticias;
 
 typedef struct{
 	char * Title;
@@ -36,7 +36,7 @@ typedef struct{
 	char * Image;
 	char * Source;
 	char * Text;
-}DicionarioNoticia;
+} DicionarioNoticia;
 
 DicionarioNoticia NewDicionarioNoticia(){
 	DicionarioNoticia retorno;
@@ -60,7 +60,16 @@ DicionarioNoticia NewDicionarioNoticia(){
 
 	retorno.Text = (char *)calloc(strlen("") + 1, sizeof(char));
 	strcpy(retorno.Text, "");
+}
 
+void CleanDicionarioNoticia (DicionarioNoticia * dic) {
+	free(dic->Title);
+	free(dic->Abstract);
+	free(dic->Author);
+	free(dic->Date);
+	free(dic->Image);
+	free(dic->Source);
+	free(dic->Text);
 }
 
 //Converte uma string para letras maiusculas. Nao esquecer de dar free na memoria retornada depois de usar se nao for mais necessaria
