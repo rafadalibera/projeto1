@@ -431,15 +431,6 @@ void MarcarMostrarTodosObjetosNaNoticia(Noticia * noticia, char * lista) {
 		int coluna;
 		char * lista;
 	} newsStructure;
-	struct TempNews {
-		char * title;
-		char * abstract;
-		char * author;
-		char * date;
-		char * image;
-		char * source;
-		char * text;
-	} tempNews;
 
 	Noticia noticia;
 }
@@ -460,36 +451,16 @@ void MarcarMostrarTodosObjetosNaNoticia(Noticia * noticia, char * lista) {
 %token T_SHOW
 %token <intval> T_NUM
 
-%error-verbose
+%error-verboseDicionarioNoticia
 
 %type <str> id_list show_list T_TITLE T_ABSTRACT T_AUTHOR  T_IMAGE	T_SOURCE T_DATE T_TEXT	
 %type <newsStructure> structure
-%type <tempNews> a_news
 %type <noticia> news
 
 
 %%
 
 newspaper: 	T_NEWSPAPER '{' T_TITLE '=' T_STRING  T_DATE '=' T_STRING  structure news_list '}' {	
-		FILE *F = fopen("newspaper.htm", "w"); 
-		fprintf(F, "<html>\n");
-		fprintf(F, "	<head>\n");
-		fprintf(F, "		<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\">\n"); 
-		fprintf(F, "		<title> SEMPRE ONLINE. </title>\n");
-		fprintf(F, "		<link rel=\"stylesheet\" type=\"text/css\" href=\"./style/style.css\" media=\"screen\">\n");
-		fprintf(F, "		<script type=\"text/javascript\"> </script>\n");
-		fprintf(F, "		<style type=\"text/css\"></style>\n");
-		fprintf(F, "	</head>\n");
-		fprintf(F, "	<body style=\"\">\n");
-		fprintf(F, "		<div id=\"header\">\n");
-		fprintf(F, "			<div id=\"logo\">\n");
-		fprintf(F, "				<h1> %s </h1>\n", $5);
-		fprintf(F, "				<p> %s </p>\n", $8);
-		fprintf(F, "			</div>\n");
-		fprintf(F, "		</div>\n");
-		fclose(F);
-
-		printf("-> %d\n", $9.coluna);
 
 		MarcarTodasNoticias (&listaNoticias, $9.lista);
 
@@ -536,13 +507,8 @@ news_list :
 news:
 		T_ID '{' a_news structure '}'
 		{
-			//struct TempNews a_news_struct = (struct TempNews)$3;
-			//struct NewsStructure structure_struct = (struct NewsStructure)$4;
-
 			Noticia novaNoticia;
-
 			novaNoticia = NewNoticia($1, $3.title, $3.abstract, $3.author, $3.date, $3.image, $3.source, $3.text, $4.coluna);
-			//printf("%s\n", $4.lista);
 
 			MarcarMostrarTodosObjetosNaNoticia(&novaNoticia, $4.lista); 
 			
@@ -694,13 +660,13 @@ a_news:
 */
 
 id_list:
-		T_ID {$$ = $1;}
-	| 	id_list ',' T_ID {$$ = concat($1, ",", $3);}
+		T_ID { $$ = $1; }
+	| 	id_list ',' T_ID { $$ = concat($1, ",", $3); }
 ;
 
 show_list:
-	/* empty */		{$$ = ""}
-	| 	T_TITLE 	{ $$ = "title"; AdicionarAtributo(&ultimaNoticia, "title", $3)}
+	/* empty */		{ $$ = " "; }
+	| 	T_TITLE 	{ $$ = "title"; }
 	| 	T_ABSTRACT 	{ $$ = "abstract"; }
 	| 	T_AUTHOR 	{ $$ = "author"; }
 	| 	T_IMAGE		{ $$ = "image"; }
