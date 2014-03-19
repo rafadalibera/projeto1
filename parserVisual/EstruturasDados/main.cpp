@@ -28,6 +28,46 @@ typedef struct {
 	Noticia * valores;
 }ListaNoticias;
 
+typedef struct{
+	char * Title;
+	char * Abstract;
+	char * Author;
+	char * Date;
+	char * Image;
+	char * Source;
+	char * Text;
+}DicionarioNoticia;
+
+DicionarioNoticia NewDicionarioNoticia(){
+	DicionarioNoticia retorno;
+	retorno.Title = (char *)calloc(strlen("") + 1, sizeof(char));
+	strcpy(retorno.Title, "");
+
+	retorno.Abstract = (char *)calloc(strlen("") + 1, sizeof(char));
+	strcpy(retorno.Abstract, "");
+
+	retorno.Author = (char *)calloc(strlen("") + 1, sizeof(char));
+	strcpy(retorno.Author, "");
+
+	retorno.Date = (char *)calloc(strlen("") + 1, sizeof(char));
+	strcpy(retorno.Date, "");
+
+	retorno.Image = (char *)calloc(strlen("") + 1, sizeof(char));
+	strcpy(retorno.Image, "");
+
+	retorno.Source = (char *)calloc(strlen("") + 1, sizeof(char));
+	strcpy(retorno.Source, "");
+
+	retorno.Text = (char *)calloc(strlen("") + 1, sizeof(char));
+	strcpy(retorno.Text, "");
+
+}
+
+AdicionarChave(DicionarioNoticia * dic, char * chave, char * valor){
+
+}
+
+
 //Converte uma string para letras maiusculas. Nao esquecer de dar free na memoria retornada depois de usar se nao for mais necessaria
 char *StringToUpper(char * stringOriginal){
 	int i = 0;
@@ -406,10 +446,16 @@ void TesteGeraHtml(){
 	ImprimePaginaWeb("saidaTeste.html", &listaNoticias, 3);
 }
 
+
+
+
+
 int main(){
 
 	//TesteMetodos();
 
+	DicionarioNoticia dic;
+	
 	TesteGeraHtml();
 
 }
