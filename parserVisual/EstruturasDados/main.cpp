@@ -106,7 +106,34 @@ void MarcarMostrarObjetoNaNoticia(Noticia * noticia, TipoPropriedade tipoObjeto)
 	fprintf(stderr, "\nWarning: Noticia %s tentando mostrar mais objetos que o possivel.\n", (*noticia).NomeObjeto);
 }
 
-
+void MostrarPropriedade(Noticia * noticia, char * nomePropriedade){
+	char * nomePropriedadeMaiuscula = StringToUpper(nomePropriedade);
+	if (strcmp(nomePropriedadeMaiuscula, "TITLE") == 0){
+		MarcarMostrarObjetoNaNoticia(noticia, Title);
+	}
+	else if (strcmp(nomePropriedadeMaiuscula, "ABSTRACT") == 0){
+		MarcarMostrarObjetoNaNoticia(noticia, Abstract);
+	}
+	else if (strcmp(nomePropriedadeMaiuscula, "AUTHOR") == 0){
+		MarcarMostrarObjetoNaNoticia(noticia, Author);
+	}
+	else if (strcmp(nomePropriedadeMaiuscula, "DATE") == 0){
+		MarcarMostrarObjetoNaNoticia(noticia, Date);
+	}
+	else if (strcmp(nomePropriedadeMaiuscula, "IMAGE") == 0){
+		MarcarMostrarObjetoNaNoticia(noticia, Image);
+	}
+	else if (strcmp(nomePropriedadeMaiuscula, "SOURCE") == 0){
+		MarcarMostrarObjetoNaNoticia(noticia, Source);
+	}
+	else if (strcmp(nomePropriedadeMaiuscula, "TEXT") == 0){
+		MarcarMostrarObjetoNaNoticia(noticia, Text);
+	}
+	else{
+		printf("\nWarning - Token nao reconhecido\n");
+	}
+	free(nomePropriedadeMaiuscula);
+}
 
 
 //Sinaliza que a noticia apontada deve ser impressa no final.
@@ -349,9 +376,13 @@ void TesteGeraHtml(){
 
 	Noticia not1 = NewNoticia("head1", "Teste 1", "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla in neque at magna tempus consectetur at ut ligula. Proin imperdiet a urna sit amet porta. Suspendisse sapien nulla, dapibus ut aliquet sit amet, aliquam ac tortor. Donec sed dictum justo. Ut tortor tortor, porta ut tincidunt ac, cursus ut lectus. Sed tempor, tortor vitae blandit suscipit, lacus nibh molestie magna, ac vestibulum felis dui non purus. Aliquam faucibus, dui quis laoreet lobortis, orci elit facilisis dui, quis pellentesque dui eros id velit. Maecenas tincidunt arcu ac leo semper convallis. Quisque ultrices mauris a orci aliquet adipiscing. Nam sagittis dui volutpat eleifend sollicitudin. Cras nec aliquet risus, sed sagittis eros. Sed quis sagittis mi, sit amet imperdiet neque. Ut mattis est est, ut pretium lorem tincidunt eget. Nam aliquam mollis sagittis. ", "Eu mermo", "Hoje", "imgTeste3.jpg", "sem fonte", "Etiam eu libero at ipsum lacinia dapibus id eu dolor. Nam volutpat vel lectus non mattis. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. In arcu lorem, pellentesque pellentesque fermentum vel, fringilla at dui. Maecenas bibendum, libero id fringilla venenatis, sem elit tincidunt eros, vitae posuere massa erat accumsan odio. Proin fermentum porta diam, ac condimentum urna euismod nec. Praesent nec ligula a turpis consectetur convallis ut vitae metus. Etiam at ligula scelerisque, mollis sapien non, facilisis erat. Duis eu adipiscing erat. Etiam consectetur feugiat nulla id euismod. Aliquam sed aliquam magna. Vestibulum posuere, velit eu interdum feugiat, dolor sapien faucibus tellus, in adipiscing neque ipsum porttitor orci. Aenean semper magna mi, vitae volutpat elit tincidunt sed. Curabitur dui quam, mollis nec condimentum hendrerit, vulputate eu magna. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas", 2);
 	
-	MarcarMostrarObjetoNaNoticia(&not1, Title);
-	MarcarMostrarObjetoNaNoticia(&not1, Image);
-	MarcarMostrarObjetoNaNoticia(&not1, Abstract);
+	//MarcarMostrarObjetoNaNoticia(&not1, Title);
+	//MarcarMostrarObjetoNaNoticia(&not1, Image);
+	//MarcarMostrarObjetoNaNoticia(&not1, Abstract);
+	MostrarPropriedade(&not1, "TITLE");
+	MostrarPropriedade(&not1, "abstract");
+	MostrarPropriedade(&not1, "Author");
+
 	AppendElemento(&listaNoticias, not1);
 
 	Noticia not2 = NewNoticia("head2", "Teste 2", "Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Cras mauris arcu, gravida sed sagittis non, mattis in tellus. Donec imperdiet, nulla id iaculis tempus, leo odio eleifend erat, at gravida enim neque vel ligula. Integer non faucibus dui, vel laoreet velit. Morbi ornare nulla pretium orci ornare dictum. Vivamus dictum ipsum ac venenatis pulvinar. Curabitur venenatis lorem ut neque vulputate ornare. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Vestibulum ornare, quam non faucibus condimentum, turpis nulla tempor purus, a mattis sem velit quis lorem. Phasellus fringilla gravida placerat. In metus urna, molestie ac ornare in, vulputate sed metus. Nulla facilisi. Integer sollicitudin ultrices nunc, in ullamcorper orci dignissim nec. Maecenas id mi non diam gravida dictum. Nulla nulla elit, pellentesque ut mauris at, accumsan tincidunt felis. Nulla facilisi. ", "Eu mermo denovo", "Hoje", "imgTeste2.png", "sem fonte", "Praesent at feugiat nisl. Etiam id erat at sem porta pulvinar in tempus lorem. Quisque vel sollicitudin risus. Phasellus tristique nulla et ipsum cursus scelerisque. Proin nulla libero, ullamcorper sed suscipit quis, iaculis et mi. Sed ornare, urna sed tristique iaculis, ipsum dolor bibendum eros, sed aliquet felis lorem ut erat. Vivamus convallis ipsum ut dolor cursus, sed tincidunt quam auctor. Pellentesque ut justo porttitor, consectetur magna ornare, dignissim sapien. Phasellus eu nulla tellus. Donec vulputate sodales quam, eget viverra lorem eleifend sed. Morbi rutrum malesuada venenatis. ", 1);
