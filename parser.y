@@ -339,6 +339,34 @@ char* concat(char *str1, char *str2, char *str3)
 	return str;
 }
 
+
+void MarcarTodasNoticias (ListaNoticias * listaNoticias, char * lista) {
+	char temp[10];
+	int length;
+	int i=0, j=0;
+
+	temp[0] = '\0';
+
+	length = stringLength(lista);
+
+	while (i < length) {
+		if (lista[i] == ',' || lista[i] == '\0') {
+			temp[j] = '\0';
+			printf("-> %s\n", temp);
+			MarcarNoticiaParaExibicao(listaNoticias, temp);
+			j = 0;
+			temp[j] = '\0';
+			i++;
+		} else {
+			if (lista[i] != ' ') {
+				temp[j] = lista[i];
+				j++;
+			}
+			i++;
+		}
+	}
+}
+
 %}
  
 %union{
@@ -379,7 +407,7 @@ char* concat(char *str1, char *str2, char *str3)
 
 %error-verbose
 
-%type <str> id_list show_list T_TITLE T_ABSTRACT T_AUTHOR  T_IMAGE	 T_SOURCE T_DATE T_TEXT	
+%type <str> id_list show_list T_TITLE T_ABSTRACT T_AUTHOR  T_IMAGE	T_SOURCE T_DATE T_TEXT	
 %type <newsStructure> structure
 %type <tempNews> a_news
 %type <noticia> news
@@ -406,7 +434,9 @@ newspaper: 	T_NEWSPAPER '{' T_TITLE '=' T_STRING  T_DATE '=' T_STRING  structure
 		fprintf(F, "		</div>\n");
 		fclose(F);
 
-		//printf("passei aqui =)\n");
+		printf("-> %d\n", $9.coluna);
+
+		MarcarTodasNoticias (&listaNoticias, $9.lista);
 
 		ImprimePaginaWeb("out.htm", &listaNoticias, $9.coluna);
 	} 
@@ -425,11 +455,11 @@ structure:
 		| 	T_STRUCTURE '{' T_COL '=' T_NUM T_SHOW '=' show_list '}'
 			{ 
 				struct NewsStructure temp;
-				temp.coluna = (int) malloc (sizeof(int));
 				temp.coluna = $5;
 				temp.lista = (char *) malloc ((sizeof($8) + 1) * sizeof(char));
 				temp.lista = $8;
 
+				$$ = temp;
 			}
 
 
