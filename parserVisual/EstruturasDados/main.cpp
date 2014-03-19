@@ -60,6 +60,8 @@ DicionarioNoticia NewDicionarioNoticia(){
 
 	retorno.Text = (char *)calloc(strlen("") + 1, sizeof(char));
 	strcpy(retorno.Text, "");
+
+	return retorno;
 }
 
 void CleanDicionarioNoticia (DicionarioNoticia * dic) {
@@ -475,6 +477,7 @@ void ImprimePaginaWeb(char * nomeSaidaHtml, ListaNoticias * listaNoticias, int c
 
 void TesteMetodos(){
 	ListaNoticias lista = NewListaNoticias(10); //O capacity pode por qualquer coisa. Acho que 10 tah bom para nao ficar dando realloc nem gastar infinito memoria. Mas se passar disso ele realoca.
+	DicionarioNoticia dic = NewDicionarioNoticia();
 
 	Noticia not10 = NewNoticia("headline10", "titulo10", "abstract10", "author10", "data10", "imagem10", "fonte10", "texto balbalablab10", 10); //Instancias de teste
 	Noticia not1 = NewNoticia("headline1", "titulo1", "abstract1", "author1", "data1", "imagem1", "fonte1", "texto balbalablab10", 1);
@@ -502,6 +505,25 @@ void TesteMetodos(){
 	Noticia * not1ret2 = BuscaProximaNoticia(&lista); // Deve voltar NULL, pois as duas noticias jah foram pesquisadas e nao tem mais nada sem pesquisar
 
 	int jahPesquisouTudo = TestaSeTodasNoticiasJahForamBuscadas(&lista); //Deve retornar 1, pois as duas noticias jah foram eleitas
+
+	AdicionarChave(&dic, "title", "Titulo"); //Aqui devem dar todos certos
+	AdicionarChave(&dic, "abstract", "resumo");
+	AdicionarChave(&dic, "author", "autor");
+	AdicionarChave(&dic, "image", "imagem");
+	AdicionarChave(&dic, "source", "fonte");
+	AdicionarChave(&dic, "date", "data");
+	AdicionarChave(&dic, "text", "um texto mais longo");
+
+	AdicionarChave(&dic, "title", "Titulo"); //Aqui devem dar todos errados
+	AdicionarChave(&dic, "abstract", "resumo");
+	AdicionarChave(&dic, "author", "autor");
+	AdicionarChave(&dic, "image", "imagem");
+	AdicionarChave(&dic, "source", "fonte");
+	AdicionarChave(&dic, "date", "data");
+	AdicionarChave(&dic, "text", "um texto mais longo");
+
+	CleanDicionarioNoticia(&dic);
+
 }
 
 void TesteGeraHtml(){
@@ -537,10 +559,10 @@ void TesteGeraHtml(){
 
 int main(){
 
-	//TesteMetodos();
+	TesteMetodos();
 
 	DicionarioNoticia dic;
 	
-	TesteGeraHtml();
+	//TesteGeraHtml();
 
 }
