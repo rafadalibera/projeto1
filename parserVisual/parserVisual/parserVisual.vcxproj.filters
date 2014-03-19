@@ -18,10 +18,10 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\parser.c">
+    <ClCompile Include="..\..\scanner.c">
       <Filter>Source files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\scanner.c">
+    <ClCompile Include="..\..\parser.c">
       <Filter>Source files</Filter>
     </ClCompile>
   </ItemGroup>

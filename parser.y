@@ -111,7 +111,34 @@ void MarcarMostrarObjetoNaNoticia(Noticia * noticia, TipoPropriedade tipoObjeto)
 	fprintf(stderr, "\nWarning: Noticia %s tentando mostrar mais objetos que o possivel.\n", (*noticia).NomeObjeto);
 }
 
-
+void MostrarPropriedade(Noticia * noticia, char * nomePropriedade){
+	char * nomePropriedadeMaiuscula = StringToUpper(nomePropriedade);
+	if (strcmp(nomePropriedadeMaiuscula, "TITLE") == 0){
+		MarcarMostrarObjetoNaNoticia(noticia, Title);
+	}
+	else if (strcmp(nomePropriedadeMaiuscula, "ABSTRACT") == 0){
+		MarcarMostrarObjetoNaNoticia(noticia, Abstract);
+	}
+	else if (strcmp(nomePropriedadeMaiuscula, "AUTHOR") == 0){
+		MarcarMostrarObjetoNaNoticia(noticia, Author);
+	}
+	else if (strcmp(nomePropriedadeMaiuscula, "DATE") == 0){
+		MarcarMostrarObjetoNaNoticia(noticia, Date);
+	}
+	else if (strcmp(nomePropriedadeMaiuscula, "IMAGE") == 0){
+		MarcarMostrarObjetoNaNoticia(noticia, Image);
+	}
+	else if (strcmp(nomePropriedadeMaiuscula, "SOURCE") == 0){
+		MarcarMostrarObjetoNaNoticia(noticia, Source);
+	}
+	else if (strcmp(nomePropriedadeMaiuscula, "TEXT") == 0){
+		MarcarMostrarObjetoNaNoticia(noticia, Text);
+	}
+	else{
+		printf("\nWarning - Token nao reconhecido\n");
+	}
+	free(nomePropriedadeMaiuscula);
+}
 
 
 //Sinaliza que a noticia apontada deve ser impressa no final.
@@ -380,7 +407,7 @@ void MarcarMostrarTodosObjetosNaNoticia(Noticia * noticia, char * lista) {
 		if (lista[i] == ',' || lista[i] == '\0') {
 			temp[j] = '\0';
 			//printf("-> %s\n", temp);
-			MarcarMostrarObjetoNaNoticia(noticia, temp);
+			MostrarPropriedade(noticia, temp);
 			j = 0;
 			temp[j] = '\0';
 			i++;
