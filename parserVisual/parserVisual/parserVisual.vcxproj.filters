@@ -29,9 +29,6 @@
     <ClInclude Include="..\..\parser.h">
       <Filter>Header files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\util.h">
-      <Filter>Header files</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\parser.y">

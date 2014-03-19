@@ -914,10 +914,10 @@ static const yytype_int8 yyrhs[] =
 /* YYRLINE[YYN] -- source line where rule number YYN was defined.  */
 static const yytype_uint16 yyrline[] =
 {
-       0,   473,   473,   483,   492,   504,   509,   516,   532,   552,
-     572,   592,   612,   632,   656,   657,   660,   661,   662,   663,
-     664,   665,   666,   667,   668,   669,   670,   671,   672,   673,
-     674
+       0,   473,   473,   501,   510,   522,   527,   534,   550,   570,
+     590,   610,   630,   650,   674,   675,   678,   679,   680,   681,
+     682,   683,   684,   685,   686,   687,   688,   689,   690,   691,
+     692
 };
 #endif
 
@@ -1855,7 +1855,25 @@ yyreduce:
 /* Line 1787 of yacc.c  */
 #line 473 "parser.y"
     {	
+		FILE *F = fopen("newspaper.htm", "w"); 
+		fprintf(F, "<html>\n");
+		fprintf(F, "	<head>\n");
+		fprintf(F, "		<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\">\n"); 
+		fprintf(F, "		<title> SEMPRE ONLINE. </title>\n");
+		fprintf(F, "		<link rel=\"stylesheet\" type=\"text/css\" href=\"./style/style.css\" media=\"screen\">\n");
+		fprintf(F, "		<script type=\"text/javascript\"> </script>\n");
+		fprintf(F, "		<style type=\"text/css\"></style>\n");
+		fprintf(F, "	</head>\n");
+		fprintf(F, "	<body style=\"\">\n");
+		fprintf(F, "		<div id=\"header\">\n");
+		fprintf(F, "			<div id=\"logo\">\n");
+		fprintf(F, "				<h1> %s </h1>\n", (yyvsp[(5) - (11)].str));
+		fprintf(F, "				<p> %s </p>\n", (yyvsp[(8) - (11)].str));
+		fprintf(F, "			</div>\n");
+		fprintf(F, "		</div>\n");
+		fclose(F);
 
+		printf("-> %d\n", (yyvsp[(9) - (11)].newsStructure).coluna);
 
 		MarcarTodasNoticias (&listaNoticias, (yyvsp[(9) - (11)].newsStructure).lista);
 
@@ -1865,7 +1883,7 @@ yyreduce:
 
   case 3:
 /* Line 1787 of yacc.c  */
-#line 484 "parser.y"
+#line 502 "parser.y"
     { 
 				struct NewsStructure temp;
 				temp.coluna = (yyvsp[(5) - (9)].intval);
@@ -1878,7 +1896,7 @@ yyreduce:
 
   case 4:
 /* Line 1787 of yacc.c  */
-#line 493 "parser.y"
+#line 511 "parser.y"
     { 
 				struct NewsStructure temp;
 				temp.coluna = (yyvsp[(5) - (9)].intval);
@@ -1891,7 +1909,7 @@ yyreduce:
 
   case 5:
 /* Line 1787 of yacc.c  */
-#line 505 "parser.y"
+#line 523 "parser.y"
     {
 			AppendElemento(&listaNoticias, (yyvsp[(1) - (1)].noticia));
 			printf("%s\n", (yyvsp[(1) - (1)].noticia).Author);
@@ -1900,7 +1918,7 @@ yyreduce:
 
   case 6:
 /* Line 1787 of yacc.c  */
-#line 510 "parser.y"
+#line 528 "parser.y"
     {
 			AppendElemento(&listaNoticias, (yyvsp[(1) - (2)].noticia));
 			printf("%s\n", (yyvsp[(1) - (2)].noticia).Author);
@@ -1909,7 +1927,7 @@ yyreduce:
 
   case 7:
 /* Line 1787 of yacc.c  */
-#line 517 "parser.y"
+#line 535 "parser.y"
     {
 			//struct TempNews a_news_struct = (struct TempNews)$3;
 			//struct NewsStructure structure_struct = (struct NewsStructure)$4;
@@ -1927,7 +1945,7 @@ yyreduce:
 
   case 8:
 /* Line 1787 of yacc.c  */
-#line 533 "parser.y"
+#line 551 "parser.y"
     { 
 				struct TempNews temp;
 				temp.title = (char *) malloc ((sizeof((yyvsp[(3) - (9)].str)) + 1) * sizeof(char));
@@ -1951,7 +1969,7 @@ yyreduce:
 
   case 9:
 /* Line 1787 of yacc.c  */
-#line 553 "parser.y"
+#line 571 "parser.y"
     { 
 				struct TempNews temp;
 				temp.title = (char *) malloc ((sizeof((yyvsp[(3) - (9)].str)) + 1) * sizeof(char));
@@ -1975,7 +1993,7 @@ yyreduce:
 
   case 10:
 /* Line 1787 of yacc.c  */
-#line 573 "parser.y"
+#line 591 "parser.y"
     { 
 				struct TempNews temp;
 				temp.title = (char *) malloc ((sizeof((yyvsp[(6) - (9)].str)) + 1) * sizeof(char));
@@ -1999,7 +2017,7 @@ yyreduce:
 
   case 11:
 /* Line 1787 of yacc.c  */
-#line 593 "parser.y"
+#line 611 "parser.y"
     { 
 				struct TempNews temp;
 				temp.title = (char *) malloc ((sizeof((yyvsp[(9) - (9)].str)) + 1) * sizeof(char));
@@ -2023,7 +2041,7 @@ yyreduce:
 
   case 12:
 /* Line 1787 of yacc.c  */
-#line 613 "parser.y"
+#line 631 "parser.y"
     { 
 				struct TempNews temp;
 				temp.title = (char *) malloc ((sizeof((yyvsp[(9) - (9)].str)) + 1) * sizeof(char));
@@ -2047,7 +2065,7 @@ yyreduce:
 
   case 13:
 /* Line 1787 of yacc.c  */
-#line 633 "parser.y"
+#line 651 "parser.y"
     { 
 				struct TempNews temp;
 				temp.title = (char *) malloc ((sizeof((yyvsp[(6) - (9)].str)) + 1) * sizeof(char));
@@ -2071,109 +2089,109 @@ yyreduce:
 
   case 14:
 /* Line 1787 of yacc.c  */
-#line 656 "parser.y"
+#line 674 "parser.y"
     {(yyval.str) = (yyvsp[(1) - (1)].str);}
     break;
 
   case 15:
 /* Line 1787 of yacc.c  */
-#line 657 "parser.y"
+#line 675 "parser.y"
     {(yyval.str) = concat((yyvsp[(1) - (3)].str), ",", (yyvsp[(3) - (3)].str));}
     break;
 
   case 16:
 /* Line 1787 of yacc.c  */
-#line 660 "parser.y"
+#line 678 "parser.y"
     {(yyval.str) = "";}
     break;
 
   case 17:
 /* Line 1787 of yacc.c  */
-#line 661 "parser.y"
+#line 679 "parser.y"
     { (yyval.str) = "title"; }
     break;
 
   case 18:
 /* Line 1787 of yacc.c  */
-#line 662 "parser.y"
+#line 680 "parser.y"
     { (yyval.str) = "abstract"; }
     break;
 
   case 19:
 /* Line 1787 of yacc.c  */
-#line 663 "parser.y"
+#line 681 "parser.y"
     { (yyval.str) = "author"; }
     break;
 
   case 20:
 /* Line 1787 of yacc.c  */
-#line 664 "parser.y"
+#line 682 "parser.y"
     { (yyval.str) = "image"; }
     break;
 
   case 21:
 /* Line 1787 of yacc.c  */
-#line 665 "parser.y"
+#line 683 "parser.y"
     { (yyval.str) = "source"; }
     break;
 
   case 22:
 /* Line 1787 of yacc.c  */
-#line 666 "parser.y"
+#line 684 "parser.y"
     { (yyval.str) = "date"; }
     break;
 
   case 23:
 /* Line 1787 of yacc.c  */
-#line 667 "parser.y"
+#line 685 "parser.y"
     { (yyval.str) = "text"; }
     break;
 
   case 24:
 /* Line 1787 of yacc.c  */
-#line 668 "parser.y"
+#line 686 "parser.y"
     { (yyval.str) = concat((yyvsp[(1) - (3)].str), ",", "title"); }
     break;
 
   case 25:
 /* Line 1787 of yacc.c  */
-#line 669 "parser.y"
+#line 687 "parser.y"
     { (yyval.str) = concat((yyvsp[(1) - (3)].str), ",", "abstract"); }
     break;
 
   case 26:
 /* Line 1787 of yacc.c  */
-#line 670 "parser.y"
+#line 688 "parser.y"
     { (yyval.str) = concat((yyvsp[(1) - (3)].str), ",", "author"); }
     break;
 
   case 27:
 /* Line 1787 of yacc.c  */
-#line 671 "parser.y"
+#line 689 "parser.y"
     { (yyval.str) = concat((yyvsp[(1) - (3)].str), ",", "image"); }
     break;
 
   case 28:
 /* Line 1787 of yacc.c  */
-#line 672 "parser.y"
+#line 690 "parser.y"
     { (yyval.str) = concat((yyvsp[(1) - (3)].str), ",", "source"); }
     break;
 
   case 29:
 /* Line 1787 of yacc.c  */
-#line 673 "parser.y"
+#line 691 "parser.y"
     { (yyval.str) = concat((yyvsp[(1) - (3)].str), ",", "date"); }
     break;
 
   case 30:
 /* Line 1787 of yacc.c  */
-#line 674 "parser.y"
+#line 692 "parser.y"
     { (yyval.str) = concat((yyvsp[(1) - (3)].str), ",", "text"); }
     break;
 
 
 /* Line 1787 of yacc.c  */
-#line 2177 "parser.c"
+#line 2195 "parser.c"
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires
@@ -2405,7 +2423,7 @@ yyreturn:
 
 
 /* Line 2050 of yacc.c  */
-#line 679 "parser.y"
+#line 697 "parser.y"
 
  
 int yyerror(const char* errmsg)

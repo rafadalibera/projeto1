@@ -245,13 +245,6 @@ void ImprimeTextoDeUmaNoticia(Noticia noticia, char * nomeSaidaHtml){
 	free(nomeComExtensao);
 }
 
-char * TrimAspasString(char * string){
-	char * retorno = (char *)calloc(strlen(string), sizeof(char));
-	strcpy(retorno, string + 1);
-	retorno[strlen(retorno) - 1] = '\0';
-	return retorno;
-}
-
 //Dalibera, essa daqui eh a funcao que imprime uma das noticias.
 //Faz com fprintf ao inves de retornar string. Eu chamo essa funcao 
 //sempre que eu quiser imprimir uma das noticias. Voce fica no escopo <td></td>.
@@ -267,9 +260,8 @@ void ImprimeUmaNoticia(Noticia noticia, FILE * F){
 				fprintf(F, "<h2><a href onclick=\"window.open('%s.html', '_blank', 'width=720,height=500,toolbar=no,scrollbars=yes,resizable=no');\">%s</a></h2>\n", noticia.NomeObjeto, noticia.Title);
 				ImprimeTextoDeUmaNoticia(noticia, noticia.NomeObjeto);
 			}
-			else{
+			else
 				fprintf(F, "<h2>%s</h2>\n", noticia.Title);
-			}
 		}
 		else if (noticia.listaPropriedades[i] == Date){
 			fprintf(F, "<p>\n");
