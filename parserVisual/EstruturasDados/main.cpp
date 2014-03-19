@@ -60,7 +60,16 @@ DicionarioNoticia NewDicionarioNoticia(){
 
 	retorno.Text = (char *)calloc(strlen("") + 1, sizeof(char));
 	strcpy(retorno.Text, "");
+}
 
+void CleanDicionarioNoticia (DicionarioNoticia * dic) {
+	free(dic->Title);
+	free(dic->Abstract);
+	free(dic->Author);
+	free(dic->Date);
+	free(dic->Image);
+	free(dic->Source);
+	free(dic->Text);
 }
 
 AdicionarChave(DicionarioNoticia * dic, char * chave, char * valor){
