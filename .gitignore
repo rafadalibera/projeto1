@@ -9,3 +9,5 @@ parser.h
 *.swp
 
 scanner.c
+
+parser

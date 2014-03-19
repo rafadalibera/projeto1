@@ -551,6 +551,24 @@ news:
 ; 
 
 a_news:
+	| 	T_TITLE '=' T_STRING 	{QualquerCoisaPorEnquanto(&dicionarioNoticia, "title", $3);}	 
+	| 	T_ABSTRACT '=' T_STRING {QualquerCoisaPorEnquanto(&dicionarioNoticia, "abstract", $3);}	
+	| 	T_AUTHOR '=' T_STRING 	{QualquerCoisaPorEnquanto(&dicionarioNoticia, "author", $3);}	
+	| 	T_IMAGE '=' T_STRING 	{QualquerCoisaPorEnquanto(&dicionarioNoticia, "image", $3);}	
+	| 	T_SOURCE '=' T_STRING 	{QualquerCoisaPorEnquanto(&dicionarioNoticia, "source", $3);}	
+	| 	T_DATE '=' T_STRING 	{QualquerCoisaPorEnquanto(&dicionarioNoticia, "date", $3);}	
+	| 	T_TEXT '=' T_STRING 	{QualquerCoisaPorEnquanto(&dicionarioNoticia, "text", $3);}	
+	|	a_news T_TITLE '=' T_STRING		{QualquerCoisaPorEnquanto(&dicionarioNoticia, "title", $3);}		 		
+	|	a_news T_ABSTRACT '=' T_STRING	{QualquerCoisaPorEnquanto(&dicionarioNoticia, "abstract", $3);}	
+	|	a_news T_AUTHOR	'=' T_STRING	{QualquerCoisaPorEnquanto(&dicionarioNoticia, "author", $3);}	
+	|	a_news T_IMAGE '=' T_STRING		{QualquerCoisaPorEnquanto(&dicionarioNoticia, "image", $3);}	
+	|	a_news T_SOURCE '=' T_STRING	{QualquerCoisaPorEnquanto(&dicionarioNoticia, "source", $3);}	
+	|	a_news T_DATE '=' T_STRING		{QualquerCoisaPorEnquanto(&dicionarioNoticia, "date", $3);}	
+	|	a_news T_TEXT '=' T_STRING		{QualquerCoisaPorEnquanto(&dicionarioNoticia, "text", $3);}		
+;
+
+/*
+a_news:
 			T_TITLE '=' T_STRING T_ABSTRACT '=' T_STRING T_AUTHOR '=' T_STRING 
 			{ 
 				struct TempNews temp;
@@ -673,7 +691,7 @@ a_news:
 			}
 	;
 
-
+*/
 
 id_list:
 		T_ID {$$ = $1;}
@@ -682,7 +700,7 @@ id_list:
 
 show_list:
 	/* empty */		{$$ = ""}
-	| 	T_TITLE 	{ $$ = "title"; }
+	| 	T_TITLE 	{ $$ = "title"; AdicionarAtributo(&ultimaNoticia, "title", $3)}
 	| 	T_ABSTRACT 	{ $$ = "abstract"; }
 	| 	T_AUTHOR 	{ $$ = "author"; }
 	| 	T_IMAGE		{ $$ = "image"; }
