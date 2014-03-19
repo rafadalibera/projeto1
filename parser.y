@@ -349,10 +349,10 @@ void MarcarTodasNoticias (ListaNoticias * listaNoticias, char * lista) {
 
 	length = stringLength(lista);
 
-	while (i < length) {
+	while (i < length+1) {
 		if (lista[i] == ',' || lista[i] == '\0') {
 			temp[j] = '\0';
-			printf("-> %s\n", temp);
+			//printf("-> %s\n", temp);
 			MarcarNoticiaParaExibicao(listaNoticias, temp);
 			j = 0;
 			temp[j] = '\0';
@@ -365,6 +365,34 @@ void MarcarTodasNoticias (ListaNoticias * listaNoticias, char * lista) {
 			i++;
 		}
 	}
+}
+
+void MarcarMostrarTodosObjetosNaNoticia(Noticia * noticia, char * lista) {
+	char temp[10];
+	int length;
+	int i=0, j=0;
+
+	temp[0] = '\0';
+
+	length = stringLength(lista);
+
+	while (i < length+1) {
+		if (lista[i] == ',' || lista[i] == '\0') {
+			temp[j] = '\0';
+			//printf("-> %s\n", temp);
+			MarcarMostrarObjetoNaNoticia(noticia, temp);
+			j = 0;
+			temp[j] = '\0';
+			i++;
+		} else {
+			if (lista[i] != ' ') {
+				temp[j] = lista[i];
+				j++;
+			}
+			i++;
+		}
+	}
+	
 }
 
 %}
@@ -482,7 +510,11 @@ news:
 			//struct NewsStructure structure_struct = (struct NewsStructure)$4;
 
 			Noticia novaNoticia;
+
 			novaNoticia = NewNoticia($1, $3.title, $3.abstract, $3.author, $3.date, $3.image, $3.source, $3.text, $4.coluna);
+			//printf("%s\n", $4.lista);
+
+			MarcarMostrarTodosObjetosNaNoticia(&novaNoticia, $4.lista); 
 			
 			$$ = novaNoticia;
 		}  
