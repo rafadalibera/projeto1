@@ -12,7 +12,7 @@
   <Build xsi:type="com.visualgdb.build.custom">
     <BuildCommand>
       <SkipWhenRunningCommandList>false</SkipWhenRunningCommandList>
-      <Command>D:\cygwin64\bin\make.exe</Command>
+      <Command>D:\Cygwin64\bin\make.exe</Command>
       <Arguments />
       <WorkingDirectory>$(BuildDir)</WorkingDirectory>
       <Environment>
@@ -30,7 +30,7 @@
     </BuildCommand>
     <CleanCommand>
       <SkipWhenRunningCommandList>false</SkipWhenRunningCommandList>
-      <Command>D:\cygwin64\bin\make.exe</Command>
+      <Command>D:\Cygwin64\bin\make.exe</Command>
       <Arguments>clean</Arguments>
       <WorkingDirectory>$(BuildDir)</WorkingDirectory>
       <Environment>
@@ -73,32 +73,6 @@
   </Build>
   <Debug xsi:type="com.visualgdb.debug.local">
     <AdditionalStartupCommands />
-    <AdditionalGDBSettings>
-      <FilterSpuriousStoppedNotifications>false</FilterSpuriousStoppedNotifications>
-      <ForceSingleThreadedMode>false</ForceSingleThreadedMode>
-      <PendingBreakpointsSupported>true</PendingBreakpointsSupported>
-      <DisableChildRanges>false</DisableChildRanges>
-      <UseAppleExtensions>false</UseAppleExtensions>
-      <CanAcceptCommandsWhileRunning>false</CanAcceptCommandsWhileRunning>
-      <MakeLogFile>false</MakeLogFile>
-      <IgnoreModuleEventsWhileStepping>true</IgnoreModuleEventsWhileStepping>
-      <UseRelativePathsOnly>false</UseRelativePathsOnly>
-      <ExitAction>None</ExitAction>
-      <Features>
-        <DisableAutoDetection>false</DisableAutoDetection>
-        <UseFrameParameter>false</UseFrameParameter>
-        <SimpleValuesFlagSupported>false</SimpleValuesFlagSupported>
-        <ListLocalsSupported>false</ListLocalsSupported>
-        <ByteLevelMemoryCommandsAvailable>false</ByteLevelMemoryCommandsAvailable>
-        <ThreadInfoSupported>false</ThreadInfoSupported>
-        <PendingBreakpointsSupported>false</PendingBreakpointsSupported>
-        <SupportTargetCommand>false</SupportTargetCommand>
-      </Features>
-      <DisableDisassembly>false</DisableDisassembly>
-      <ExamineMemoryWithXCommand>false</ExamineMemoryWithXCommand>
-      <StepIntoNewInstanceEntry>main</StepIntoNewInstanceEntry>
-      <ExamineRegistersInRawFormat>true</ExamineRegistersInRawFormat>
-    </AdditionalGDBSettings>
     <LaunchGDBSettings xsi:type="GDBLaunchParametersNewInstance">
       <GDBEnvironment>
         <Records>

@@ -3,29 +3,29 @@ newspaper {
         date = "date"
         structure {
                 col = 3
-                show = head1, head2, head3
+                show = head1, head2
         }
 
         head1 {
-                title = "newstile"
-                abstract = "abstract"
-                author = "author"
+                title = "Ipsum Lorem 1"
+                abstract = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus aliquet nisl quam, at sagittis lacus elementum in. Praesent a turpis tellus. Aliquam luctus ornare massa, a fermentum quam egestas vel. Praesent pellentesque ullamcorper quam vitae imperdiet. Praesent rhoncus eget elit id pulvinar. Mauris non nulla metus. Ut in quam scelerisque, pharetra turpis sed, mollis tellus. Vivamus in est odio. Duis id arcu felis. Vestibulum vitae augue sed velit volutpat fringilla. Curabitur quis adipiscing elit. Suspendisse egestas tortor felis, pretium rhoncus tellus ullamcorper in. Praesent dapibus imperdiet hendrerit. Integer nec augue augue. Nulla ac augue porta, mollis lorem in, gravida magna. Nulla mattis augue at ligula blandit, eget cursus purus imperdiet. "
+                author = "author 1"
 
                 structure {
                         col = 1
-                        show = title, abstract
+                        show = title, abstract, author
                 }
         }
 }
 
         head2 {
                 title = "newstile2”
-                abstract = "abstract2”
-                author = "author2”
+                abstract = "Nam lobortis purus vel mattis sagittis. Pellentesque semper neque lorem, vitae auctor nibh dapibus nec. Mauris metus quam, malesuada lacinia faucibus vitae, vestibulum eget tellus. Mauris convallis adipiscing tellus in mollis. Integer vel ultrices diam. Etiam porta tellus ac volutpat dapibus. Mauris tincidunt et justo sit amet rutrum. Proin tempor scelerisque nulla ac molestie. Sed rhoncus mauris eget arcu porttitor, vitae condimentum lorem ultrices. Proin malesuada lorem felis, in fringilla risus vehicula et. Sed enim turpis, vulputate ac ultricies ut, facilisis non nunc. Etiam id turpis sagittis, euismod dui ac, sollicitudin massa. Mauris turpis justo, tristique vel neque vel, accumsan mattis massa. Nunc a suscipit sapien. Proin vehicula elit at sapien vestibulum gravida. Interdum et malesuada fames ac ante ipsum primis in faucibus. ”
+                author = "author 2”
 
                 structure {
                         col = 2
-                        show = title, abstract
+                        show = title, abstract, author
                 }
         }
 

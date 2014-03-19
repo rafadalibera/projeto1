@@ -1,13 +1,17 @@
-﻿Build started 18/03/2014 23:44:35.
+﻿Build started 19/03/2014 15:26:25.
      1>Project "D:\mc911\projeto1\parserVisual\parserVisual\parserVisual.vcxproj" on node 2 (Build target(s)).
      1>Build:
          "C:\Program Files (x86)\Sysprogs\VisualGDB\VisualGDB.exe" /build "D:\mc911\projeto1\parserVisual\parserVisual\parserVisual.vcxproj" "/solution:D:\mc911\projeto1\parserVisual\parserVisual.sln" "/config:Debug" "/platform:Win32"
          VisualGDB: Executing prebuild actions
-         VisualGDB: Run "D:\cygwin64\bin\make.exe " in directory "D:\mc911\projeto1" on local computer
-         make: 'parser' is up to date.
+         VisualGDB: Run "D:\Cygwin64\bin\make.exe " in directory "D:\mc911\projeto1" on local computer
+         bison -d parser.y  -o parser.c
+         parser.y:619.41: warning: a ';' might be needed at the end of action code
+         parser.y:619.41:     future versions of Bison will not add the ';'
+         gcc -g   -c -o parser.o parser.c
+         gcc -o parser scanner.o parser.o
          VisualGDB: Executing postbuild actions
      1>Done Building Project "D:\mc911\projeto1\parserVisual\parserVisual\parserVisual.vcxproj" (Build target(s)).
 
 Build succeeded.
 
-Time Elapsed 00:00:00.59
+Time Elapsed 00:00:01.17
