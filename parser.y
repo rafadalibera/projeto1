@@ -494,7 +494,8 @@ newspaper: 	T_NEWSPAPER '{' T_TITLE '=' T_STRING  T_DATE '=' T_STRING  structure
 		MarcarTodasNoticias (&listaNoticias, $9.lista);
 
 		ImprimePaginaWeb("out.htm", &listaNoticias, $9.coluna);
-	} 
+	}
+;
 
 
 structure:
@@ -516,6 +517,7 @@ structure:
 
 				$$ = temp;
 			}
+;
 
 
 news_list :
@@ -529,6 +531,7 @@ news_list :
 			AppendElemento(&listaNoticias, $1);
 			printf("%s\n", $1.Author);
 		}
+;
 
 news:
 		T_ID '{' a_news structure '}'
@@ -544,7 +547,8 @@ news:
 			MarcarMostrarTodosObjetosNaNoticia(&novaNoticia, $4.lista); 
 			
 			$$ = novaNoticia;
-		}  
+		} 
+; 
 
 a_news:
 			T_TITLE '=' T_STRING T_ABSTRACT '=' T_STRING T_AUTHOR '=' T_STRING 
@@ -667,12 +671,14 @@ a_news:
 
 				$$ = temp;
 			}
+	;
 
 
 
 id_list:
 		T_ID {$$ = $1;}
 	| 	id_list ',' T_ID {$$ = concat($1, ",", $3);}
+;
 
 show_list:
 	/* empty */		{$$ = ""}
@@ -690,8 +696,6 @@ show_list:
 	|	show_list ',' T_SOURCE		{ $$ = concat($1, ",", "source"); }
 	|	show_list ',' T_DATE		{ $$ = concat($1, ",", "date"); }
 	|	show_list ',' T_TEXT		{ $$ = concat($1, ",", "text"); }
- 
-
 ;
  
 %%

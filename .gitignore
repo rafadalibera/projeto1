@@ -1,3 +1,11 @@
 parserVisual/parserVisual.opensdf
-parser.exe
-parser.o
+
+*.o
+
+*.htm
+
+parser.h
+
+*.swp
+
+scanner.c
