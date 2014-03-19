@@ -1,1 +1,9 @@
 parserVisual/parserVisual.opensdf
+
+*.o
+
+*.htm
+
+parser.h
+
+*.swp
