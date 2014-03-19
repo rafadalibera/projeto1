@@ -63,11 +63,6 @@ DicionarioNoticia NewDicionarioNoticia(){
 
 }
 
-AdicionarChave(DicionarioNoticia * dic, char * chave, char * valor){
-
-}
-
-
 //Converte uma string para letras maiusculas. Nao esquecer de dar free na memoria retornada depois de usar se nao for mais necessaria
 char *StringToUpper(char * stringOriginal){
 	int i = 0;
@@ -79,6 +74,87 @@ char *StringToUpper(char * stringOriginal){
 	retorno[i] = '\0';
 	return retorno;
 }
+
+void AdicionarChave(DicionarioNoticia * dic, char * chave, char * valor){
+	char * chaveMaiuscula = StringToUpper(chave);
+	if (strcmp(chaveMaiuscula, "TITLE") == 0){
+		if (strcmp((*dic).Title, "") == 0){
+			free((*dic).Title);
+			(*dic).Title = (char *)calloc(strlen(valor) + 1, sizeof(char));
+			strcpy((*dic).Title, valor);
+		}
+		else{
+			fprintf(stderr, "\nWarning - Atributo TITLE repetido no jornal\n");
+		}
+	}
+	else if (strcmp(chaveMaiuscula, "ABSTRACT") == 0){
+		if (strcmp((*dic).Abstract, "") == 0){
+			free((*dic).Abstract);
+			(*dic).Abstract = (char *)calloc(strlen(valor) + 1, sizeof(char));
+			strcpy((*dic).Abstract, valor);
+		}
+		else{
+			fprintf(stderr, "\nWarning - Atributo ABSTRACT repetido no jornal\n");
+		}
+	}
+	else if (strcmp(chaveMaiuscula, "AUTHOR") == 0){
+		if (strcmp((*dic).Author, "") == 0){
+			free((*dic).Author);
+			(*dic).Author = (char *)calloc(strlen(valor) + 1, sizeof(char));
+			strcpy((*dic).Author, valor);
+		}
+		else{
+			fprintf(stderr, "\nWarning - Atributo AUTHOR repetido no jornal\n");
+		}
+	}
+	else if (strcmp(chaveMaiuscula, "DATE") == 0){
+		if (strcmp((*dic).Date, "") == 0){
+			free((*dic).Date);
+			(*dic).Date = (char *)calloc(strlen(valor) + 1, sizeof(char));
+			strcpy((*dic).Date, valor);
+		}
+		else{
+			fprintf(stderr, "\nWarning - Atributo DATE repetido no jornal\n");
+		}
+	}
+	else if (strcmp(chaveMaiuscula, "IMAGE") == 0){
+		if (strcmp((*dic).Image, "") == 0){
+			free((*dic).Image);
+			(*dic).Image = (char *)calloc(strlen(valor) + 1, sizeof(char));
+			strcpy((*dic).Image, valor);
+		}
+		else{
+			fprintf(stderr, "\nWarning - Atributo IMAGE repetido no jornal\n");
+		}
+	}
+	else if (strcmp(chaveMaiuscula, "SOURCE") == 0){
+		if (strcmp((*dic).Source, "") == 0){
+			free((*dic).Source);
+			(*dic).Source = (char *)calloc(strlen(valor) + 1, sizeof(char));
+			strcpy((*dic).Source, valor);
+		}
+		else{
+			fprintf(stderr, "\nWarning - Atributo SOURCE repetido no jornal\n");
+		}
+	}
+	else if (strcmp(chaveMaiuscula, "TEXT") == 0){
+		if (strcmp((*dic).Text, "") == 0){
+			free((*dic).Text);
+			(*dic).Text = (char *)calloc(strlen(valor) + 1, sizeof(char));
+			strcpy((*dic).Text, valor);
+		}
+		else{
+			fprintf(stderr, "\nWarning - Atributo TEXT repetido no jornal\n");
+		}
+	}
+	else{
+		fprintf(stderr, "\nWarning - Atributo desconhecido no jornal\n");
+	}
+
+
+	free(chaveMaiuscula);
+}
+
 
 //Os argumentos precisam ser strings bem formadas (com NUL no final). Todos os objetos sao reinstanciados, ou seja, pode dar free nos fontes depois
 //Nao mudar abstrac para abstract. Palavra reservada.
@@ -170,7 +246,7 @@ void MostrarPropriedade(Noticia * noticia, char * nomePropriedade){
 		MarcarMostrarObjetoNaNoticia(noticia, Text);
 	}
 	else{
-		printf("\nWarning - Token nao reconhecido\n");
+		fprintf(stderr, "\nWarning - Token nao reconhecido\n");
 	}
 	free(nomePropriedadeMaiuscula);
 }
