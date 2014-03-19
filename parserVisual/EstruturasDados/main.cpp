@@ -5,7 +5,7 @@
 
 typedef enum  {
 	Invalido, Title, Abstract, Author, Date, Image, Source, Text
-}TipoPropriedade;
+} TipoPropriedade;
 
 typedef struct{
 	int buscada; //Esse campo serve soh para dizer se uma noticia jah foi eleita para ser colocada na tela. Necessario na hora de ordenar / decidir.
@@ -26,7 +26,7 @@ typedef struct {
 	int capacidade;
 	int tamanho;
 	Noticia * valores;
-}ListaNoticias;
+} ListaNoticias;
 
 typedef struct{
 	char * Title;
@@ -36,7 +36,7 @@ typedef struct{
 	char * Image;
 	char * Source;
 	char * Text;
-}DicionarioNoticia;
+} DicionarioNoticia;
 
 DicionarioNoticia NewDicionarioNoticia(){
 	DicionarioNoticia retorno;
