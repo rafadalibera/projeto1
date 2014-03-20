@@ -5,7 +5,8 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <ctype.h>
-
+#include "util.h"
+/*
 typedef enum  {
 	Invalido, Title, Abstract, Author, Date, Image, Source, Text
 }TipoPropriedade;
@@ -32,7 +33,7 @@ typedef struct {
 }ListaNoticias;
 
 ListaNoticias listaNoticias;
-
+*/
 //Converte uma string para letras maiusculas. Nao esquecer de dar free na memoria retornada depois de usar se nao for mais necessaria
 char *StringToUpper(char * stringOriginal){
 	int i = 0;
@@ -418,9 +419,128 @@ void MarcarMostrarTodosObjetosNaNoticia(Noticia * noticia, char * lista) {
 			}
 			i++;
 		}
-	}
-	
+	}	
 }
+
+//******************************************************
+DicionarioNoticia NewDicionarioNoticia(){
+	DicionarioNoticia retorno;
+	retorno.Title = (char *)calloc(strlen("") + 1, sizeof(char));
+	strcpy(retorno.Title, "");
+
+	retorno.Abstract = (char *)calloc(strlen("") + 1, sizeof(char));
+	strcpy(retorno.Abstract, "");
+
+	retorno.Author = (char *)calloc(strlen("") + 1, sizeof(char));
+	strcpy(retorno.Author, "");
+
+	retorno.Date = (char *)calloc(strlen("") + 1, sizeof(char));
+	strcpy(retorno.Date, "");
+
+	retorno.Image = (char *)calloc(strlen("") + 1, sizeof(char));
+	strcpy(retorno.Image, "");
+
+	retorno.Source = (char *)calloc(strlen("") + 1, sizeof(char));
+	strcpy(retorno.Source, "");
+
+	retorno.Text = (char *)calloc(strlen("") + 1, sizeof(char));
+	strcpy(retorno.Text, "");
+
+	return retorno;
+}
+
+void CleanDicionarioNoticia (DicionarioNoticia * dic) {
+	free(dic->Title);
+	free(dic->Abstract);
+	free(dic->Author);
+	free(dic->Date);
+	free(dic->Image);
+	free(dic->Source);
+	free(dic->Text);
+}
+
+void AdicionarChave(DicionarioNoticia * dic, char * chave, char * valor){
+	char * chaveMaiuscula = StringToUpper(chave);
+	if (strcmp(chaveMaiuscula, "TITLE") == 0){
+		if (strcmp((*dic).Title, "") == 0){
+			free((*dic).Title);
+			(*dic).Title = (char *)calloc(strlen(valor) + 1, sizeof(char));
+			strcpy((*dic).Title, valor);
+		}
+		else{
+			fprintf(stderr, "\nWarning - Atributo TITLE repetido no jornal\n");
+		}
+	}
+	else if (strcmp(chaveMaiuscula, "ABSTRACT") == 0){
+		if (strcmp((*dic).Abstract, "") == 0){
+			free((*dic).Abstract);
+			(*dic).Abstract = (char *)calloc(strlen(valor) + 1, sizeof(char));
+			strcpy((*dic).Abstract, valor);
+		}
+		else{
+			fprintf(stderr, "\nWarning - Atributo ABSTRACT repetido no jornal\n");
+		}
+	}
+	else if (strcmp(chaveMaiuscula, "AUTHOR") == 0){
+		if (strcmp((*dic).Author, "") == 0){
+			free((*dic).Author);
+			(*dic).Author = (char *)calloc(strlen(valor) + 1, sizeof(char));
+			strcpy((*dic).Author, valor);
+		}
+		else{
+			fprintf(stderr, "\nWarning - Atributo AUTHOR repetido no jornal\n");
+		}
+	}
+	else if (strcmp(chaveMaiuscula, "DATE") == 0){
+		if (strcmp((*dic).Date, "") == 0){
+			free((*dic).Date);
+			(*dic).Date = (char *)calloc(strlen(valor) + 1, sizeof(char));
+			strcpy((*dic).Date, valor);
+		}
+		else{
+			fprintf(stderr, "\nWarning - Atributo DATE repetido no jornal\n");
+		}
+	}
+	else if (strcmp(chaveMaiuscula, "IMAGE") == 0){
+		if (strcmp((*dic).Image, "") == 0){
+			free((*dic).Image);
+			(*dic).Image = (char *)calloc(strlen(valor) + 1, sizeof(char));
+			strcpy((*dic).Image, valor);
+		}
+		else{
+			fprintf(stderr, "\nWarning - Atributo IMAGE repetido no jornal\n");
+		}
+	}
+	else if (strcmp(chaveMaiuscula, "SOURCE") == 0){
+		if (strcmp((*dic).Source, "") == 0){
+			free((*dic).Source);
+			(*dic).Source = (char *)calloc(strlen(valor) + 1, sizeof(char));
+			strcpy((*dic).Source, valor);
+		}
+		else{
+			fprintf(stderr, "\nWarning - Atributo SOURCE repetido no jornal\n");
+		}
+	}
+	else if (strcmp(chaveMaiuscula, "TEXT") == 0){
+		if (strcmp((*dic).Text, "") == 0){
+			free((*dic).Text);
+			(*dic).Text = (char *)calloc(strlen(valor) + 1, sizeof(char));
+			strcpy((*dic).Text, valor);
+		}
+		else{
+			fprintf(stderr, "\nWarning - Atributo TEXT repetido no jornal\n");
+		}
+	}
+	else{
+		fprintf(stderr, "\nWarning - Atributo desconhecido no jornal\n");
+	}
+
+
+	free(chaveMaiuscula);
+}
+
+
+//******************************************************
 
 %}
  
@@ -451,7 +571,7 @@ void MarcarMostrarTodosObjetosNaNoticia(Noticia * noticia, char * lista) {
 %token T_SHOW
 %token <intval> T_NUM
 
-%error-verboseDicionarioNoticia
+//%error-verboseDicionarioNoticia
 
 %type <str> id_list show_list T_TITLE T_ABSTRACT T_AUTHOR  T_IMAGE	T_SOURCE T_DATE T_TEXT	
 %type <newsStructure> structure
@@ -508,29 +628,32 @@ news:
 		T_ID '{' a_news structure '}'
 		{
 			Noticia novaNoticia;
-			novaNoticia = NewNoticia($1, $3.title, $3.abstract, $3.author, $3.date, $3.image, $3.source, $3.text, $4.coluna);
+			novaNoticia = NewNoticia($1, dicionarioNoticia.Title, dicionarioNoticia.Abstract, dicionarioNoticia.Author, dicionarioNoticia.Date, dicionarioNoticia.Image, dicionarioNoticia.Source, dicionarioNoticia.Text, $4.coluna);
 
 			MarcarMostrarTodosObjetosNaNoticia(&novaNoticia, $4.lista); 
-			
+
+			CleanDicionarioNoticia (&dicionarioNoticia);
+			dicionarioNoticia = NewDicionarioNoticia();
+
 			$$ = novaNoticia;
 		} 
 ; 
 
 a_news:
-	| 	T_TITLE '=' T_STRING 	{QualquerCoisaPorEnquanto(&dicionarioNoticia, "title", $3);}	 
-	| 	T_ABSTRACT '=' T_STRING {QualquerCoisaPorEnquanto(&dicionarioNoticia, "abstract", $3);}	
-	| 	T_AUTHOR '=' T_STRING 	{QualquerCoisaPorEnquanto(&dicionarioNoticia, "author", $3);}	
-	| 	T_IMAGE '=' T_STRING 	{QualquerCoisaPorEnquanto(&dicionarioNoticia, "image", $3);}	
-	| 	T_SOURCE '=' T_STRING 	{QualquerCoisaPorEnquanto(&dicionarioNoticia, "source", $3);}	
-	| 	T_DATE '=' T_STRING 	{QualquerCoisaPorEnquanto(&dicionarioNoticia, "date", $3);}	
-	| 	T_TEXT '=' T_STRING 	{QualquerCoisaPorEnquanto(&dicionarioNoticia, "text", $3);}	
-	|	a_news T_TITLE '=' T_STRING		{QualquerCoisaPorEnquanto(&dicionarioNoticia, "title", $3);}		 		
-	|	a_news T_ABSTRACT '=' T_STRING	{QualquerCoisaPorEnquanto(&dicionarioNoticia, "abstract", $3);}	
-	|	a_news T_AUTHOR	'=' T_STRING	{QualquerCoisaPorEnquanto(&dicionarioNoticia, "author", $3);}	
-	|	a_news T_IMAGE '=' T_STRING		{QualquerCoisaPorEnquanto(&dicionarioNoticia, "image", $3);}	
-	|	a_news T_SOURCE '=' T_STRING	{QualquerCoisaPorEnquanto(&dicionarioNoticia, "source", $3);}	
-	|	a_news T_DATE '=' T_STRING		{QualquerCoisaPorEnquanto(&dicionarioNoticia, "date", $3);}	
-	|	a_news T_TEXT '=' T_STRING		{QualquerCoisaPorEnquanto(&dicionarioNoticia, "text", $3);}		
+	| 	T_TITLE '=' T_STRING 	{ AdicionarChave(&dicionarioNoticia, "title", $3); }	 
+	| 	T_ABSTRACT '=' T_STRING { AdicionarChave(&dicionarioNoticia, "abstract", $3); }	
+	| 	T_AUTHOR '=' T_STRING 	{ AdicionarChave(&dicionarioNoticia, "author", $3); }	
+	| 	T_IMAGE '=' T_STRING 	{ AdicionarChave(&dicionarioNoticia, "image", $3); }	
+	| 	T_SOURCE '=' T_STRING 	{ AdicionarChave(&dicionarioNoticia, "source", $3); }	
+	| 	T_DATE '=' T_STRING 	{ AdicionarChave(&dicionarioNoticia, "date", $3); }	
+	| 	T_TEXT '=' T_STRING 	{ AdicionarChave(&dicionarioNoticia, "text", $3); }	
+	|	a_news T_TITLE '=' T_STRING		{ AdicionarChave(&dicionarioNoticia, "title", $4); }		 		
+	|	a_news T_ABSTRACT '=' T_STRING	{ AdicionarChave(&dicionarioNoticia, "abstract", $4); }	
+	|	a_news T_AUTHOR	'=' T_STRING	{ AdicionarChave(&dicionarioNoticia, "author", $4); }	
+	|	a_news T_IMAGE '=' T_STRING		{ AdicionarChave(&dicionarioNoticia, "image", $4); }	
+	|	a_news T_SOURCE '=' T_STRING	{ AdicionarChave(&dicionarioNoticia, "source", $4); }	
+	|	a_news T_DATE '=' T_STRING		{ AdicionarChave(&dicionarioNoticia, "date", $4); }	
+	|	a_news T_TEXT '=' T_STRING		{ AdicionarChave(&dicionarioNoticia, "text", $4); }		
 ;
 
 /*
@@ -694,6 +817,7 @@ int yywrap(void) { return 1; }
 int main(int argc, char** argv)
 {
 	listaNoticias = NewListaNoticias(10);
+	dicionarioNoticia = NewDicionarioNoticia();
     yyparse();
     return 0;
 }
