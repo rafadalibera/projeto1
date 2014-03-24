@@ -72,6 +72,27 @@ void CleanDicionarioNoticia (DicionarioNoticia * dic) {
 	free(dic->Image);
 	free(dic->Source);
 	free(dic->Text);
+
+	(*dic).Title = (char *)calloc(strlen("") + 1, sizeof(char));
+	strcpy((*dic).Title, "");
+
+	(*dic).Abstract = (char *)calloc(strlen("") + 1, sizeof(char));
+	strcpy((*dic).Abstract, "");
+
+	(*dic).Author = (char *)calloc(strlen("") + 1, sizeof(char));
+	strcpy((*dic).Author, "");
+
+	(*dic).Date = (char *)calloc(strlen("") + 1, sizeof(char));
+	strcpy((*dic).Date, "");
+
+	(*dic).Image = (char *)calloc(strlen("") + 1, sizeof(char));
+	strcpy((*dic).Image, "");
+
+	(*dic).Source = (char *)calloc(strlen("") + 1, sizeof(char));
+	strcpy((*dic).Source, "");
+
+	(*dic).Text = (char *)calloc(strlen("") + 1, sizeof(char));
+	strcpy((*dic).Text, "");
 }
 
 //Converte uma string para letras maiusculas. Nao esquecer de dar free na memoria retornada depois de usar se nao for mais necessaria
@@ -551,6 +572,10 @@ void TesteGeraHtml(){
 	MarcarNoticiaParaExibicao(&listaNoticias, "HEAD1");
 
 	ImprimePaginaWeb("saidaTeste.html", &listaNoticias, 3);
+
+	DicionarioNoticia dic = NewDicionarioNoticia();
+	CleanDicionarioNoticia(&dic);
+
 }
 
 
@@ -561,7 +586,6 @@ int main(){
 
 	TesteMetodos();
 
-	DicionarioNoticia dic;
 	
 	//TesteGeraHtml();
 
