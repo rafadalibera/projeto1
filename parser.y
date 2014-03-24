@@ -457,6 +457,27 @@ void CleanDicionarioNoticia (DicionarioNoticia * dic) {
 	free(dic->Image);
 	free(dic->Source);
 	free(dic->Text);
+
+	(*dic).Title = (char *)calloc(strlen("") + 1, sizeof(char));
+	strcpy((*dic).Title, "");
+
+	(*dic).Abstract = (char *)calloc(strlen("") + 1, sizeof(char));
+	strcpy((*dic).Abstract, "");
+
+	(*dic).Author = (char *)calloc(strlen("") + 1, sizeof(char));
+	strcpy((*dic).Author, "");
+
+	(*dic).Date = (char *)calloc(strlen("") + 1, sizeof(char));
+	strcpy((*dic).Date, "");
+
+	(*dic).Image = (char *)calloc(strlen("") + 1, sizeof(char));
+	strcpy((*dic).Image, "");
+
+	(*dic).Source = (char *)calloc(strlen("") + 1, sizeof(char));
+	strcpy((*dic).Source, "");
+
+	(*dic).Text = (char *)calloc(strlen("") + 1, sizeof(char));
+	strcpy((*dic).Text, "");
 }
 
 void AdicionarChave(DicionarioNoticia * dic, char * chave, char * valor){
