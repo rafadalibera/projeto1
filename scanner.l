@@ -6,8 +6,9 @@
 
 ID [\*a-z][a-z0-9_]*
 NUM [0-9]+
-STRING \"[A-Za-z0-9 \?!@#\$%^&*(),\.;/]+\"
-WHITESPACE [ \n\r\t]+
+/*STRING \"[A-Za-z0-9 \?!@#\$%^&*(),\.;/Á«·ÈÌÛ˙¡…Õ”⁄„ı√’]+\"*/
+STRING \".+\"
+WHITESPACE [ \r\n\t]+
 ANY_CHAR .
 
 %option case-insensitive

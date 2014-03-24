@@ -51,5 +51,8 @@
     <Text Include="Estrutura noticia doc.txt">
       <Filter>Doc</Filter>
     </Text>
+    <Text Include="TestePaginaProfessorSemComentarios.txt">
+      <Filter>Resource files</Filter>
+    </Text>
   </ItemGroup>
 </Project>
