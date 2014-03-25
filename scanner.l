@@ -10,9 +10,8 @@ NUM [0-9]+
 STRING \".+\"
 WHITESPACE [ \r\n\t]+
 ANY_CHAR .
-COMMENT [//].*
-WORD [A-Za-z0-9\?!@#\$%^&\-(),\.;/Á«·ÈÌÛ˙¡…Õ”⁄„ı√’‡ËÏÚ˘¿»Ã“ŸÍ ]+
-LINKTEXT (\[.+[ ]*\|[ ]*.+[ ]*])
+COMMENT //.*
+WORD ([^\s]+)
 
 %option case-insensitive
 
@@ -36,7 +35,6 @@ LINKTEXT (\[.+[ ]*\|[ ]*.+[ ]*])
 "," 			{return ',';}
 ";"				{return ';';}
 "="				{return '=';}
-"\""			{return '"';}
 
 {ID} {	
 	yylval.str = (char *) strdup(yytext);
@@ -48,19 +46,9 @@ LINKTEXT (\[.+[ ]*\|[ ]*.+[ ]*])
 	return T_STRING;
 }
 
-{LINKTEXT} {
-	yylval.str = (char *) strdup(yytext);
-	return T_LINKTEXT;
-}
-
 {NUM} {
 	yylval.intval = atoi(strdup(yytext));
 	return T_NUM;
-}
-
-{WORD} {
-	yylval.str = (char *) strdup(yytext);
-	return T_WORD;
 }
 
 {ANY_CHAR} {

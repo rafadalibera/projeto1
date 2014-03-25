@@ -588,29 +588,27 @@ void AdicionarChave(DicionarioNoticia * dic, char * chave, char * valor){
 %token T_ITEM
 %token T_DATE
 %token <str> T_STRING
-%token <str> T_LINKTEXT
 %token T_COL
 %token T_SHOW
 %token <intval> T_NUM
-%token <str> T_WORD
 
 //%error-verboseDicionarioNoticia
 
-%type <str> id_list show_list word_list T_TITLE T_ABSTRACT T_AUTHOR T_IMAGE T_SOURCE T_DATE T_TEXT 	
+%type <str> id_list show_list T_TITLE T_ABSTRACT T_AUTHOR  T_IMAGE	T_SOURCE T_DATE T_TEXT	
 %type <newsStructure> structure
 %type <noticia> news
 
 
 %%
-			
-newspaper: 	T_NEWSPAPER '{' T_TITLE '=' '\"' word_list '\"'  T_DATE '=' '\"' word_list '\"'  structure news_list '}' 
-	{	
 
-		MarcarTodasNoticias (&listaNoticias, $13.lista);
+newspaper: 	T_NEWSPAPER '{' T_TITLE '=' T_STRING  T_DATE '=' T_STRING  structure news_list '}' {	
 
-		ImprimePaginaWeb("out.htm", &listaNoticias, $13.coluna);
+		MarcarTodasNoticias (&listaNoticias, $9.lista);
+
+		ImprimePaginaWeb("out.htm", &listaNoticias, $9.coluna);
 	}
 ;
+
 
 structure:
 			T_STRUCTURE '{' T_COL '=' T_NUM T_SHOW '=' id_list '}' 		
@@ -663,20 +661,20 @@ news:
 ; 
 
 a_news:
-	| 	T_TITLE '=' '\"' word_list '\"' 		{ AdicionarChave(&dicionarioNoticia, "title", $4); }	 
-	| 	T_ABSTRACT '=' '\"' word_list '\"' 		{ AdicionarChave(&dicionarioNoticia, "abstract", $4); }	
-	| 	T_AUTHOR '=' '\"' word_list '\"' 		{ AdicionarChave(&dicionarioNoticia, "author", $4); }	
-	| 	T_IMAGE '=' '\"' word_list '\"' 		{ AdicionarChave(&dicionarioNoticia, "image", $4); }	
-	| 	T_SOURCE '=' '\"' word_list '\"' 		{ AdicionarChave(&dicionarioNoticia, "source", $4); }	
-	| 	T_DATE '=' '\"' word_list '\"' 			{ AdicionarChave(&dicionarioNoticia, "date", $4); }	
-	| 	T_TEXT '=' '\"' word_list '\"' 			{ AdicionarChave(&dicionarioNoticia, "text", $4); }	
-	|	a_news T_TITLE '=' '\"' word_list '\"'		{ AdicionarChave(&dicionarioNoticia, "title", $5); }		 		
-	|	a_news T_ABSTRACT '=' '\"' word_list '\"'	{ AdicionarChave(&dicionarioNoticia, "abstract", $5); }	
-	|	a_news T_AUTHOR	'=' '\"' word_list '\"'		{ AdicionarChave(&dicionarioNoticia, "author", $5); }	
-	|	a_news T_IMAGE '=' '\"' word_list '\"'		{ AdicionarChave(&dicionarioNoticia, "image", $5); }	
-	|	a_news T_SOURCE '=' '\"' word_list '\"'		{ AdicionarChave(&dicionarioNoticia, "source", $5); }	
-	|	a_news T_DATE '=' '\"' word_list '\"'		{ AdicionarChave(&dicionarioNoticia, "date", $5); }	
-	|	a_news T_TEXT '=' '\"' word_list '\"'		{ AdicionarChave(&dicionarioNoticia, "text", $5); }		
+	| 	T_TITLE '=' T_STRING 	{ AdicionarChave(&dicionarioNoticia, "title", $3); }	 
+	| 	T_ABSTRACT '=' T_STRING { AdicionarChave(&dicionarioNoticia, "abstract", $3); }	
+	| 	T_AUTHOR '=' T_STRING 	{ AdicionarChave(&dicionarioNoticia, "author", $3); }	
+	| 	T_IMAGE '=' T_STRING 	{ AdicionarChave(&dicionarioNoticia, "image", $3); }	
+	| 	T_SOURCE '=' T_STRING 	{ AdicionarChave(&dicionarioNoticia, "source", $3); }	
+	| 	T_DATE '=' T_STRING 	{ AdicionarChave(&dicionarioNoticia, "date", $3); }	
+	| 	T_TEXT '=' T_STRING 	{ AdicionarChave(&dicionarioNoticia, "text", $3); }	
+	|	a_news T_TITLE '=' T_STRING		{ AdicionarChave(&dicionarioNoticia, "title", $4); }		 		
+	|	a_news T_ABSTRACT '=' T_STRING	{ AdicionarChave(&dicionarioNoticia, "abstract", $4); }	
+	|	a_news T_AUTHOR	'=' T_STRING	{ AdicionarChave(&dicionarioNoticia, "author", $4); }	
+	|	a_news T_IMAGE '=' T_STRING		{ AdicionarChave(&dicionarioNoticia, "image", $4); }	
+	|	a_news T_SOURCE '=' T_STRING	{ AdicionarChave(&dicionarioNoticia, "source", $4); }	
+	|	a_news T_DATE '=' T_STRING		{ AdicionarChave(&dicionarioNoticia, "date", $4); }	
+	|	a_news T_TEXT '=' T_STRING		{ AdicionarChave(&dicionarioNoticia, "text", $4); }		
 ;
 
 /*
@@ -826,11 +824,6 @@ show_list:
 	|	show_list ',' T_SOURCE		{ $$ = concat($1, ",", "source"); }
 	|	show_list ',' T_DATE		{ $$ = concat($1, ",", "date"); }
 	|	show_list ',' T_TEXT		{ $$ = concat($1, ",", "text"); }
-;
-
-word_list: 
-			T_WORD				{ $$ = $1; }
-		|	word_list T_WORD 	{ $$ = concat($1, "", $2); }
 ;
  
 %%
