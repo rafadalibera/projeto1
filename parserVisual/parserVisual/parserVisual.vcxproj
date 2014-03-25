@@ -71,6 +71,7 @@
   <ItemGroup>
     <None Include="..\..\parser.y" />
     <None Include="..\..\scanner.l" />
+    <None Include="C:\Temp\sempre_online.npl" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="Estrutura noticia doc.txt" />

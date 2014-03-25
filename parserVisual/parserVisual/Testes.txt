@@ -2,6 +2,7 @@ newspaper {
         title = "title"
         date = "date"
         structure {
+		//tem um comment
                 col = 3
                 show = head1, head2
         }

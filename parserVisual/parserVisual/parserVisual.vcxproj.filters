@@ -40,6 +40,9 @@
     <None Include="..\..\scanner.l">
       <Filter>Resource files</Filter>
     </None>
+    <None Include="C:\Temp\sempre_online.npl">
+      <Filter>Resource files</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Text Include="Testes.txt">
