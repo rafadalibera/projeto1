@@ -12,6 +12,7 @@ WHITESPACE [ \r\n\t]+
 ANY_CHAR .
 COMMENT [//].*
 WORD ([^\s]+)
+LINKTEXT (\[.+[ ]*\|[ ]*.+[ ]*])
 
 %option case-insensitive
 
@@ -44,6 +45,11 @@ WORD ([^\s]+)
 {STRING} {
 	yylval.str = (char *) strdup(yytext);
 	return T_STRING;
+}
+
+{LINKTEXT} {
+	yylval.str = (char *) strdup(yytext);
+	return T_LINKTEXT;
 }
 
 {NUM} {

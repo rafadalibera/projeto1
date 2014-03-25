@@ -1,4 +1,4 @@
-﻿Build started 24/03/2014 21:53:50.
+﻿Build started 24/03/2014 22:26:53.
      1>Project "D:\mc911\projeto1\parserVisual\parserVisual\parserVisual.vcxproj" on node 2 (Build target(s)).
      1>Build:
          "C:\Program Files (x86)\Sysprogs\VisualGDB\VisualGDB.exe" /build "D:\mc911\projeto1\parserVisual\parserVisual\parserVisual.vcxproj" "/solution:D:\mc911\projeto1\parserVisual\parserVisual.sln" "/config:Debug" "/platform:Win32"
@@ -12,4 +12,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:00.98
+Time Elapsed 00:00:01.04

@@ -588,6 +588,7 @@ void AdicionarChave(DicionarioNoticia * dic, char * chave, char * valor){
 %token T_ITEM
 %token T_DATE
 %token <str> T_STRING
+%token <str> T_LINKTEXT
 %token T_COL
 %token T_SHOW
 %token <intval> T_NUM
