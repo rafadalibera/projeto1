@@ -36,6 +36,7 @@ LINKTEXT (\[.+[ ]*\|[ ]*.+[ ]*])
 "," 			{return ',';}
 ";"				{return ';';}
 "="				{return '=';}
+"\""			{return '"';}
 
 {ID} {	
 	yylval.str = (char *) strdup(yytext);
