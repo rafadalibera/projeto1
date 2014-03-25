@@ -661,21 +661,37 @@ news:
 ; 
 
 a_news:
-	| 	T_TITLE '=' T_STRING 	{ AdicionarChave(&dicionarioNoticia, "title", $3); }	 
+	 	T_TITLE '=' T_STRING 	{ AdicionarChave(&dicionarioNoticia, "title", $3); }	 
 	| 	T_ABSTRACT '=' T_STRING { AdicionarChave(&dicionarioNoticia, "abstract", $3); }	
 	| 	T_AUTHOR '=' T_STRING 	{ AdicionarChave(&dicionarioNoticia, "author", $3); }	
 	| 	T_IMAGE '=' T_STRING 	{ AdicionarChave(&dicionarioNoticia, "image", $3); }	
 	| 	T_SOURCE '=' T_STRING 	{ AdicionarChave(&dicionarioNoticia, "source", $3); }	
 	| 	T_DATE '=' T_STRING 	{ AdicionarChave(&dicionarioNoticia, "date", $3); }	
-	| 	T_TEXT '=' T_STRING 	{ AdicionarChave(&dicionarioNoticia, "text", $3); }	
+	| 	T_TEXT '=' '\"' content_text '\"' 	{ AdicionarChave(&dicionarioNoticia, "text", $3); }	
 	|	a_news T_TITLE '=' T_STRING		{ AdicionarChave(&dicionarioNoticia, "title", $4); }		 		
 	|	a_news T_ABSTRACT '=' T_STRING	{ AdicionarChave(&dicionarioNoticia, "abstract", $4); }	
 	|	a_news T_AUTHOR	'=' T_STRING	{ AdicionarChave(&dicionarioNoticia, "author", $4); }	
 	|	a_news T_IMAGE '=' T_STRING		{ AdicionarChave(&dicionarioNoticia, "image", $4); }	
 	|	a_news T_SOURCE '=' T_STRING	{ AdicionarChave(&dicionarioNoticia, "source", $4); }	
 	|	a_news T_DATE '=' T_STRING		{ AdicionarChave(&dicionarioNoticia, "date", $4); }	
-	|	a_news T_TEXT '=' T_STRING		{ AdicionarChave(&dicionarioNoticia, "text", $4); }		
+	|	a_news T_TEXT '=' '\"' content_text '\"'		{ AdicionarChave(&dicionarioNoticia, "text", $4); }		
 ;
+
+content_text: 
+				/* blank */
+			|	content_text "[" SSA "|" SSA "]"
+			|	content_text "[" "[" SSA "|" SSA "]" "]"
+			|	content_text "=" "=" "=" SSA "=" "=" "="
+			|	content_text "'" "'" SSA "'" "'"
+			|	content_text "'" "'" "'" SSA "'" "'" "'"
+			|	content_text "'" "'" "'" "'" "'" SSA "'" "'" "'" "'" "'"
+			|	content_text "*" SSA
+			|	content_text "*" "*" SSA
+			|	content_text "*" "*" "*" SSA
+			|  	content_text "#" SSA
+			| 	content_text "#" "#" SSA
+			|	content_text "#" "#" "#" SSA					
+
 
 /*
 a_news:

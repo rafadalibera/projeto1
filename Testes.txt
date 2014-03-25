@@ -10,7 +10,7 @@ newspaper {
                 title = "Ipsum Lorem 1"
                 abstract = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus aliquet nisl quam, at sagittis lacus elementum in. Praesent a turpis tellus. Aliquam luctus ornare massa, a fermentum quam egestas vel. Praesent pellentesque ullamcorper quam vitae imperdiet. Praesent rhoncus eget elit id pulvinar. Mauris non nulla metus. Ut in quam scelerisque, pharetra turpis sed, mollis tellus. Vivamus in est odio. Duis id arcu felis. Vestibulum vitae augue sed velit volutpat fringilla. Curabitur quis adipiscing elit. Suspendisse egestas tortor felis, pretium rhoncus tellus ullamcorper in. Praesent dapibus imperdiet hendrerit. Integer nec augue augue. Nulla ac augue porta, mollis lorem in, gravida magna. Nulla mattis augue at ligula blandit, eget cursus purus imperdiet. "
                 author = "author 1"
-		date = "06/07/1990""
+		date = "06/07/1990"
 
                 structure {
                         col = 1
