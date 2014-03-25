@@ -10,11 +10,12 @@ NUM [0-9]+
 STRING \".+\"
 WHITESPACE [ \r\n\t]+
 ANY_CHAR .
+COMMENT [//]+.+
 
 %option case-insensitive
 
 %%
-
+{COMMENT} /* ignore */
 {WHITESPACE} /* ignore */ ;
 "COL"			{return T_COL;}
 "SHOW"			{return T_SHOW;}
