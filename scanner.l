@@ -11,7 +11,7 @@ STRING \".+\"
 WHITESPACE [ \r\n\t]+
 ANY_CHAR .
 COMMENT [//].*
-WORD ([^\s]+)
+WORD [A-Za-z0-9\?!@#\$%^&\-(),\.;/çÇáéíóúÁÉÍÓÚãõÃÕàèìòùÀÈÌÒÙêÊ]+
 LINKTEXT (\[.+[ ]*\|[ ]*.+[ ]*])
 
 %option case-insensitive
@@ -56,6 +56,7 @@ LINKTEXT (\[.+[ ]*\|[ ]*.+[ ]*])
 	yylval.intval = atoi(strdup(yytext));
 	return T_NUM;
 }
+
 
 {ANY_CHAR} {
 	printf ("Caracter %c (ASCII=%d) inesperado\n", yytext[0], yytext[0]);
