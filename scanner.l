@@ -10,7 +10,8 @@ NUM [0-9]+
 STRING \".+\"
 WHITESPACE [ \r\n\t]+
 ANY_CHAR .
-COMMENT [//]+.+
+COMMENT //.*
+WORD ([^\s]+)
 
 %option case-insensitive
 
