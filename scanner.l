@@ -53,6 +53,11 @@ LINKTEXT (\[.+[ ]*\|[ ]*.+[ ]*])
 	return T_LINKTEXT;
 }
 
+{WORD} {
+	yylval.str = (char *) strdup(yytext);
+	return T_WORD;
+}
+
 {NUM} {
 	yylval.intval = atoi(strdup(yytext));
 	return T_NUM;
