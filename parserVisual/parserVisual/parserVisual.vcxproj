@@ -75,7 +75,6 @@
   <ItemGroup>
     <Text Include="Estrutura noticia doc.txt" />
     <Text Include="PaginaIdentada.html" />
-    <Text Include="TestePaginaProfessorSemComentarios.txt" />
     <Text Include="Testes.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

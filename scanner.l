@@ -6,17 +6,14 @@
 
 ID [\*a-z][a-z0-9_]*
 NUM [0-9]+
-/*STRING \"[A-Za-z0-9 \?!@#\$%^&*(),\.;/Á«·ÈÌÛ˙¡…Õ”⁄„ı√’]+\"*/
-STRING \"[\S[ \r]*]*\"
-WHITESPACE [ \r\n\t]+
+STRING \"[A-Za-z0-9 \?!@#\$%^&*(),\.;/]+\"
+WHITESPACE [ \n\r\t]+
 ANY_CHAR .
-COMMENT [//].*
-WORD ([^\s]+)
 
 %option case-insensitive
 
 %%
-{COMMENT} /* ignore */
+
 {WHITESPACE} /* ignore */ ;
 "COL"			{return T_COL;}
 "SHOW"			{return T_SHOW;}
