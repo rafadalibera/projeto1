@@ -53,16 +53,15 @@ LINKTEXT (\[.+[ ]*\|[ ]*.+[ ]*])
 	return T_LINKTEXT;
 }
 
-{WORD} {
-	yylval.str = (char *) strdup(yytext);
-	return T_WORD;
-}
-
 {NUM} {
 	yylval.intval = atoi(strdup(yytext));
 	return T_NUM;
 }
 
+{WORD} {
+	yylval.str = (char *) strdup(yytext);
+	return T_WORD;
+}
 
 {ANY_CHAR} {
 	printf ("Caracter %c (ASCII=%d) inesperado\n", yytext[0], yytext[0]);

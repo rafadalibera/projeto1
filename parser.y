@@ -596,7 +596,7 @@ void AdicionarChave(DicionarioNoticia * dic, char * chave, char * valor){
 
 //%error-verboseDicionarioNoticia
 
-%type <str> id_list show_list T_TITLE T_ABSTRACT T_AUTHOR T_IMAGE T_SOURCE T_DATE T_TEXT word_list	
+%type <str> id_list show_list word_list T_TITLE T_ABSTRACT T_AUTHOR T_IMAGE T_SOURCE T_DATE T_TEXT 	
 %type <newsStructure> structure
 %type <noticia> news
 
@@ -610,11 +610,6 @@ newspaper: 	T_NEWSPAPER '{' T_TITLE '=' '\"' word_list '\"'  T_DATE '=' '\"' wor
 
 		ImprimePaginaWeb("out.htm", &listaNoticias, $13.coluna);
 	}
-;
-
-word_list: 
-			T_WORD				{ printf("%s\n", "hey1!"); $$ = $1; }
-		|	word_list T_WORD 	{ printf("%s\n", "hey2!"); $$ = concat($1, "", $2); }
 ;
 
 structure:
@@ -831,6 +826,11 @@ show_list:
 	|	show_list ',' T_SOURCE		{ $$ = concat($1, ",", "source"); }
 	|	show_list ',' T_DATE		{ $$ = concat($1, ",", "date"); }
 	|	show_list ',' T_TEXT		{ $$ = concat($1, ",", "text"); }
+;
+
+word_list: 
+			T_WORD				{ $$ = $1; }
+		|	word_list T_WORD 	{ $$ = concat($1, "", $2); }
 ;
  
 %%
