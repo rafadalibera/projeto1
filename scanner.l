@@ -7,7 +7,7 @@
 ID [\*a-z][a-z0-9_]*
 NUM [0-9]+
 /*STRING \"[A-Za-z0-9 \?!@#\$%^&*(),\.;/ГгАИМСЗаимсзЦУцу]+\"*/
-STRING \".+\"
+STRING \"[\S[ \r]*]*\"
 WHITESPACE [ \r\n\t]+
 ANY_CHAR .
 COMMENT [//].*
