@@ -7,6 +7,7 @@
 ID [\*a-z][a-z0-9_]*
 NUM [0-9]+
 STRING \"[A-Za-z0-9\?!@#\$%\]^&\[\-(), \|\.=;/з«бйнуъЅ…Ќ”Џгх√’аимтщј»ћ“ўк вк¬:\*'#\r\t\n]+\"
+SSA [A-Za-z0-9\?!@#\$%\]^&\[\-(), \|\.=;/з«бйнуъЅ…Ќ”Џгх√’аимтщј»ћ“ўк вк¬:\*'#\r\t\n]+
 WHITESPACE [ \n\r\t]+
 ANY_CHAR .
 COMMENT \/\/.+
@@ -42,6 +43,11 @@ COMMENT \/\/.+
 {STRING} {
 	yylval.str = (char *) strdup(yytext);
 	return T_STRING;
+}
+
+{SSA} {
+	yylval.str = (char *) strdup(yytext);
+	return T_SSA;
 }
 
 {NUM} {

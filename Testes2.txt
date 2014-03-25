@@ -1,0 +1,24 @@
+newspaper {
+        title = "title"
+        date = "date"
+        structure {
+                col = 3
+                show = head2
+        }
+
+        head2 {
+                title = "newstile2"
+
+                abstract = "Nam lobortis purus vel mattis sagittis. Pellentesque semper neque lorem, vitae auctor nibh dapibus nec. Mauris metus quam, malesuada lacinia faucibus vitae, vestibulum eget tellus. Mauris convallis adipiscing tellus in mollis. Integer vel ultrices diam. Etiam porta tellus ac volutpat dapibus. Mauris tincidunt et justo sit amet rutrum. Proin tempor scelerisque nulla ac molestie. Sed rhoncus mauris eget arcu porttitor, vitae condimentum lorem ultrices. Proin malesuada lorem felis, in fringilla risus vehicula et. Sed enim turpis, vulputate ac ultricies ut, facilisis non nunc. Etiam id turpis sagittis, euismod dui ac, sollicitudin massa. Mauris turpis justo, tristique vel neque vel, accumsan mattis massa. Nunc a suscipit sapien. Proin vehicula elit at sapien vestibulum gravida. Interdum et malesuada fames ac ante ipsum primis in faucibus. "
+
+                author = "author 2"
+                
+		text = "purus vel mattis sagittis. Pellentesque semper neque lorem, vitae auctor nibh dapibus nec. Mauris metus quam, malesuada lacinia faucibus vitae, vestibulum eget tellus. Mauris convallis adipiscing tellus in mollis. Integer vel ultrices diam. Etiam porta tellus ac volutpat dapibus. Mauris tincidunt et justo sit amet rutrum. Proin tempor scelerisque nulla ac molestie. Sed rhoncus mauris eget arcu porttitor, vitae condimentum lorem ultrices. Proin malesuada lorem felis, in fringilla risus vehicula et. Sed enim turpis, vulputate ac ultricies ut, facilisis non nunc. Etiam id turpis sagittis, euismod dui ac, sollicitudin "
+
+                structure {
+                        col = 2
+                        show = title, abstract, text
+                }
+        }
+
+}
