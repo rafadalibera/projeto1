@@ -567,16 +567,34 @@ char * AdicionarTextoNumerado(int nivel, char * texto) {
 	return texto;
 }
 
-char * AdicionarBullet(int nivel, char * texto) {
-	return texto;
-}
 
 char * AdicionarTextoEspaco(int nivel, char * texto) {
 	return texto;
 }
 
 char * RetornaLink(char * texto) {
-	return texto;
+	char * retorno;
+	retorno = concat("<a href=\"", texto, "\"");
+	retorno = concat(retorno, ">", texto);
+	retorno = concat(retorno, "</a>", "");
+
+	return retorno;
+}
+
+char * AdicionarBullet(int nivel, char * texto) {
+	int i = 0;
+	int j = 0;
+	char * retorno = (char *)calloc(strlen(texto) + 10 + 9*4*nivel, sizeof(char));
+	retorno = concat("<br>", "", "");
+	for (j = 0; j < nivel; j++){
+		for (i = 0; i < 4; i++){
+			retorno = concat(retorno, "&nbsp; ", "");
+		}
+	}
+	
+	retorno = concat(retorno, "&#8226; ", texto);
+	retorno = concat(retorno, "<br>", "");
+	return retorno;
 }
 
 //******************************************************
