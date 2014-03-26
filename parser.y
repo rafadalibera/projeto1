@@ -683,20 +683,20 @@ news:
 
 a_news:
 	 	T_TITLE '=' '\"' word_list '\"' 	{ AdicionarChave(&dicionarioNoticia, "title", $4);}	 
-	| 	T_ABSTRACT '=' '\"' word_list '\"' { AdicionarChave(&dicionarioNoticia, "abstract", $4);}	
+	| 	T_ABSTRACT '=' '\"' word_list '\"' 	{ AdicionarChave(&dicionarioNoticia, "abstract", $4);}	
 	| 	T_AUTHOR '=' '\"' word_list '\"' 	{ AdicionarChave(&dicionarioNoticia, "author", $4); }	
 	| 	T_IMAGE '=' '\"' word_list '\"' 	{ AdicionarChave(&dicionarioNoticia, "image", $4); }	
 	| 	T_SOURCE '=' '\"' word_list '\"' 	{ AdicionarChave(&dicionarioNoticia, "source", $4); }	
-	| 	T_DATE '=' '\"' word_list '\"' 	{ AdicionarChave(&dicionarioNoticia, "date", $4); }	
-/*	| 	T_TEXT '=' '\"' word_list '\"' 	{ AdicionarChave(&dicionarioNoticia, "text", $4); }	*/
-	| 	T_TEXT '=' '\"' word_list '\"' 	{ AdicionarChave(&dicionarioNoticia, "text", $4); }	
+	| 	T_DATE '=' '\"' word_list '\"' 		{ AdicionarChave(&dicionarioNoticia, "date", $4); }	
+/*	| 	T_TEXT '=' '\"' word_list '\"' 		{ AdicionarChave(&dicionarioNoticia, "text", $4); }	*/
+	| 	T_TEXT '=' '\"' word_list '\"' 		{ AdicionarChave(&dicionarioNoticia, "text", $4); }	
 	|	a_news T_TITLE '=' '\"' word_list '\"'		{ AdicionarChave(&dicionarioNoticia, "title", $5); }		 		
 	|	a_news T_ABSTRACT '=' '\"' word_list '\"'	{ AdicionarChave(&dicionarioNoticia, "abstract", $5); }	
-	|	a_news T_AUTHOR	'=' '\"' word_list '\"'	{ AdicionarChave(&dicionarioNoticia, "author", $5); }	
+	|	a_news T_AUTHOR	'=' '\"' word_list '\"'		{ AdicionarChave(&dicionarioNoticia, "author", $5); }	
 	|	a_news T_IMAGE '=' '\"' word_list '\"'		{ AdicionarChave(&dicionarioNoticia, "image", $5); }	
-	|	a_news T_SOURCE '=' '\"' word_list '\"'	{ AdicionarChave(&dicionarioNoticia, "source", $5); }	
+	|	a_news T_SOURCE '=' '\"' word_list '\"'		{ AdicionarChave(&dicionarioNoticia, "source", $5); }	
 	|	a_news T_DATE '=' '\"' word_list '\"'		{ AdicionarChave(&dicionarioNoticia, "date", $5); }	 
-/*	|	a_news T_TEXT '=' '\"' content_text '\"'		{ AdicionarChave(&dicionarioNoticia, "text", $5); }	*/
+/*	|	a_news T_TEXT '=' '\"' content_text '\"'	{ AdicionarChave(&dicionarioNoticia, "text", $5); }	*/
 	|	a_news T_TEXT '=' '\"' word_list '\"'		{ AdicionarChave(&dicionarioNoticia, "text", $5); }		
 ;
 
@@ -852,6 +852,8 @@ id_list:
 word_list:
 		T_STRING { $$ = $1; }
 	|	',' { $$ = ",";}
+	|	';' { $$ = ";";}
+	|	'.' { $$ = ".";}
 	|	T_ID {$$ = $1;}
 	|	T_NUM {
 	char * buffer = (char *)calloc(11, sizeof(char));
@@ -866,6 +868,8 @@ word_list:
 		$$ = buffer;
 		$$ = concat($1, " ", buffer); }
 	|	word_list ',' { $$ = concat($1, ",", " "); }
+	|	word_list '.' { $$ = concat($1, ".", " "); }
+	|	word_list ';' { $$ = concat($1, ";", " "); }
 ;
 
 show_list:
