@@ -852,10 +852,18 @@ id_list:
 word_list:
 		T_STRING { $$ = $1; }
 	|	T_ID {$$ = $1;}
-	|	T_NUM {$$ = $1;}
+	|	T_NUM {
+	char * buffer = (char *)calloc(11, sizeof(char));
+	sprintf(buffer, "%d", $1);
+	$$ = buffer;
+	}
 	| 	word_list T_STRING { $$ = concat($1, " ", $2); }
 	| 	word_list T_ID { $$ = concat($1, " ", $2); }
-	|	word_list T_NUM { $$ = concat($1, " ", $2); }
+	|	word_list T_NUM { 
+		char * buffer = (char *)calloc(11, sizeof(char));
+		sprintf(buffer, "%d", $2);
+		$$ = buffer;
+		$$ = concat($1, " ", buffer); }
 ;
 
 show_list:
