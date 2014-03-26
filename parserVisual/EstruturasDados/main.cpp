@@ -186,7 +186,17 @@ void AdicionarChave(DicionarioNoticia * dic, char * chave, char * valor){
 
 	free(chaveMaiuscula);
 }
+char* concat(char *str1, char *str2, char *str3)
+{
+	int length = strlen(str1) + strlen(str2) + strlen(str3);
+	char *str = (char *)malloc((length + 1) * sizeof(char));
 
+	strcpy(str, str1);
+	str = strcat(str, str2);
+	str = strcat(str, str3);
+
+	return str;
+}
 
 //Os argumentos precisam ser strings bem formadas (com NUL no final). Todos os objetos sao reinstanciados, ou seja, pode dar free nos fontes depois
 //Nao mudar abstrac para abstract. Palavra reservada.
@@ -494,9 +504,40 @@ void ImprimePaginaWeb(char * nomeSaidaHtml, ListaNoticias * listaNoticias, int c
 	ImprimeTermino(arquivo);
 	fclose(arquivo);
 }
+//Recebe a URL e o texto a ser exibido. Retorna uma string html formatada que já faça isso
+char * RetornaLinkTexto(char * url, char * textoExibido);
+
+//Recebe a URL de uma imagem e sua legenda e retorna um HTML formatado que mostre a imagem
+char * RetornaImagem(char * url, char * legenda);
+
+char * RetornaTextoItalico(char * texto);
+
+char * RetornaTextoNegrito(char * texto);
+
+char * AdicionarTextoNumerado(int nivel, char * texto);
+
+#pragma warning (disable:4996)
+char * AdicionarBullet(int nivel, char * texto) {
+	int i = 0;
+	int j = 0;
+	char * retorno = (char *)calloc(strlen(texto) + 10 + 9*4*nivel, sizeof(char));
+	retorno = concat("<br>", "", "");
+	for (j = 0; j < nivel; j++){
+		for (i = 0; i < 4; i++){
+			retorno = concat(retorno, "&nbsp; ", "");
+		}
+	}
+	
+	retorno = concat(retorno, "&#8226; ", texto);
+	retorno = concat(retorno, "<br>", "");
+	return retorno;
+}
 
 
 void TesteMetodos(){
+	
+	char * teste10 = AdicionarBullet(1, "textoqqr");
+
 	ListaNoticias lista = NewListaNoticias(10); //O capacity pode por qualquer coisa. Acho que 10 tah bom para nao ficar dando realloc nem gastar infinito memoria. Mas se passar disso ele realoca.
 	DicionarioNoticia dic = NewDicionarioNoticia();
 
@@ -547,21 +588,10 @@ void TesteMetodos(){
 
 }
 
-//Recebe a URL e o texto a ser exibido. Retorna uma string html formatada que já faça isso
-char * RetornaLinkTexto(char * url, char * textoExibido);
-
-//Recebe a URL de uma imagem e sua legenda e retorna um HTML formatado que mostre a imagem
-char * RetornaImagem(char * url, char * legenda);
-
-char * RetornaTextoItalico(char * texto);
-
-char * RetornaTextoNegrito(char * texto);
-
-char * AdicionarTextoNumerado(int nivel, char * texto);
-
-char * AdicionarBullet(int nivel, char * texto);
 
 void TesteGeraHtml(){
+	
+	
 	ListaNoticias listaNoticias = NewListaNoticias(5);
 
 	Noticia not1 = NewNoticia("head1", "Teste 1", "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla in neque at magna tempus consectetur at ut ligula. Proin imperdiet a urna sit amet porta. Suspendisse sapien nulla, dapibus ut aliquet sit amet, aliquam ac tortor. Donec sed dictum justo. Ut tortor tortor, porta ut tincidunt ac, cursus ut lectus. Sed tempor, tortor vitae blandit suscipit, lacus nibh molestie magna, ac vestibulum felis dui non purus. Aliquam faucibus, dui quis laoreet lobortis, orci elit facilisis dui, quis pellentesque dui eros id velit. Maecenas tincidunt arcu ac leo semper convallis. Quisque ultrices mauris a orci aliquet adipiscing. Nam sagittis dui volutpat eleifend sollicitudin. Cras nec aliquet risus, sed sagittis eros. Sed quis sagittis mi, sit amet imperdiet neque. Ut mattis est est, ut pretium lorem tincidunt eget. Nam aliquam mollis sagittis. ", "Eu mermo", "Hoje", "imgTeste3.jpg", "sem fonte", "Etiam eu libero at ipsum lacinia dapibus id eu dolor. Nam volutpat vel lectus non mattis. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. In arcu lorem, pellentesque pellentesque fermentum vel, fringilla at dui. Maecenas bibendum, libero id fringilla venenatis, sem elit tincidunt eros, vitae posuere massa erat accumsan odio. Proin fermentum porta diam, ac condimentum urna euismod nec. Praesent nec ligula a turpis consectetur convallis ut vitae metus. Etiam at ligula scelerisque, mollis sapien non, facilisis erat. Duis eu adipiscing erat. Etiam consectetur feugiat nulla id euismod. Aliquam sed aliquam magna. Vestibulum posuere, velit eu interdum feugiat, dolor sapien faucibus tellus, in adipiscing neque ipsum porttitor orci. Aenean semper magna mi, vitae volutpat elit tincidunt sed. Curabitur dui quam, mollis nec condimentum hendrerit, vulputate eu magna. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas", 2);
@@ -595,7 +625,7 @@ void TesteGeraHtml(){
 
 
 
-
+#pragma warning (disable:4996)
 int main(){
 
 	TesteMetodos();
