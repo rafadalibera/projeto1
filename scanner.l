@@ -5,7 +5,7 @@
 
 ID [a-z][a-z0-9_]*
 NUM [0-9]*
-STRING [\S;.�]*
+STRING [\S.,áàãéèíìóòõúùÁÀÃÉÈÍÌÓÒÕÚÙçÇ]*
 WHITESPACE [ \n\r\t]+
 ANY_CHAR .
 COMMENT \/\/.+
