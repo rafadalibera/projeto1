@@ -6,34 +6,7 @@
 #include <stdio.h>
 #include <ctype.h>
 #include "util.h"
-/*
-typedef enum  {
-	Invalido, Title, Abstract, Author, Date, Image, Source, Text
-}TipoPropriedade;
 
-typedef struct{
-	int buscada; //Esse campo serve soh para dizer se uma noticia jah foi eleita para ser colocada na tela. Necessario na hora de ordenar / decidir.
-	int posicaoNoticia; //-1 significa que essa noticia nao deve ser mostrada. 0 em diante eh a posicao dessa noticia no jornal
-	char * NomeObjeto; //Aqui precisa ir tipo o T_ID "headline1" do codigo, para mais tarde decidirmos quais noticias mostrar, vindo do structure da noticia
-	char * Title;
-	char * Abstract;
-	char * Author;
-	char * Date;
-	char * Image;
-	char * Source;
-	char * Text;
-	int numCol;
-	TipoPropriedade listaPropriedades[7];
-} Noticia;
-
-typedef struct {
-	int capacidade;
-	int tamanho;
-	Noticia * valores;
-}ListaNoticias;
-
-ListaNoticias listaNoticias;
-*/
 //Converte uma string para letras maiusculas. Nao esquecer de dar free na memoria retornada depois de usar se nao for mais necessaria
 char *StringToUpper(char * stringOriginal){
 	int i = 0;
@@ -561,22 +534,42 @@ void AdicionarChave(DicionarioNoticia * dic, char * chave, char * valor){
 }
 
 //Recebe a URL e o texto a ser exibido. Retorna uma string html formatada que já faça isso
-char * RetornaLinkTexto(char * url, char * textoExibido);
+char * RetornaLinkTexto(char * url, char * textoExibido) {
+	char * temp;
+	temp = concat("<a href=\"", url, "\" target=\"_blank\">");
+	return concat("", textoExibido, "</a>");
+}
 
 //Recebe a URL de uma imagem e sua legenda e retorna um HTML formatado que mostre a imagem
-char * RetornaImagem(char * url, char * legenda);
+char * RetornaImagem(char * url, char * legenda) {
+	char *temp;
+	temp = concat("<div id=\"figura\"><p><img class=\"escala\" src=\"", url, ">");
+	return concat ("<p>", legenda, "</div>");
+}
 
-char * RetornaTextoTitulo(char * texto);
+char * RetornaTextoTitulo(char * texto) {
+	return concat("<h2>", texto, "</h2>");
+}
 
-char * RetornaTextoItalico(char * texto);
+char * RetornaTextoItalico(char * texto) {
+	return concat("<i>", texto, "</i>");
+}
 
-char * RetornaTextoNegrito(char * texto);
+char * RetornaTextoNegrito(char * texto){
+	return concat("<b>", texto, "</b>");
+}
 
-char * RetornaTextoNegritoItalico(char * texto);
+char * RetornaTextoNegritoItalico(char * texto) {
+	return concat("<b><i>", texto, "</i></b>");
+}
 
-char * AdicionarTextoNumerado(int nivel, char * texto);
+char * AdicionarTextoNumerado(int nivel, char * texto) {
+	return texto;
+}
 
-char * AdicionarBullet(int nivel, char * texto);
+char * AdicionarBullet(int nivel, char * texto) {
+	return texto;
+}
 
 //******************************************************
 
@@ -612,7 +605,7 @@ char * AdicionarBullet(int nivel, char * texto);
 %token T_ASP
 
 
-%type <str> id_list show_list word_list
+%type <str> id_list show_list word_list content_text
 %type <newsStructure> structure
 %type <noticia> news
 
@@ -657,12 +650,10 @@ news_list :
 		news 
 		{
 			AppendElemento(&listaNoticias, $1);
-			printf("%s\n", $1.Author);
 		}
 	|	news news_list
 		{
 			AppendElemento(&listaNoticias, $1);
-			printf("%s\n", $1.Author);
 		}
 ;
 
@@ -688,161 +679,33 @@ a_news:
 	| 	T_IMAGE '=' '\"' word_list '\"' 	{ AdicionarChave(&dicionarioNoticia, "image", $4); }	
 	| 	T_SOURCE '=' '\"' word_list '\"' 	{ AdicionarChave(&dicionarioNoticia, "source", $4); }	
 	| 	T_DATE '=' '\"' word_list '\"' 		{ AdicionarChave(&dicionarioNoticia, "date", $4); }	
-/*	| 	T_TEXT '=' '\"' word_list '\"' 		{ AdicionarChave(&dicionarioNoticia, "text", $4); }	*/
-	| 	T_TEXT '=' '\"' word_list '\"' 		{ AdicionarChave(&dicionarioNoticia, "text", $4); }	
+	| 	T_TEXT '=' '\"' content_text '\"' 		{ AdicionarChave(&dicionarioNoticia, "text", $4); }	
 	|	a_news T_TITLE '=' '\"' word_list '\"'		{ AdicionarChave(&dicionarioNoticia, "title", $5); }		 		
 	|	a_news T_ABSTRACT '=' '\"' word_list '\"'	{ AdicionarChave(&dicionarioNoticia, "abstract", $5); }	
 	|	a_news T_AUTHOR	'=' '\"' word_list '\"'		{ AdicionarChave(&dicionarioNoticia, "author", $5); }	
 	|	a_news T_IMAGE '=' '\"' word_list '\"'		{ AdicionarChave(&dicionarioNoticia, "image", $5); }	
 	|	a_news T_SOURCE '=' '\"' word_list '\"'		{ AdicionarChave(&dicionarioNoticia, "source", $5); }	
-	|	a_news T_DATE '=' '\"' word_list '\"'		{ AdicionarChave(&dicionarioNoticia, "date", $5); }	 
-/*	|	a_news T_TEXT '=' '\"' content_text '\"'	{ AdicionarChave(&dicionarioNoticia, "text", $5); }	*/
-	|	a_news T_TEXT '=' '\"' word_list '\"'		{ AdicionarChave(&dicionarioNoticia, "text", $5); }		
+	|	a_news T_DATE '=' '\"' word_list '\"'		{ AdicionarChave(&dicionarioNoticia, "date", $5); }	
+	|	a_news T_TEXT '=' '\"' content_text '\"'	{ AdicionarChave(&dicionarioNoticia, "text", $5); }	
 ;
 
-/*
+
 content_text: 
-				// blank												{$$ = "";}
-			| 	content_text T_SSA 											{$$ = concat($1, " ", $2);}
-			|	content_text "[" T_SSA "|" T_SSA "]"						{$$ = concat($1, " ", RetornaLinkTexto($3, $5));}
-			|	content_text "[" "[" T_SSA "|" T_SSA "]" "]"				{$$ = concat($1, " ", RetornaImagem($4, $6));}
-			|	content_text "=" "=" "=" T_SSA "=" "=" "="					{$$ = concat($1, " ", RetornaTextoTitulo($5);}
-			|	content_text "'" "'" T_SSA "'" "'"							{$$ = concat($1, " ", RetornaTextoItalico($4));}
-			|	content_text "'" "'" "'" T_SSA "'" "'" "'"					{$$ = concat($1, " ", RetornaTextoNegrito($5));}
-			|	content_text "'" "'" "'" "'" "'" T_SSA "'" "'" "'" "'" "'"	{$$ = concat($1, " ", RetornaTextoNegritoItalico($7));}
-			|	content_text "*" T_SSA 										{$$ = concat($1, " ", AdicionarBullet(1, $3));}
-			|	content_text "*" "*" T_SSA 									{$$ = concat($1, " ", AdicionarBullet(1, $4));}
-			|	content_text "*" "*" "*" T_SSA 								{$$ = concat($1, " ", AdicionarBullet(1, $5));}
-			|  	content_text "#" T_SSA 										{$$ = concat($1, " ", AdicionarTextoNumerado(1, $3));}
-			| 	content_text "#" "#" T_SSA 									{$$ = concat($1, " ", AdicionarTextoNumerado(2, $4));}
-			|	content_text "#" "#" "#" T_SSA								{$$ = concat($1, " ", AdicionarTextoNumerado(3, $5));}
+				/* blank */																	{ $$ = "";}
+			| 	content_text word_list 														{ $$ = concat($1, " ", $2);}
+			|	content_text '[' word_list '|' word_list ']'								{ $$ = concat($1, " ", RetornaLinkTexto($3, $5));}
+			|	content_text '[' '[' word_list '|' word_list ']' ']'						{ $$ = concat($1, " ", RetornaImagem($4, $6));}
+			|	content_text '=' '=' '=' word_list '=' '=' '='								{ $$ = concat($1, " ", RetornaTextoTitulo($5));}
+			|	content_text '\'' '\'' word_list '\'' '\''									{ $$ = concat($1, " ", RetornaTextoItalico($4));}
+			|	content_text '\'' '\'' '\'' word_list '\'' '\'' '\''						{ $$ = concat($1, " ", RetornaTextoNegrito($5));}
+			|	content_text '\'' '\'' '\'' '\'' '\'' word_list '\'' '\'' '\'' '\'' '\''	{ $$ = concat($1, " ", RetornaTextoNegritoItalico($7));}
+			|	content_text '*' word_list 													{ $$ = concat($1, " ", AdicionarBullet(1, $3));}
+			|	content_text '*' '*' word_list 												{ $$ = concat($1, " ", AdicionarBullet(1, $4));}
+			|	content_text '*' '*' '*' word_list 											{ $$ = concat($1, " ", AdicionarBullet(1, $5));}
+			|  	content_text '#' word_list 													{ $$ = concat($1, " ", AdicionarTextoNumerado(1, $3));}
+			| 	content_text '#' '#' word_list 												{ $$ = concat($1, " ", AdicionarTextoNumerado(2, $4));}
+			|	content_text '#' '#' '#' word_list											{ $$ = concat($1, " ", AdicionarTextoNumerado(3, $5));}
 ;
-*/
-/*
-a_news:
-			T_TITLE '=' '\"' word_list '\"' T_ABSTRACT '=' '\"' word_list '\"' T_AUTHOR '=' '\"' word_list '\"' 
-			{ 
-				struct TempNews temp;
-				temp.title = (char *) malloc ((sizeof($3) + 1) * sizeof(char));
-				temp.title = $3;
-				temp.abstract = (char *) malloc ((sizeof($6) + 1) * sizeof(char));
-				temp.abstract = $6;
-				temp.author = (char *) malloc ((sizeof($9) + 1) * sizeof(char));
-				temp.author = $9;
-				temp.date = (char *) malloc (sizeof(char));
-				temp.date = "";
-				temp.image = (char *) malloc (sizeof(char));
-				temp.image = "";
-				temp.source = (char *) malloc (sizeof(char));
-				temp.source = "";
-				temp.text = (char *) malloc (sizeof(char));
-				temp.text = "";
-
-				$$ = temp;
-			}	
-		|	T_TITLE '=' '\"' word_list '\"' T_AUTHOR '=' '\"' word_list '\"' T_ABSTRACT '=' '\"' word_list '\"'
-			{ 
-				struct TempNews temp;
-				temp.title = (char *) malloc ((sizeof($3) + 1) * sizeof(char));
-				temp.title = $3;
-				temp.abstract = (char *) malloc ((sizeof($9) + 1) * sizeof(char));
-				temp.abstract = $9;
-				temp.author = (char *) malloc ((sizeof($6) + 1) * sizeof(char));
-				temp.author = $6;
-				temp.date = (char *) malloc (sizeof(char));
-				temp.date = "";
-				temp.image = (char *) malloc (sizeof(char));
-				temp.image = "";
-				temp.source = (char *) malloc (sizeof(char));
-				temp.source = "";
-				temp.text = (char *) malloc (sizeof(char));
-				temp.text = "";
-
-				$$ = temp;
-			} 
-		|	T_AUTHOR '=' '\"' word_list '\"' T_TITLE '=' '\"' word_list '\"' T_ABSTRACT '=' '\"' word_list '\"'
-			{ 
-				struct TempNews temp;
-				temp.title = (char *) malloc ((sizeof($6) + 1) * sizeof(char));
-				temp.title = $6;
-				temp.abstract = (char *) malloc ((sizeof($9) + 1) * sizeof(char));
-				temp.abstract = $9;
-				temp.author = (char *) malloc ((sizeof($3) + 1) * sizeof(char));
-				temp.author = $3;
-				temp.date = (char *) malloc (sizeof(char));
-				temp.date = "";
-				temp.image = (char *) malloc (sizeof(char));
-				temp.image = "";
-				temp.source = (char *) malloc (sizeof(char));
-				temp.source = "";
-				temp.text = (char *) malloc (sizeof(char));
-				temp.text = "";
-
-				$$ = temp;
-			}
-		|	T_AUTHOR '=' '\"' word_list '\"' T_ABSTRACT '=' '\"' word_list '\"' T_TITLE '=' '\"' word_list '\"'
-			{ 
-				struct TempNews temp;
-				temp.title = (char *) malloc ((sizeof($9) + 1) * sizeof(char));
-				temp.title = $9;
-				temp.abstract = (char *) malloc ((sizeof($6) + 1) * sizeof(char));
-				temp.abstract = $6;
-				temp.author = (char *) malloc ((sizeof($3) + 1) * sizeof(char));
-				temp.author = $3;
-				temp.date = (char *) malloc (sizeof(char));
-				temp.date = "";
-				temp.image = (char *) malloc (sizeof(char));
-				temp.image = "";
-				temp.source = (char *) malloc (sizeof(char));
-				temp.source = "";
-				temp.text = (char *) malloc (sizeof(char));
-				temp.text = "";
-
-				$$ = temp;
-			}
-		|	T_ABSTRACT '=' '\"' word_list '\"' T_AUTHOR '=' '\"' word_list '\"' T_TITLE '=' '\"' word_list '\"'
-			{ 
-				struct TempNews temp;
-				temp.title = (char *) malloc ((sizeof($9) + 1) * sizeof(char));
-				temp.title = $9;
-				temp.abstract = (char *) malloc ((sizeof($3) + 1) * sizeof(char));
-				temp.abstract = $3;
-				temp.author = (char *) malloc ((sizeof($6) + 1) * sizeof(char));
-				temp.author = $6;
-				temp.date = (char *) malloc (sizeof(char));
-				temp.date = "";
-				temp.image = (char *) malloc (sizeof(char));
-				temp.image = "";
-				temp.source = (char *) malloc (sizeof(char));
-				temp.source = "";
-				temp.text = (char *) malloc (sizeof(char));
-				temp.text = "";
-
-				$$ = temp;
-			}
-		|	T_ABSTRACT '=' '\"' word_list '\"' T_TITLE '=' '\"' word_list '\"' T_AUTHOR '=' '\"' word_list '\"'
-			{ 
-				struct TempNews temp;
-				temp.title = (char *) malloc ((sizeof($6) + 1) * sizeof(char));
-				temp.title = $6;
-				temp.abstract = (char *) malloc ((sizeof($3) + 1) * sizeof(char));
-				temp.abstract = $3;
-				temp.author = (char *) malloc ((sizeof($3) + 1) * sizeof(char));
-				temp.author = $3;
-				temp.date = (char *) malloc (sizeof(char));
-				temp.date = "";
-				temp.image = (char *) malloc (sizeof(char));
-				temp.image = "";
-				temp.source = (char *) malloc (sizeof(char));
-				temp.source = "";
-				temp.text = (char *) malloc (sizeof(char));
-				temp.text = "";
-
-				$$ = temp;
-			}
-	;
-
-*/
 
 id_list:
 		T_ID { $$ = $1; }
@@ -855,22 +718,37 @@ word_list:
 	|	',' { $$ = ",";}
 	|	';' { $$ = ";";}
 	|	'.' { $$ = ".";}
+	| 	'?' { $$ = "?";}
+	| 	'!' { $$ = "!";}
+	|	'(' { $$ = "(";}
+	|	')' { $$ = ")";}
+	|	'\\' '\"' { $$ = "\"";}
+	|	'\'' { $$ = "\'";}
 	|	T_ID {$$ = $1;}
-	|	T_NUM {
-	char * buffer = (char *)calloc(11, sizeof(char));
-	sprintf(buffer, "%d", $1);
-	$$ = buffer;
-	}
+	|	T_NUM 
+		{
+			char * buffer = (char *)calloc(11, sizeof(char));
+			sprintf(buffer, "%d", $1);
+			$$ = buffer;
+		}
 	| 	word_list T_STRING { $$ = concat($1, " ", $2); }
 	| 	word_list T_ID { $$ = concat($1, " ", $2); }
-	|	word_list T_NUM { 
-		char * buffer = (char *)calloc(11, sizeof(char));
-		sprintf(buffer, "%d", $2);
-		$$ = buffer;
-		$$ = concat($1, " ", buffer); }
-	|	word_list ',' { $$ = concat($1, ",", " "); }
-	|	word_list '.' { $$ = concat($1, ".", " "); }
-	|	word_list ';' { $$ = concat($1, ";", " "); }
+	|	word_list T_NUM 
+		{ 
+			char * buffer = (char *)calloc(11, sizeof(char));
+			sprintf(buffer, "%d", $2);
+			$$ = buffer;
+			$$ = concat($1, " ", buffer); 
+		}
+	|	word_list ',' 	{ $$ = concat($1, ",", " "); }
+	|	word_list '.' 	{ $$ = concat($1, ".", " "); }
+	|	word_list ';' 	{ $$ = concat($1, ";", " "); }
+	| 	word_list '?' 	{ $$ = concat($1, "?", " "); }
+	| 	word_list '!' 	{ $$ = concat($1, "!", " "); }
+	|	word_list '(' 	{ $$ = concat($1, "(", " "); }
+	|	word_list ')' 	{ $$ = concat($1, ")", " "); }
+	|	word_list '\\' '\"' 	{ $$ = concat($1, "\"", " ");}
+	|	word_list '\'' 	{ $$ = concat($1, "\'", " ");}
 	|	word_list T_SHOW {$$ = concat($1, " ", "show"); }
 ;
 

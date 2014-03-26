@@ -5,7 +5,7 @@
 
 ID [a-z][a-z0-9_]*
 NUM [0-9]*
-STRING [\S\.,áàãâéèêíîìóòôõúùÁÀÃÉÈÍÌÓÒÕÚÙçÇ=:\\'\[\]]*
+STRING [\SáàãâéèêíîìóòôõúùÁÀÃÉÈÍÌÓÒÕÚÙçÇ]*
 WHITESPACE [ \n\r\t]+
 ANY_CHAR .
 COMMENT \/\/.+
@@ -30,12 +30,20 @@ COMMENT \/\/.+
 "ITEM"			{return T_ITEM;}
 "{"				{return '{';}
 "}"				{return '}';} 
+"["				{return '[';}
+"]"				{return ']';}
 "," 			{return ',';}
 "." 			{return '.';}
 ";" 			{return ';';}
 "="				{return '=';}
 "?"				{return '?';}
+"\'"			{return '\'';}
 "\""			{return '\"';}
+"?"				{return '?';}
+"!" 			{return '!';}
+"("				{return '(';}
+")"				{return ')';}	
+"\\"			{return '\\';}
 
 {ID} {	
 	yylval.str = (char *) strdup(yytext);
