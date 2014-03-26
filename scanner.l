@@ -1,13 +1,11 @@
 %{
 #include "util.h"
 #include "parser.h"
-
 %}
 
 ID [\*a-z][a-z0-9_]*
 NUM [0-9]+
-STRING \"[A-Za-z0-9\?!@#\$%\]^&\[\-(), \|\.=;/çÇáéíóúÁÉÍÓÚãõÃÕàèìòùÀÈÌÒÙêÊâêÂ:\*'#\r\t\n]+\"
-SSA [A-Za-z0-9\?!@#\$%\]^&\[\-(), \|\.=;/çÇáéíóúÁÉÍÓÚãõÃÕàèìòùÀÈÌÒÙêÊâêÂ:\*'#\r\t\n]+
+STRING [A-Za-z0-9\?!@#\$%\]^&\[\-(),\|\.=;/çÇáéíóúÁÉÍÓÚãõÃÕàèìòùÀÈÌÒÙêÊâêÂ:\*'#\r\t\n]+
 WHITESPACE [ \n\r\t]+
 ANY_CHAR .
 COMMENT \/\/.+
@@ -15,6 +13,7 @@ COMMENT \/\/.+
 %option case-insensitive
 
 %%
+
 {COMMENT} /* ignore */
 {WHITESPACE} /* ignore */ ;
 "COL"			{return T_COL;}
@@ -45,11 +44,6 @@ COMMENT \/\/.+
 	return T_STRING;
 }
 
-{SSA} {
-	yylval.str = (char *) strdup(yytext);
-	return T_SSA;
-}
-
 {NUM} {
 	yylval.intval = atoi(strdup(yytext));
 	return T_NUM;
@@ -58,5 +52,3 @@ COMMENT \/\/.+
 {ANY_CHAR} {
 	printf ("Caracter %c (ASCII=%d) inesperado\n", yytext[0], yytext[0]);
 }
-
-%%

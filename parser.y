@@ -610,7 +610,8 @@ char * AdicionarBullet(int nivel, char * texto);
 %token T_SHOW
 %token <intval> T_NUM
 
-//%error-verboseDicionarioNoticia
+
+%error-verbose
 
 %type <str> id_list show_list word_list T_TITLE T_ABSTRACT T_AUTHOR  T_IMAGE	T_SOURCE T_DATE T_TEXT	
 %type <newsStructure> structure
@@ -618,6 +619,11 @@ char * AdicionarBullet(int nivel, char * texto);
 
 
 %%
+newstest: T_NEWSPAPER '{' T_TITLE '=' '"' word_list '"' T_DATE '=' '"' word_list '"' '}' {	
+
+		printf("foi");
+	}
+;
 
 newspaper: 	T_NEWSPAPER '{' T_TITLE '=' word_list  T_DATE '=' word_list  structure news_list '}' {	
 
