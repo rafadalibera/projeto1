@@ -566,9 +566,13 @@ char * RetornaLinkTexto(char * url, char * textoExibido);
 //Recebe a URL de uma imagem e sua legenda e retorna um HTML formatado que mostre a imagem
 char * RetornaImagem(char * url, char * legenda);
 
+char * RetornaTextoTitulo(char * texto);
+
 char * RetornaTextoItalico(char * texto);
 
 char * RetornaTextoNegrito(char * texto);
+
+char * RetornaTextoNegritoItalico(char * texto);
 
 char * AdicionarTextoNumerado(int nivel, char * texto);
 
@@ -694,22 +698,21 @@ a_news:
 ;
 
 content_text: 
-				/* blank */													{$$ = "teste";}
-			| 	content_text T_SSA 											{$$ = "teste";}
-			|	content_text "[" T_SSA "|" T_SSA "]"						{$$ = "teste";}
-			|	content_text "[" "[" T_SSA "|" T_SSA "]" "]"				{$$ = "teste";}
-			|	content_text "=" "=" "=" T_SSA "=" "=" "="					{$$ = "teste";}
-			|	content_text "'" "'" T_SSA "'" "'"							{$$ = "teste";}
-			|	content_text "'" "'" "'" T_SSA "'" "'" "'"					{$$ = "teste";}
-			|	content_text "'" "'" "'" "'" "'" T_SSA "'" "'" "'" "'" "'"	{$$ = "teste";}
-			|	content_text "*" T_SSA 										{$$ = "teste";}
-			|	content_text "*" "*" T_SSA 									{$$ = "teste";}
-			|	content_text "*" "*" "*" T_SSA 								{$$ = "teste";}
-			|  	content_text "#" T_SSA 										{$$ = "teste";}
-			| 	content_text "#" "#" T_SSA 									{$$ = "teste";}
-			|	content_text "#" "#" "#" T_SSA								{$$ = "teste";}
+				/* blank */													{$$ = "";}
+			| 	content_text T_SSA 											{$$ = concat($1, " ", $2);}
+			|	content_text "[" T_SSA "|" T_SSA "]"						{$$ = concat($1, " ", RetornaLinkTexto($3, $5));}
+			|	content_text "[" "[" T_SSA "|" T_SSA "]" "]"				{$$ = concat($1, " ", RetornaImagem($4, $6));}
+			|	content_text "=" "=" "=" T_SSA "=" "=" "="					{$$ = concat($1, " ", RetornaTextoTitulo($5);}
+			|	content_text "'" "'" T_SSA "'" "'"							{$$ = concat($1, " ", RetornaTextoItalico($4));}
+			|	content_text "'" "'" "'" T_SSA "'" "'" "'"					{$$ = concat($1, " ", RetornaTextoNegrito($5));}
+			|	content_text "'" "'" "'" "'" "'" T_SSA "'" "'" "'" "'" "'"	{$$ = concat($1, " ", RetornaTextoNegritoItalico($7));}
+			|	content_text "*" T_SSA 										{$$ = concat($1, " ", AdicionarBullet(1, $3));}
+			|	content_text "*" "*" T_SSA 									{$$ = concat($1, " ", AdicionarBullet(1, $4));}
+			|	content_text "*" "*" "*" T_SSA 								{$$ = concat($1, " ", AdicionarBullet(1, $5));}
+			|  	content_text "#" T_SSA 										{$$ = concat($1, " ", AdicionarTextoNumerado(1, $3));}
+			| 	content_text "#" "#" T_SSA 									{$$ = concat($1, " ", AdicionarTextoNumerado(2, $4));}
+			|	content_text "#" "#" "#" T_SSA								{$$ = concat($1, " ", AdicionarTextoNumerado(3, $5));}
 ;
-
 
 /*
 a_news:
