@@ -4,7 +4,7 @@
 %}
 
 ID [a-z][a-z0-9_]*
-NUM [0-9]+
+NUM [0-9]*
 STRING [\S]*
 WHITESPACE [ \n\r\t]+
 ANY_CHAR .

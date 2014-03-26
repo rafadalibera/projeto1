@@ -616,23 +616,17 @@ char * AdicionarBullet(int nivel, char * texto);
 %type <newsStructure> structure
 %type <noticia> news
 
-%start newstest
+%start newspaper
 
 %error-verbose
 
 %%
 
-newstest: T_NEWSPAPER '{' T_TITLE '=' '\"' word_list '\"' T_DATE '=' '\"' word_list '\"' '}' {	
+newspaper: 	T_NEWSPAPER '{' T_TITLE '=' '\"' word_list  '\"' T_DATE '=' '\"' word_list '\"' structure news_list '}' {	
 
-		printf("foi");
-	}
-;
+		MarcarTodasNoticias (&listaNoticias, $13.lista);
 
-newspaper: 	T_NEWSPAPER '{' T_TITLE '=' word_list  T_DATE '=' word_list  structure news_list '}' {	
-
-		MarcarTodasNoticias (&listaNoticias, $9.lista);
-
-		ImprimePaginaWeb("out.htm", &listaNoticias, $9.coluna);
+		ImprimePaginaWeb("out.htm", &listaNoticias, $13.coluna);
 	}
 ;
 
@@ -688,22 +682,22 @@ news:
 ; 
 
 a_news:
-	 	T_TITLE '=' word_list 	{ AdicionarChave(&dicionarioNoticia, "title", $3); }	 
-	| 	T_ABSTRACT '=' word_list { AdicionarChave(&dicionarioNoticia, "abstract", $3); }	
-	| 	T_AUTHOR '=' word_list 	{ AdicionarChave(&dicionarioNoticia, "author", $3); }	
-	| 	T_IMAGE '=' word_list 	{ AdicionarChave(&dicionarioNoticia, "image", $3); }	
-	| 	T_SOURCE '=' word_list 	{ AdicionarChave(&dicionarioNoticia, "source", $3); }	
-	| 	T_DATE '=' word_list 	{ AdicionarChave(&dicionarioNoticia, "date", $3); }	
-/*	| 	T_TEXT '=' '\"' content_text '\"' 	{ AdicionarChave(&dicionarioNoticia, "text", $4); }	*/
-	| 	T_TEXT '=' word_list 	{ AdicionarChave(&dicionarioNoticia, "text", $3); }	
-	|	a_news T_TITLE '=' word_list		{ AdicionarChave(&dicionarioNoticia, "title", $4); }		 		
-	|	a_news T_ABSTRACT '=' word_list	{ AdicionarChave(&dicionarioNoticia, "abstract", $4); }	
-	|	a_news T_AUTHOR	'=' word_list	{ AdicionarChave(&dicionarioNoticia, "author", $4); }	
-	|	a_news T_IMAGE '=' word_list		{ AdicionarChave(&dicionarioNoticia, "image", $4); }	
-	|	a_news T_SOURCE '=' word_list	{ AdicionarChave(&dicionarioNoticia, "source", $4); }	
-	|	a_news T_DATE '=' word_list		{ AdicionarChave(&dicionarioNoticia, "date", $4); }	 
+	 	T_TITLE '=' '\"' word_list '\"' 	{ AdicionarChave(&dicionarioNoticia, "title", $4); }	 
+	| 	T_ABSTRACT '=' '\"' word_list '\"' { AdicionarChave(&dicionarioNoticia, "abstract", $4); }	
+	| 	T_AUTHOR '=' '\"' word_list '\"' 	{ AdicionarChave(&dicionarioNoticia, "author", $4); }	
+	| 	T_IMAGE '=' '\"' word_list '\"' 	{ AdicionarChave(&dicionarioNoticia, "image", $4); }	
+	| 	T_SOURCE '=' '\"' word_list '\"' 	{ AdicionarChave(&dicionarioNoticia, "source", $4); }	
+	| 	T_DATE '=' '\"' word_list '\"' 	{ AdicionarChave(&dicionarioNoticia, "date", $4); }	
+/*	| 	T_TEXT '=' '\"' word_list '\"' 	{ AdicionarChave(&dicionarioNoticia, "text", $4); }	*/
+	| 	T_TEXT '=' '\"' word_list '\"' 	{ AdicionarChave(&dicionarioNoticia, "text", $4); }	
+	|	a_news T_TITLE '=' '\"' word_list '\"'		{ AdicionarChave(&dicionarioNoticia, "title", $5); }		 		
+	|	a_news T_ABSTRACT '=' '\"' word_list '\"'	{ AdicionarChave(&dicionarioNoticia, "abstract", $5); }	
+	|	a_news T_AUTHOR	'=' '\"' word_list '\"'	{ AdicionarChave(&dicionarioNoticia, "author", $5); }	
+	|	a_news T_IMAGE '=' '\"' word_list '\"'		{ AdicionarChave(&dicionarioNoticia, "image", $5); }	
+	|	a_news T_SOURCE '=' '\"' word_list '\"'	{ AdicionarChave(&dicionarioNoticia, "source", $5); }	
+	|	a_news T_DATE '=' '\"' word_list '\"'		{ AdicionarChave(&dicionarioNoticia, "date", $5); }	 
 /*	|	a_news T_TEXT '=' '\"' content_text '\"'		{ AdicionarChave(&dicionarioNoticia, "text", $5); }	*/
-	|	a_news T_TEXT '=' word_list		{ AdicionarChave(&dicionarioNoticia, "text", $4); }		
+	|	a_news T_TEXT '=' '\"' word_list '\"'		{ AdicionarChave(&dicionarioNoticia, "text", $5); }		
 ;
 
 /*
@@ -726,7 +720,7 @@ content_text:
 */
 /*
 a_news:
-			T_TITLE '=' T_STRING T_ABSTRACT '=' T_STRING T_AUTHOR '=' T_STRING 
+			T_TITLE '=' '\"' word_list '\"' T_ABSTRACT '=' '\"' word_list '\"' T_AUTHOR '=' '\"' word_list '\"' 
 			{ 
 				struct TempNews temp;
 				temp.title = (char *) malloc ((sizeof($3) + 1) * sizeof(char));
@@ -746,7 +740,7 @@ a_news:
 
 				$$ = temp;
 			}	
-		|	T_TITLE '=' T_STRING T_AUTHOR '=' T_STRING T_ABSTRACT '=' T_STRING
+		|	T_TITLE '=' '\"' word_list '\"' T_AUTHOR '=' '\"' word_list '\"' T_ABSTRACT '=' '\"' word_list '\"'
 			{ 
 				struct TempNews temp;
 				temp.title = (char *) malloc ((sizeof($3) + 1) * sizeof(char));
@@ -766,7 +760,7 @@ a_news:
 
 				$$ = temp;
 			} 
-		|	T_AUTHOR '=' T_STRING T_TITLE '=' T_STRING T_ABSTRACT '=' T_STRING
+		|	T_AUTHOR '=' '\"' word_list '\"' T_TITLE '=' '\"' word_list '\"' T_ABSTRACT '=' '\"' word_list '\"'
 			{ 
 				struct TempNews temp;
 				temp.title = (char *) malloc ((sizeof($6) + 1) * sizeof(char));
@@ -786,7 +780,7 @@ a_news:
 
 				$$ = temp;
 			}
-		|	T_AUTHOR '=' T_STRING T_ABSTRACT '=' T_STRING T_TITLE '=' T_STRING
+		|	T_AUTHOR '=' '\"' word_list '\"' T_ABSTRACT '=' '\"' word_list '\"' T_TITLE '=' '\"' word_list '\"'
 			{ 
 				struct TempNews temp;
 				temp.title = (char *) malloc ((sizeof($9) + 1) * sizeof(char));
@@ -806,7 +800,7 @@ a_news:
 
 				$$ = temp;
 			}
-		|	T_ABSTRACT '=' T_STRING T_AUTHOR '=' T_STRING T_TITLE '=' T_STRING
+		|	T_ABSTRACT '=' '\"' word_list '\"' T_AUTHOR '=' '\"' word_list '\"' T_TITLE '=' '\"' word_list '\"'
 			{ 
 				struct TempNews temp;
 				temp.title = (char *) malloc ((sizeof($9) + 1) * sizeof(char));
@@ -826,7 +820,7 @@ a_news:
 
 				$$ = temp;
 			}
-		|	T_ABSTRACT '=' T_STRING T_TITLE '=' T_STRING T_AUTHOR '=' T_STRING
+		|	T_ABSTRACT '=' '\"' word_list '\"' T_TITLE '=' '\"' word_list '\"' T_AUTHOR '=' '\"' word_list '\"'
 			{ 
 				struct TempNews temp;
 				temp.title = (char *) malloc ((sizeof($6) + 1) * sizeof(char));
@@ -858,8 +852,10 @@ id_list:
 word_list:
 		T_STRING { $$ = $1; }
 	|	T_ID {$$ = $1;}
+	|	T_NUM {$$ = $1;}
 	| 	word_list T_STRING { $$ = concat($1, " ", $2); }
 	| 	word_list T_ID { $$ = concat($1, " ", $2); }
+	|	word_list T_NUM { $$ = concat($1, " ", $2); }
 ;
 
 show_list:
