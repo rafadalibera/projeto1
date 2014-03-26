@@ -1,15 +1,13 @@
-﻿Build started 25/03/2014 01:36:43.
+﻿Build started 25/03/2014 21:15:00.
      1>Project "D:\mc911\projeto1\parserVisual\parserVisual\parserVisual.vcxproj" on node 2 (Build target(s)).
      1>Build:
          "C:\Program Files (x86)\Sysprogs\VisualGDB\VisualGDB.exe" /build "D:\mc911\projeto1\parserVisual\parserVisual\parserVisual.vcxproj" "/solution:D:\mc911\projeto1\parserVisual\parserVisual.sln" "/config:Debug" "/platform:Win32"
          VisualGDB: Executing prebuild actions
          VisualGDB: Run "D:\Cygwin64\bin\make.exe " in directory "D:\mc911\projeto1" on local computer
-         flex  -o scanner.c scanner.l
-         gcc -g   -c -o scanner.o scanner.c
-         gcc -o parser scanner.o parser.o
+         make: 'parser' is up to date.
          VisualGDB: Executing postbuild actions
      1>Done Building Project "D:\mc911\projeto1\parserVisual\parserVisual\parserVisual.vcxproj" (Build target(s)).
 
 Build succeeded.
 
-Time Elapsed 00:00:01.01
+Time Elapsed 00:00:00.65

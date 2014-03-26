@@ -547,6 +547,20 @@ void TesteMetodos(){
 
 }
 
+//Recebe a URL e o texto a ser exibido. Retorna uma string html formatada que já faça isso
+char * RetornaLinkTexto(char * url, char * textoExibido);
+
+//Recebe a URL de uma imagem e sua legenda e retorna um HTML formatado que mostre a imagem
+char * RetornaImagem(char * url, char * legenda);
+
+char * RetornaTextoItalico(char * texto);
+
+char * RetornaTextoNegrito(char * texto);
+
+char * AdicionarTextoNumerado(int nivel, char * texto);
+
+char * AdicionarBullet(int nivel, char * texto);
+
 void TesteGeraHtml(){
 	ListaNoticias listaNoticias = NewListaNoticias(5);
 
