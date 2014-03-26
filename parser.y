@@ -611,16 +611,17 @@ char * AdicionarBullet(int nivel, char * texto);
 %token <intval> T_NUM
 
 
-%error-verbose
 
-%type <str> id_list show_list word_list /* T_TITLE T_ABSTRACT T_AUTHOR  T_IMAGE T_SOURCE T_DATE T_TEXT */
+%type <str> id_list show_list word_list
 %type <newsStructure> structure
 %type <noticia> news
 
 %start newstest
 
+%error-verbose
 
 %%
+
 newstest: T_NEWSPAPER '{' T_TITLE '=' '\"' word_list '\"' T_DATE '=' '\"' word_list '\"' '}' {	
 
 		printf("foi");
@@ -855,8 +856,10 @@ id_list:
 ;
 
 word_list:
-		T_STRING { printf("hey1!\n"); $$ = $1; }
-	| 	word_list T_STRING { printf("hey2!\n"); $$ = concat($1, " ", $2); }
+		T_STRING { $$ = $1; }
+	|	T_ID {$$ = $1;}
+	| 	word_list T_STRING { $$ = concat($1, " ", $2); }
+	| 	word_list T_ID { $$ = concat($1, " ", $2); }
 ;
 
 show_list:

@@ -3,9 +3,9 @@
 #include "parser.h"
 %}
 
-ID [\*a-z][a-z0-9_]*
+ID [a-z][a-z0-9_]*
 NUM [0-9]+
-STRING [A-Za-z0-9\?!@#\$%\]^&\[\-(),\|\.;/çÇáéíóúÁÉÍÓÚãõÃÕàèìòùÀÈÌÒÙêÊâêÂ:\*'#\r\t\n]+
+STRING [\S]*
 WHITESPACE [ \n\r\t]+
 ANY_CHAR .
 COMMENT \/\/.+
@@ -33,6 +33,7 @@ COMMENT \/\/.+
 "," 			{return ',';}
 ";"				{return ';';}
 "="				{return '=';}
+"\""			{return '\"';}
 
 {ID} {	
 	yylval.str = (char *) strdup(yytext);
