@@ -804,7 +804,7 @@ word_list:
 	|	word_list ';' 			{ $$ = concat($1, ";", " "); }
 	| 	word_list '\?' 			{ $$ = concat($1, "\?", " "); }
 	| 	word_list '!' 			{ $$ = concat($1, "!", " "); }
-	|	word_list '(' 			{ $$ = concat($1, "(", " "); }
+	|	word_list '(' 			{ $$ = concat($1, "(", ""); }
 	|	word_list ')' 			{ $$ = concat($1, ")", " "); }
 	|	word_list '\\' '\"' 	{ $$ = concat($1, "\"", " ");}
 	|	word_list '\'' 			{ $$ = concat($1, "\'", "");}
