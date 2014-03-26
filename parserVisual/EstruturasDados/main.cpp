@@ -541,9 +541,35 @@ char * AdicionarBullet(int nivel, char * texto) {
 	return retorno;
 }
 
+char * RetornaSemEspacos(char * teste){
+	int comp = strlen(teste);
+	int i = 0;
+	int j = 0;
+	char * msgFinal = (char *)calloc(comp + 1, sizeof(char));
+
+	for (i = 0; i < comp; i++){
+		if (teste[i] == ' '){
+			i++;
+		}
+		if (teste[i] == '\0'){
+			break;
+		}
+		if (teste[i] != ' '){
+			msgFinal[j] = teste[i];
+			j++;
+		}
+	}
+
+	return msgFinal;
+}
 
 void TesteMetodos(){
 	
+	char * input = (char *)calloc(100, sizeof(char));
+	strcpy(input, "teste tskjsktj setjsektje stksjestskjt aqui");
+
+	char * resrserse = RetornaSemEspacos(input);
+
 	char * teste10 = AdicionarBullet(1, "textoqqr");
 
 	char * teste20 = RetornaLink("www.uol.com.br");

@@ -1,15 +1,16 @@
-﻿Build started 26/03/2014 16:43:57.
+﻿Build started 26/03/2014 17:04:23.
      1>Project "D:\mc911\projeto1\parserVisual\parserVisual\parserVisual.vcxproj" on node 2 (Build target(s)).
      1>Build:
          "C:\Program Files (x86)\Sysprogs\VisualGDB\VisualGDB.exe" /build "D:\mc911\projeto1\parserVisual\parserVisual\parserVisual.vcxproj" "/solution:D:\mc911\projeto1\parserVisual\parserVisual.sln" "/config:Debug" "/platform:Win32"
          VisualGDB: Executing prebuild actions
          VisualGDB: Run "D:\Cygwin64\bin\make.exe " in directory "D:\mc911\projeto1" on local computer
-         flex  -o scanner.c scanner.l
-         gcc -g   -c -o scanner.o scanner.c
+         bison -d parser.y  -o parser.c
+         parser.y: conflicts: 137 shift/reduce
+         gcc -g   -c -o parser.o parser.c
          gcc -o parsernpl scanner.o parser.o
          VisualGDB: Executing postbuild actions
      1>Done Building Project "D:\mc911\projeto1\parserVisual\parserVisual\parserVisual.vcxproj" (Build target(s)).
 
 Build succeeded.
 
-Time Elapsed 00:00:01.06
+Time Elapsed 00:00:01.21

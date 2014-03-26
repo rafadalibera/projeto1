@@ -422,6 +422,28 @@ DicionarioNoticia NewDicionarioNoticia(){
 	return retorno;
 }
 
+char * RetornaSemEspacos(char * teste){
+	int comp = strlen(teste);
+	int i = 0;
+	int j = 0;
+	char * msgFinal = (char *)calloc(comp + 1, sizeof(char));
+
+	for (i = 0; i < comp; i++){
+		if (teste[i] == ' '){
+			i++;
+		}
+		if (teste[i] == '\0'){
+			break;
+		}
+		if (teste[i] != ' '){
+			msgFinal[j] = teste[i];
+			j++;
+		}
+	}
+
+	return msgFinal;
+}
+
 void CleanDicionarioNoticia (DicionarioNoticia * dic) {
 	free(dic->Title);
 	free(dic->Abstract);
@@ -536,14 +558,14 @@ void AdicionarChave(DicionarioNoticia * dic, char * chave, char * valor){
 //Recebe a URL e o texto a ser exibido. Retorna uma string html formatada que já faça isso
 char * RetornaLinkTexto(char * url, char * textoExibido) {
 	char * temp;
-	temp = concat("<a href=\"", url, "\" target=\"_blank\">");
+	temp = concat("<a href=\"", RetornaSemEspacos(url), "\" target=\"_blank\">");
 	return concat("", textoExibido, "</a>");
 }
 
 //Recebe a URL de uma imagem e sua legenda e retorna um HTML formatado que mostre a imagem
 char * RetornaImagem(char * url, char * legenda) {
 	char *temp;
-	temp = concat("<div id=\"figura\"><p><img class=\"escala\" src=\"", url, ">");
+	temp = concat("<div id=\"figura\"><p><img class=\"escala\" src=\"", RetornaSemEspacos(url), ">");
 	return concat ("<p>", legenda, "</div>");
 }
 
@@ -574,8 +596,8 @@ char * AdicionarTextoEspaco(int nivel, char * texto) {
 
 char * RetornaLink(char * texto) {
 	char * retorno;
-	retorno = concat("<a href=\"", texto, "\"");
-	retorno = concat(retorno, ">", texto);
+	retorno = concat("<a href=\"", RetornaSemEspacos(texto), "\"");
+	retorno = concat(retorno, ">", RetornaSemEspacos(texto));
 	retorno = concat(retorno, "</a>", "");
 
 	return retorno;
@@ -702,15 +724,15 @@ a_news:
 	 	T_TITLE '=' '\"' word_list '\"' 	{ AdicionarChave(&dicionarioNoticia, "title", $4);}	 
 	| 	T_ABSTRACT '=' '\"' word_list '\"' 	{ AdicionarChave(&dicionarioNoticia, "abstract", $4);}	
 	| 	T_AUTHOR '=' '\"' word_list '\"' 	{ AdicionarChave(&dicionarioNoticia, "author", $4); }	
-	| 	T_IMAGE '=' '\"' word_list '\"' 	{ AdicionarChave(&dicionarioNoticia, "image", $4); }	
-	| 	T_SOURCE '=' '\"' word_list '\"' 	{ AdicionarChave(&dicionarioNoticia, "source", $4); }	
+	| 	T_IMAGE '=' '\"' word_list '\"' 	{ AdicionarChave(&dicionarioNoticia, "image", RetornaSemEspacos($4)); }	
+	| 	T_SOURCE '=' '\"' word_list '\"' 	{ AdicionarChave(&dicionarioNoticia, "source", RetornaSemEspacos($4)); }	
 	| 	T_DATE '=' '\"' word_list '\"' 		{ AdicionarChave(&dicionarioNoticia, "date", $4); }	
 	| 	T_TEXT '=' '\"' content_text '\"' 		{ AdicionarChave(&dicionarioNoticia, "text", $4); }	
 	|	a_news T_TITLE '=' '\"' word_list '\"'		{ AdicionarChave(&dicionarioNoticia, "title", $5); }		 		
 	|	a_news T_ABSTRACT '=' '\"' word_list '\"'	{ AdicionarChave(&dicionarioNoticia, "abstract", $5); }	
 	|	a_news T_AUTHOR	'=' '\"' word_list '\"'		{ AdicionarChave(&dicionarioNoticia, "author", $5); }	
-	|	a_news T_IMAGE '=' '\"' word_list '\"'		{ AdicionarChave(&dicionarioNoticia, "image", $5); }	
-	|	a_news T_SOURCE '=' '\"' word_list '\"'		{ AdicionarChave(&dicionarioNoticia, "source", $5); }	
+	|	a_news T_IMAGE '=' '\"' word_list '\"'		{ AdicionarChave(&dicionarioNoticia, "image", RetornaSemEspacos($5)); }	
+	|	a_news T_SOURCE '=' '\"' word_list '\"'		{ AdicionarChave(&dicionarioNoticia, "source", RetornaSemEspacos($5)); }	
 	|	a_news T_DATE '=' '\"' word_list '\"'		{ AdicionarChave(&dicionarioNoticia, "date", $5); }	
 	|	a_news T_TEXT '=' '\"' content_text '\"'	{ AdicionarChave(&dicionarioNoticia, "text", $5); }	
 ;
