@@ -14,7 +14,7 @@ COMMENT \/\/.+
 
 %%
 
-{COMMENT} /* ignore */
+{COMMENT} /* ignore */;
 {WHITESPACE} /* ignore */ ;
 "COL"			{return T_COL;}
 "SHOW"			{return T_SHOW;}
