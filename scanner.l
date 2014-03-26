@@ -34,6 +34,7 @@ COMMENT \/\/.+
 "." 			{return '.';}
 ";" 			{return ';';}
 "="				{return '=';}
+"?"				{return '?';}
 "\""			{return '\"';}
 
 {ID} {	
