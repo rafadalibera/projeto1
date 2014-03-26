@@ -612,14 +612,14 @@ char * AdicionarBullet(int nivel, char * texto);
 
 //%error-verboseDicionarioNoticia
 
-%type <str> id_list show_list content_text T_TITLE T_ABSTRACT T_AUTHOR  T_IMAGE	T_SOURCE T_DATE T_TEXT	
+%type <str> id_list show_list word_list content_text T_TITLE T_ABSTRACT T_AUTHOR  T_IMAGE	T_SOURCE T_DATE T_TEXT	
 %type <newsStructure> structure
 %type <noticia> news
 
 
 %%
 
-newspaper: 	T_NEWSPAPER '{' T_TITLE '=' T_STRING  T_DATE '=' T_STRING  structure news_list '}' {	
+newspaper: 	T_NEWSPAPER '{' T_TITLE '=' word_list  T_DATE '=' word_list  structure news_list '}' {	
 
 		MarcarTodasNoticias (&listaNoticias, $9.lista);
 
@@ -679,26 +679,27 @@ news:
 ; 
 
 a_news:
-	 	T_TITLE '=' T_STRING 	{ AdicionarChave(&dicionarioNoticia, "title", $3); }	 
-	| 	T_ABSTRACT '=' T_STRING { AdicionarChave(&dicionarioNoticia, "abstract", $3); }	
-	| 	T_AUTHOR '=' T_STRING 	{ AdicionarChave(&dicionarioNoticia, "author", $3); }	
-	| 	T_IMAGE '=' T_STRING 	{ AdicionarChave(&dicionarioNoticia, "image", $3); }	
-	| 	T_SOURCE '=' T_STRING 	{ AdicionarChave(&dicionarioNoticia, "source", $3); }	
-/*	| 	T_DATE '=' T_STRING 	{ AdicionarChave(&dicionarioNoticia, "date", $3); }	*/
-	| 	T_TEXT '=' '\"' content_text '\"' 	{ AdicionarChave(&dicionarioNoticia, "text", $4); }	
-	| 	T_TEXT '=' T_STRING 	{ AdicionarChave(&dicionarioNoticia, "text", $3); }	
-	|	a_news T_TITLE '=' T_STRING		{ AdicionarChave(&dicionarioNoticia, "title", $4); }		 		
-	|	a_news T_ABSTRACT '=' T_STRING	{ AdicionarChave(&dicionarioNoticia, "abstract", $4); }	
-	|	a_news T_AUTHOR	'=' T_STRING	{ AdicionarChave(&dicionarioNoticia, "author", $4); }	
-	|	a_news T_IMAGE '=' T_STRING		{ AdicionarChave(&dicionarioNoticia, "image", $4); }	
-	|	a_news T_SOURCE '=' T_STRING	{ AdicionarChave(&dicionarioNoticia, "source", $4); }	
-/*	|	a_news T_DATE '=' T_STRING		{ AdicionarChave(&dicionarioNoticia, "date", $4); }	 */
-	|	a_news T_TEXT '=' '\"' content_text '\"'		{ AdicionarChave(&dicionarioNoticia, "text", $5); }	
-	|	a_news T_TEXT '=' T_STRING		{ AdicionarChave(&dicionarioNoticia, "text", $4); }		
+	 	T_TITLE '=' word_list 	{ AdicionarChave(&dicionarioNoticia, "title", $3); }	 
+	| 	T_ABSTRACT '=' word_list { AdicionarChave(&dicionarioNoticia, "abstract", $3); }	
+	| 	T_AUTHOR '=' word_list 	{ AdicionarChave(&dicionarioNoticia, "author", $3); }	
+	| 	T_IMAGE '=' word_list 	{ AdicionarChave(&dicionarioNoticia, "image", $3); }	
+	| 	T_SOURCE '=' word_list 	{ AdicionarChave(&dicionarioNoticia, "source", $3); }	
+	| 	T_DATE '=' word_list 	{ AdicionarChave(&dicionarioNoticia, "date", $3); }	
+/*	| 	T_TEXT '=' '\"' content_text '\"' 	{ AdicionarChave(&dicionarioNoticia, "text", $4); }	*/
+	| 	T_TEXT '=' word_list 	{ AdicionarChave(&dicionarioNoticia, "text", $3); }	
+	|	a_news T_TITLE '=' word_list		{ AdicionarChave(&dicionarioNoticia, "title", $4); }		 		
+	|	a_news T_ABSTRACT '=' word_list	{ AdicionarChave(&dicionarioNoticia, "abstract", $4); }	
+	|	a_news T_AUTHOR	'=' word_list	{ AdicionarChave(&dicionarioNoticia, "author", $4); }	
+	|	a_news T_IMAGE '=' word_list		{ AdicionarChave(&dicionarioNoticia, "image", $4); }	
+	|	a_news T_SOURCE '=' word_list	{ AdicionarChave(&dicionarioNoticia, "source", $4); }	
+	|	a_news T_DATE '=' word_list		{ AdicionarChave(&dicionarioNoticia, "date", $4); }	 
+/*	|	a_news T_TEXT '=' '\"' content_text '\"'		{ AdicionarChave(&dicionarioNoticia, "text", $5); }	*/
+	|	a_news T_TEXT '=' word_list		{ AdicionarChave(&dicionarioNoticia, "text", $4); }		
 ;
 
+/*
 content_text: 
-				/* blank */													{$$ = "";}
+				// blank												{$$ = "";}
 			| 	content_text T_SSA 											{$$ = concat($1, " ", $2);}
 			|	content_text "[" T_SSA "|" T_SSA "]"						{$$ = concat($1, " ", RetornaLinkTexto($3, $5));}
 			|	content_text "[" "[" T_SSA "|" T_SSA "]" "]"				{$$ = concat($1, " ", RetornaImagem($4, $6));}
@@ -713,7 +714,7 @@ content_text:
 			| 	content_text "#" "#" T_SSA 									{$$ = concat($1, " ", AdicionarTextoNumerado(2, $4));}
 			|	content_text "#" "#" "#" T_SSA								{$$ = concat($1, " ", AdicionarTextoNumerado(3, $5));}
 ;
-
+*/
 /*
 a_news:
 			T_TITLE '=' T_STRING T_ABSTRACT '=' T_STRING T_AUTHOR '=' T_STRING 
@@ -843,6 +844,11 @@ a_news:
 id_list:
 		T_ID { $$ = $1; }
 	| 	id_list ',' T_ID { $$ = concat($1, ",", $3); }
+;
+
+word_list:
+		T_STRING { $$ = $1; }
+	| 	word_list T_STRING { $$ = concat($1, " ", $2); }
 ;
 
 show_list:
