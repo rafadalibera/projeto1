@@ -682,8 +682,8 @@ news:
 ; 
 
 a_news:
-	 	T_TITLE '=' '\"' word_list '\"' 	{ AdicionarChave(&dicionarioNoticia, "title", $4); }	 
-	| 	T_ABSTRACT '=' '\"' word_list '\"' { AdicionarChave(&dicionarioNoticia, "abstract", $4); }	
+	 	T_TITLE '=' '\"' word_list '\"' 	{ AdicionarChave(&dicionarioNoticia, "title", $4);}	 
+	| 	T_ABSTRACT '=' '\"' word_list '\"' { AdicionarChave(&dicionarioNoticia, "abstract", $4);}	
 	| 	T_AUTHOR '=' '\"' word_list '\"' 	{ AdicionarChave(&dicionarioNoticia, "author", $4); }	
 	| 	T_IMAGE '=' '\"' word_list '\"' 	{ AdicionarChave(&dicionarioNoticia, "image", $4); }	
 	| 	T_SOURCE '=' '\"' word_list '\"' 	{ AdicionarChave(&dicionarioNoticia, "source", $4); }	
@@ -851,6 +851,7 @@ id_list:
 
 word_list:
 		T_STRING { $$ = $1; }
+	|	',' { $$ = ",";}
 	|	T_ID {$$ = $1;}
 	|	T_NUM {
 	char * buffer = (char *)calloc(11, sizeof(char));
@@ -864,6 +865,7 @@ word_list:
 		sprintf(buffer, "%d", $2);
 		$$ = buffer;
 		$$ = concat($1, " ", buffer); }
+	|	word_list ',' { $$ = concat($1, ",", " "); }
 ;
 
 show_list:
