@@ -77,6 +77,7 @@
     <Text Include="Estrutura noticia doc.txt" />
     <Text Include="PaginaIdentada.html" />
     <Text Include="Testes.txt" />
+    <Text Include="Testes3.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

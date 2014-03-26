@@ -5,7 +5,7 @@
 
 ID [a-z][a-z0-9_]*
 NUM [0-9]*
-STRING [\S\.,áàãéèíìóòõúùÁÀÃÉÈÍÌÓÒÕÚÙçÇ]*
+STRING [\S\.,áàãéèíìóòõúùÁÀÃÉÈÍÌÓÒÕÚÙçÇ=:\\]*
 WHITESPACE [ \n\r\t]+
 ANY_CHAR .
 COMMENT \/\/.+
@@ -35,6 +35,7 @@ COMMENT \/\/.+
 ";" 			{return ';';}
 "="				{return '=';}
 "\""			{return '\"';}
+"\\\""			{return T_ASP;}
 
 {ID} {	
 	yylval.str = (char *) strdup(yytext);

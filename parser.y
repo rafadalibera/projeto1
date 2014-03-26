@@ -609,7 +609,7 @@ char * AdicionarBullet(int nivel, char * texto);
 %token T_COL
 %token T_SHOW
 %token <intval> T_NUM
-
+%token T_ASP
 
 
 %type <str> id_list show_list word_list
@@ -851,6 +851,8 @@ id_list:
 
 word_list:
 		T_STRING { $$ = $1; }
+	|	T_ASP { $$ = "\""}
+	|	T_SHOW { $$ = "show"; }
 	|	',' { $$ = ",";}
 	|	';' { $$ = ";";}
 	|	'.' { $$ = ".";}
@@ -870,6 +872,8 @@ word_list:
 	|	word_list ',' { $$ = concat($1, ",", " "); }
 	|	word_list '.' { $$ = concat($1, ".", " "); }
 	|	word_list ';' { $$ = concat($1, ";", " "); }
+	|	word_list T_SHOW {$$ = concat($1, " ", "show"); }
+	|	word_list T_ASP {$$ = concat($1, "", "\"");}
 ;
 
 show_list:
