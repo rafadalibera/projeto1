@@ -1,6 +1,6 @@
 newspaper {
-        title = "title"
-        date = "date"
+        title = "titl0"
+        date = "data"
         structure {
                 col = 3
                 show = head1, head2
