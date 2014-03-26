@@ -778,11 +778,11 @@ word_list:
 			$$ = concat($1, " ", buffer); 
 		}
 	|	word_list ',' 			{ $$ = concat($1, ",", " "); }
-	|	word_list '.' 			{ $$ = concat($1, ".", ""); }
+	|	word_list '.' 			{ $$ = concat($1, ".", " "); }
 	|	word_list ';' 			{ $$ = concat($1, ";", " "); }
 	| 	word_list '\?' 			{ $$ = concat($1, "\?", " "); }
 	| 	word_list '!' 			{ $$ = concat($1, "!", " "); }
-	|	word_list '(' 			{ $$ = concat($1, "(", " "); }
+	|	word_list '(' 			{ $$ = concat($1, "(", ""); }
 	|	word_list ')' 			{ $$ = concat($1, ")", " "); }
 	|	word_list '\\' '\"' 	{ $$ = concat($1, "\"", " ");}
 	|	word_list '\'' 			{ $$ = concat($1, "\'", "");}
