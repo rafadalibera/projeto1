@@ -9,7 +9,7 @@ newspaper {
 
         head1 {
                 title = "Ipsum Lorem 1"
-                abstract = "abc, def"
+                abstract = "ãbc, def."
                 author = "autor 1"
 
                 structure {
