@@ -516,7 +516,15 @@ char * RetornaTextoNegrito(char * texto);
 
 char * AdicionarTextoNumerado(int nivel, char * texto);
 
-#pragma warning (disable:4996)
+char * RetornaLink(char * texto) {
+	char * retorno;
+	retorno = concat("<a href=\"", texto, "\"");
+	retorno = concat(retorno, ">", texto);
+	retorno = concat(retorno, "</a>", "");
+
+	return retorno;
+}
+
 char * AdicionarBullet(int nivel, char * texto) {
 	int i = 0;
 	int j = 0;
@@ -537,6 +545,8 @@ char * AdicionarBullet(int nivel, char * texto) {
 void TesteMetodos(){
 	
 	char * teste10 = AdicionarBullet(1, "textoqqr");
+
+	char * teste20 = RetornaLink("www.uol.com.br");
 
 	ListaNoticias lista = NewListaNoticias(10); //O capacity pode por qualquer coisa. Acho que 10 tah bom para nao ficar dando realloc nem gastar infinito memoria. Mas se passar disso ele realoca.
 	DicionarioNoticia dic = NewDicionarioNoticia();
