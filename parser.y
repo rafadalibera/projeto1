@@ -851,7 +851,6 @@ id_list:
 
 word_list:
 		T_STRING { $$ = $1; }
-	|	T_ASP { $$ = "\""}
 	|	T_SHOW { $$ = "show"; }
 	|	',' { $$ = ",";}
 	|	';' { $$ = ";";}
@@ -873,7 +872,6 @@ word_list:
 	|	word_list '.' { $$ = concat($1, ".", " "); }
 	|	word_list ';' { $$ = concat($1, ";", " "); }
 	|	word_list T_SHOW {$$ = concat($1, " ", "show"); }
-	|	word_list T_ASP {$$ = concat($1, "", "\"");}
 ;
 
 show_list:
