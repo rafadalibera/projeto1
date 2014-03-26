@@ -5,7 +5,7 @@
 
 ID [\*a-z][a-z0-9_]*
 NUM [0-9]+
-STRING [A-Za-z0-9\?!@#\$%\]^&\[\-(),\|\.=;/з«бйнуъЅ…Ќ”Џгх√’аимтщј»ћ“ўк вк¬:\*'#\r\t\n]+
+STRING [A-Za-z0-9\?!@#\$%\]^&\[\-(),\|\.;/з«бйнуъЅ…Ќ”Џгх√’аимтщј»ћ“ўк вк¬:\*'#\r\t\n]+
 WHITESPACE [ \n\r\t]+
 ANY_CHAR .
 COMMENT \/\/.+
@@ -14,7 +14,7 @@ COMMENT \/\/.+
 
 %%
 
-{COMMENT} /* ignore */
+{COMMENT} /* ignore */;
 {WHITESPACE} /* ignore */ ;
 "COL"			{return T_COL;}
 "SHOW"			{return T_SHOW;}
