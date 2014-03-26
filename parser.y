@@ -571,6 +571,14 @@ char * AdicionarBullet(int nivel, char * texto) {
 	return texto;
 }
 
+char * AdicionarTextoEspaco(int nivel, char * texto) {
+	return texto;
+}
+
+char * RetornaLink(char * texto) {
+	return texto;
+}
+
 //******************************************************
 
 %}
@@ -694,17 +702,23 @@ content_text:
 				/* blank */																	{ $$ = "";}
 			| 	content_text word_list 														{ $$ = concat($1, " ", $2);}
 			|	content_text '[' word_list '|' word_list ']'								{ $$ = concat($1, " ", RetornaLinkTexto($3, $5));}
+			|	content_text '[' word_list ']'												{ $$ = concat($1, " ", RetornaLink($3));}
 			|	content_text '[' '[' word_list '|' word_list ']' ']'						{ $$ = concat($1, " ", RetornaImagem($4, $6));}
 			|	content_text '=' '=' '=' word_list '=' '=' '='								{ $$ = concat($1, " ", RetornaTextoTitulo($5));}
 			|	content_text '\'' '\'' word_list '\'' '\''									{ $$ = concat($1, " ", RetornaTextoItalico($4));}
 			|	content_text '\'' '\'' '\'' word_list '\'' '\'' '\''						{ $$ = concat($1, " ", RetornaTextoNegrito($5));}
 			|	content_text '\'' '\'' '\'' '\'' '\'' word_list '\'' '\'' '\'' '\'' '\''	{ $$ = concat($1, " ", RetornaTextoNegritoItalico($7));}
 			|	content_text '*' word_list 													{ $$ = concat($1, " ", AdicionarBullet(1, $3));}
-			|	content_text '*' '*' word_list 												{ $$ = concat($1, " ", AdicionarBullet(1, $4));}
-			|	content_text '*' '*' '*' word_list 											{ $$ = concat($1, " ", AdicionarBullet(1, $5));}
+			|	content_text '*' '*' word_list 												{ $$ = concat($1, " ", AdicionarBullet(2, $4));}
+			|	content_text '*' '*' '*' word_list 											{ $$ = concat($1, " ", AdicionarBullet(3, $5));}
 			|  	content_text '#' word_list 													{ $$ = concat($1, " ", AdicionarTextoNumerado(1, $3));}
 			| 	content_text '#' '#' word_list 												{ $$ = concat($1, " ", AdicionarTextoNumerado(2, $4));}
 			|	content_text '#' '#' '#' word_list											{ $$ = concat($1, " ", AdicionarTextoNumerado(3, $5));}
+			/*
+			|  	content_text ':' word_list 													{ $$ = concat($1, " ", AdicionarTextoEspaco(1, $3));}
+			| 	content_text ':' ':' word_list 												{ $$ = concat($1, " ", AdicionarTextoEspaco(2, $4));}
+			|	content_text ':' ':' ':' word_list											{ $$ = concat($1, " ", AdicionarTextoEspaco(3, $5));}
+			*/
 ;
 
 id_list:
@@ -715,16 +729,21 @@ id_list:
 word_list:
 		T_STRING { $$ = $1; }
 	|	T_SHOW { $$ = "show"; }
-	|	',' { $$ = ",";}
-	|	';' { $$ = ";";}
-	|	'.' { $$ = ".";}
-	| 	'\?' { $$ = "\?";}
-	| 	'!' { $$ = "!";}
-	|	'(' { $$ = "(";}
-	|	')' { $$ = ")";}
-	|	'\\' '\"' { $$ = "\"";}
-	|	'\'' { $$ = "\'";}
-	|	T_ID {$$ = $1;}
+	|	',' 		{ $$ = ",";}
+	|	';' 		{ $$ = ";";}
+	|	'.' 		{ $$ = ".";}
+	| 	'\?' 		{ $$ = "\?";}
+	| 	'!' 		{ $$ = "!";}
+	|	'(' 		{ $$ = "(";}
+	|	')' 		{ $$ = ")";}
+	|	'\\' '\"' 	{ $$ = "\"";}
+	|	'\'' 		{ $$ = "\'";}
+	| 	':' '/' '/' { $$ = "://";}
+	| 	'.' '/' 	{ $$ = "./";}
+	| 	':'			{ $$ = ":"; }
+	| 	'-'			{ $$ = "-"; }
+	| 	'/'			{ $$ = "/"; }
+	|	T_ID 		{$$ = $1;}
 	|	T_NUM 
 		{
 			char * buffer = (char *)calloc(11, sizeof(char));
@@ -740,15 +759,20 @@ word_list:
 			$$ = buffer;
 			$$ = concat($1, " ", buffer); 
 		}
-	|	word_list ',' 	{ $$ = concat($1, ",", " "); }
-	|	word_list '.' 	{ $$ = concat($1, ".", " "); }
-	|	word_list ';' 	{ $$ = concat($1, ";", " "); }
-	| 	word_list '\?' 	{ $$ = concat($1, "\?", " "); }
-	| 	word_list '!' 	{ $$ = concat($1, "!", " "); }
-	|	word_list '(' 	{ $$ = concat($1, "(", " "); }
-	|	word_list ')' 	{ $$ = concat($1, ")", " "); }
+	|	word_list ',' 			{ $$ = concat($1, ",", " "); }
+	|	word_list '.' 			{ $$ = concat($1, ".", " "); }
+	|	word_list ';' 			{ $$ = concat($1, ";", " "); }
+	| 	word_list '\?' 			{ $$ = concat($1, "\?", " "); }
+	| 	word_list '!' 			{ $$ = concat($1, "!", " "); }
+	|	word_list '(' 			{ $$ = concat($1, "(", " "); }
+	|	word_list ')' 			{ $$ = concat($1, ")", " "); }
 	|	word_list '\\' '\"' 	{ $$ = concat($1, "\"", " ");}
-	|	word_list '\'' 	{ $$ = concat($1, "\'", " ");}
+	|	word_list '\'' 			{ $$ = concat($1, "\'", "");}
+	| 	word_list ':' '/' '/'	{ $$ = concat($1, "://", "");}
+	| 	word_list '.' '/'		{ $$ = concat($1, "./", "");}
+	| 	word_list ':'			{ $$ = concat($1, ":", " ");}
+	| 	word_list '-'			{ $$ = concat($1, "-", "");}
+	| 	word_list '/'			{ $$ = concat($1, "/", "");}
 	|	word_list T_SHOW {$$ = concat($1, " ", "show"); }
 ;
 

@@ -8,13 +8,12 @@ NUM [0-9]*
 STRING [\SáàãâéèêíîìóòôõúùÁÀÃÉÈÍÌÓÒÕÚÙçÇ]*
 WHITESPACE [ \n\r\t]+
 ANY_CHAR .
-COMMENT \/\/.+
+
 
 %option case-insensitive
 
 %%
 
-{COMMENT} /* ignore */;
 {WHITESPACE} /* ignore */ ;
 "COL"			{return T_COL;}
 "SHOW"			{return T_SHOW;}
@@ -39,11 +38,14 @@ COMMENT \/\/.+
 "="				{return '=';}
 "\'"			{return '\'';}
 "\""			{return '\"';}
-"\?"				{return '\?';}
+"\?"			{return '\?';}
 "!" 			{return '!';}
 "("				{return '(';}
 ")"				{return ')';}	
 "\\"			{return '\\';}
+"/"				{return '/';}
+"|"				{return '|';}
+"-"				{return '-';}
 
 {ID} {	
 	yylval.str = (char *) strdup(yytext);
