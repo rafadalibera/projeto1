@@ -612,7 +612,7 @@ char * AdicionarBullet(int nivel, char * texto);
 
 //%error-verboseDicionarioNoticia
 
-%type <str> id_list show_list word_list content_text T_TITLE T_ABSTRACT T_AUTHOR  T_IMAGE	T_SOURCE T_DATE T_TEXT	
+%type <str> id_list show_list word_list T_TITLE T_ABSTRACT T_AUTHOR  T_IMAGE	T_SOURCE T_DATE T_TEXT	
 %type <newsStructure> structure
 %type <noticia> news
 
